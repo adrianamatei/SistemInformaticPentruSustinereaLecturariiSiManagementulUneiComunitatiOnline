@@ -38,6 +38,16 @@
                     </div>
                 </div>
 
+                <!-- Câmp Confirmare Parolă cu icon -->
+                <div class="input-group">
+                    <label for="confirmPassword">Confirmare parolă:</label>
+                    <div class="input-with-icon">
+                        <input type="password" id="confirmPassword" name="ConfirmPassword" placeholder="Confirmare parolă" required />
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+
                 <!-- Selecție Tip Utilizator -->
                 <div class="input-group">
                     <label for="tip-utilizator">Tip Utilizator:</label>
@@ -64,7 +74,7 @@
                 <button type="submit" class="register-button">Înregistrează-te</button>
 
                 <!-- Link către Autentificare -->
-                <a asp-area="" asp-page="/Users/Login" class="create-account-link">Ai deja un cont? <strong>Autentifică-te</strong></a>
+                <a asp-area="" asp-page="/Login" class="create-account-link">Ai deja un cont? <strong>Autentifică-te</strong></a>
             </form>
         </div>
 

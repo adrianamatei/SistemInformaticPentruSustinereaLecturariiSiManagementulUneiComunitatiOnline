@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AplicatieLicenta.Pages.Users
 {
-    public class LoginModel : PageModel
+    public class ResetareParolaModel : PageModel
     {
         public void OnGet()
         {

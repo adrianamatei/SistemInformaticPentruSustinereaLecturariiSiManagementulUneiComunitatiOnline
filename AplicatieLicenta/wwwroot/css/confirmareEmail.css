@@ -1,0 +1,90 @@
+﻿body {
+    background: url('/images/background_login.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #333333; /* Text contrastant */
+}
+
+.confirm-container {
+    background-color: #f8f0e3; /* Crem */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px 30px;
+}
+
+.confirm-wrapper {
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333333;
+}
+
+p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #666666;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+    .input-group label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #333333;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        background-color: #fff;
+    }
+
+.input-with-icon {
+    position: relative;
+}
+
+    .input-with-icon input {
+        padding-right: 35px;
+    }
+
+    .input-with-icon .fas {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999999;
+        font-size: 16px;
+    }
+
+.confirm-button {
+    background-color: #C9AD7F;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+    .confirm-button:hover {
+        background-color: #b1976b;
+    }
