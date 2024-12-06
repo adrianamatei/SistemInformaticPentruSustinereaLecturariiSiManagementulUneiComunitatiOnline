@@ -1,0 +1,77 @@
+﻿@page
+@model AplicatieLicenta.Pages.Users.InregistrareModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare</title>
+    <link rel="stylesheet" href="/css/inregistrare.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <!-- Formular de Înregistrare -->
+            <form asp-action="Inregistrare" method="post">
+                <h1>Înregistrare</h1>
+                <span>Completează formularul pentru a-ți crea un cont</span>
+
+                <!-- Câmp Email cu icon -->
+                <div class="input-group">
+                    <label for="email">Email:</label>
+                    <div class="input-with-icon">
+                        <input type="email" id="email" name="Email" placeholder="Email" required />
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <!-- Câmp Parolă cu icon -->
+                <div class="input-group">
+                    <label for="password">Parolă:</label>
+                    <div class="input-with-icon">
+                        <input type="password" id="password" name="Password" placeholder="Parolă" required />
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <!-- Selecție Tip Utilizator -->
+                <div class="input-group">
+                    <label for="tip-utilizator">Tip Utilizator:</label>
+                    <select id="tip-utilizator" name="TipUtilizator" required>
+                        <option value="">Selectează</option>
+                        <option value="parinte">Părinte</option>
+                        <option value="copil">Copil</option>
+                    </select>
+                </div>
+
+                <!-- Selecție Categorie Vârstă -->
+                <div class="input-group">
+                    <label for="categorie-varsta">Categoria de Vârstă:</label>
+                    <select id="categorie-varsta" name="CategorieVarsta" required>
+                        <option value="">Selectează</option>
+                        <option value="sub 8 ani">Sub 8 ani</option>
+                        <option value="8-10">8-10 ani</option>
+                        <option value="10-12">10-12 ani</option>
+                        <option value="12-14">12-14 ani</option>
+                    </select>
+                </div>
+
+                <!-- Buton Înregistrare -->
+                <button type="submit" class="register-button">Înregistrează-te</button>
+
+                <!-- Link către Autentificare -->
+                <a asp-area="" asp-page="/Users/Login" class="create-account-link">Ai deja un cont? <strong>Autentifică-te</strong></a>
+            </form>
+        </div>
+
+        <!-- Imagine decorativă -->
+        <div class="image-wrapper">
+            <img src="/images/inregistrare.jpg" alt="Imagine de Înregistrare" class="decorative-image">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+﻿body {
+    background: url('/images/background_login.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
+    color: #333; /* Textul devine negru pentru contrast */
+}
+
+.container {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333; /* Textul h1 devine negru */
+}
+
+span {
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666; /* Textul span devine gri */
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+    .input-group input,
+    .input-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #333; /* Textul din input devine negru */
+    }
+
+.register-button {
+    background-color: #C9AD7F;
+    color: #ffffff; /* Textul butonului este alb */
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+    .register-button:hover {
+        background-color: #b1976b;
+    }
+
+.create-account-link {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #333; /* Textul devine negru */
+    text-decoration: none;
+}
+
+    .create-account-link strong {
+        color: #C9AD7F; /* Link-ul este evidențiat în culoarea principală */
+    }
+
+    .create-account-link:hover strong {
+        text-decoration: underline;
+    }
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+}
+
+.form-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.decorative-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .input-with-icon input {
+        width: 100%;
+        padding: 10px 40px 10px 10px; /* Spațiu pentru icon în partea dreaptă */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .input-with-icon i {
+        position: absolute;
+        right: 10px;
+        color: #999;
+        font-size: 18px;
+    }

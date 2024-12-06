@@ -1,0 +1,75 @@
+﻿@page
+@model AplicatieLicenta.Pages.Users.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login as Reader or Admin</title>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container" id="container">
+        <!-- Logare ca Administrator -->
+        <div class="form-container admin-login-container">
+            <form asp-action="LoginAdmin" method="post">
+                <h1>Logare Administrator</h1>
+                <span>Introduceți credențialele de administrator</span>
+
+                <!-- Câmp email pentru Administrator -->
+                <div class="input-group">
+                    <input type="text" placeholder="Email" name="Email" required />
+                    <i class="fas fa-envelope icon-right"></i>
+                </div>
+
+                <!-- Câmp parolă pentru Administrator -->
+                <div class="input-group">
+                    <input type="password" placeholder="Parolă" name="Password" required />
+                    <i class="fas fa-lock icon-right"></i>
+                </div>
+
+                <button type="submit">Logare</button>
+            </form>
+        </div>
+        <!-- Logare ca Cititor -->
+        <div class="form-container sign-in-container">
+            <form asp-action="LoginReader" method="post">
+                <h1>Logare Cititor</h1>
+                <span>Introduceți datele pentru a accesa contul de cititor</span>
+
+                <!-- Câmp email pentru Cititor -->
+                <div class="input-group">
+                    <input type="email" placeholder="Email" name="Email" required />
+                    <i class="fas fa-envelope icon-right"></i>
+                </div>
+                <!-- Câmp parolă pentru Cititor -->
+                <div class="input-group">
+                    <input type="password" id="readerPassword" placeholder="Parolă" name="Password" required />
+                        <i class="fas fa-lock icon-right"></i>
+                </div>
+                <a asp-area="" asp-page="/Users/ParolaUitata" class="forgot-password-link">Ați uitat parola?</a>
+                <button type="submit" class="login-button">Logare</button>
+                <a asp-area="" asp-page="/Users/Inregistrare" class="create-account-link">Nu ai cont? <strong>Înregistrează-te</strong></a>
+            </form>
+        </div>
+        <!-- Overlay -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <img src="/images/login_cititor.jpg" alt="Imagine Cititor" class="overlay-image">
+                    <button class="ghost" id="signInReader">Logare Cititor</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <img src="/images/admin.jpg" alt="Imagine Administrator" class="overlay-image">
+                    <button class="ghost" id="signInAdmin">Logare Administrator</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/login.js"></script>
+</body>
+</html>
