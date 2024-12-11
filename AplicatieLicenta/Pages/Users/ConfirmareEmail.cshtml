@@ -24,7 +24,7 @@
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <div class="input-with-icon">
-                        <input type="email" id="email" name="Email" placeholder="Email" required />
+                        <input type="email" id="email" name="email" placeholder="Email" required />
                         <i class="fas fa-envelope"></i>
                     </div>
                 </div>
@@ -32,14 +32,17 @@
                 <!-- Câmp Cod de confirmare -->
                 <div class="input-group">
                     <label for="code">Cod de confirmare:</label>
-                    <div class="input-with-icon">
-                        <input type="text" id="code" name="ConfirmationCode" placeholder="Cod de confirmare" required />
-                        <i class="fas fa-lock"></i>
-                    </div>
+               
+                        <input type="text" id="code" name="cod_confirmare" placeholder="Cod de confirmare" required />
+                       
+                    
                 </div>
 
                 <!-- Buton de confirmare -->
                 <button type="submit" class="confirm-button">Confirmă</button>
+
+                <!-- Buton de retrimitere cod -->
+                <button formaction="Resend" formmethod="post" class="retrimitere_button">Retrimite email</button>
             </form>
         </div>
     </div>

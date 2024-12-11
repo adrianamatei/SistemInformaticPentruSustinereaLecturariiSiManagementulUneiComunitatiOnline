@@ -7,66 +7,79 @@
     align-items: center;
     height: 100vh;
     margin: 0;
-    color: #333333; /* Text contrastant */
+    color: #333333;
 }
 
 .confirm-container {
-    background-color: #f8f0e3; /* Crem */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    padding: 20px 30px;
-}
-
-.confirm-wrapper {
-    text-align: center;
+    background-color: #fff8e1; /* Fundal crem */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 90%; /* Flexibilitate pe ecrane mici */
+    max-width: 400px; /* Dimensiune fixă pentru desktop */
+    padding: 30px 20px; /* Spațiere internă */
+    box-sizing: border-box; /* Include padding în dimensiunea totală */
 }
 
 h1 {
     font-size: 24px;
-    margin-bottom: 15px;
-    color: #333333;
+    margin-bottom: 20px;
+    color: #444444;
+    font-weight: bold;
+    text-align: center;
 }
 
 p {
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     color: #666666;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .input-group {
     margin-bottom: 20px;
-    position: relative;
+    text-align: left;
+    width: 100%; /* Textbox-urile vor ocupa 100% din container */
 }
 
     .input-group label {
         display: block;
         font-size: 14px;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         color: #333333;
+        text-align: left;
     }
 
     .input-group input {
-        width: 100%;
-        padding: 12px 15px;
+        width: calc(100% - 20px); /* Spațiu egal la stânga și dreapta */
+        padding: 12px 10px; /* Spațiere internă uniformă */
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 14px;
-        background-color: #fff;
+        background-color: #ffffff;
+        box-sizing: border-box; /* Include padding în dimensiuni */
+        margin: 0 auto; /* Centrat în container */
+        display: block;
+        transition: border-color 0.3s ease;
     }
+
+        .input-group input:focus {
+            border-color: #c9ad7f;
+            outline: none;
+        }
 
 .input-with-icon {
     position: relative;
+    width: 100%;
 }
 
     .input-with-icon input {
-        padding-right: 35px;
+        padding-right: 40px; /* Spațiu pentru icon */
     }
 
     .input-with-icon .fas {
         position: absolute;
-        right: 10px;
+        right: 10px; /* Icon poziționat corect */
         top: 50%;
         transform: translateY(-50%);
         color: #999999;
@@ -74,17 +87,55 @@ p {
     }
 
 .confirm-button {
-    background-color: #C9AD7F;
+    background-color: #c9ad7f;
     color: #ffffff;
     font-size: 16px;
-    padding: 10px 20px;
+    padding: 12px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
+    width: 100%; /* Ocupă întreaga lățime a containerului */
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
     .confirm-button:hover {
         background-color: #b1976b;
+        transform: scale(1.03);
     }
+
+.retrimitere_button {
+    background-color: #ffffff;
+    color: #c9ad7f;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #c9ad7f;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .retrimitere_button:hover {
+        background-color: #c9ad7f;
+        color: #ffffff;
+    }
+
+@media (max-width: 768px) {
+    .confirm-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+
+    .confirm-button, .retrimitere_button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
