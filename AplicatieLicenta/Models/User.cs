@@ -16,6 +16,8 @@ public partial class User
     public string TipUtilizator { get; set; } = null!;
 
     public string CategorieVarsta { get; set; } = null!;
+    public int NumarIncercariEsec { get; set; }
+    public DateTime? BlocatPanaLa { get; set; }
 
     public virtual ICollection<CluburiLectura> CluburiLecturas { get; set; } = new List<CluburiLectura>();
 

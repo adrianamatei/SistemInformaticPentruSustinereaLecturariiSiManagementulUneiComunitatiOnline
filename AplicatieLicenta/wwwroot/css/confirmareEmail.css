@@ -1,7 +1,8 @@
-﻿body {
+﻿/* Fundal general */
+body {
     background: url('/images/background_login.jpg') no-repeat center center fixed;
     background-size: cover;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,92 +11,71 @@
     color: #333333;
 }
 
+/* Container principal */
 .confirm-container {
-    background-color: #fff8e1; /* Fundal crem */
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    width: 90%; /* Flexibilitate pe ecrane mici */
-    max-width: 400px; /* Dimensiune fixă pentru desktop */
-    padding: 30px 20px; /* Spațiere internă */
-    box-sizing: border-box; /* Include padding în dimensiunea totală */
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 450px;
+    padding: 40px 30px;
+    box-sizing: border-box;
+    text-align: left;
 }
 
+/* Titlu */
 h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #444444;
+    font-size: 28px;
     font-weight: bold;
+    margin-bottom: 15px;
     text-align: center;
+    color: #444444;
 }
 
 p {
     font-size: 14px;
-    margin-bottom: 25px;
-    color: #666666;
-    line-height: 1.5;
     text-align: center;
+    margin-bottom: 30px;
+    color: #555555;
 }
 
+/* Grupuri de input */
 .input-group {
-    margin-bottom: 20px;
-    text-align: left;
-    width: 100%; /* Textbox-urile vor ocupa 100% din container */
+    margin-bottom: 25px; /* Spațiu între grupuri */
 }
 
     .input-group label {
         display: block;
-        font-size: 14px;
+        font-size: 15px;
+        font-weight: bold;
         margin-bottom: 8px;
         color: #333333;
-        text-align: left;
     }
 
     .input-group input {
-        width: calc(100% - 20px); /* Spațiu egal la stânga și dreapta */
-        padding: 12px 10px; /* Spațiere internă uniformă */
+        width: 100%;
+        padding: 12px; /* Padding standard */
         border: 1px solid #ccc;
         border-radius: 8px;
         font-size: 14px;
-        background-color: #ffffff;
-        box-sizing: border-box; /* Include padding în dimensiuni */
-        margin: 0 auto; /* Centrat în container */
-        display: block;
-        transition: border-color 0.3s ease;
+        box-sizing: border-box;
     }
 
-        .input-group input:focus {
-            border-color: #c9ad7f;
-            outline: none;
-        }
-
-.input-with-icon {
-    position: relative;
+/* Butoane */
+.confirm-button, .retrimitere-button {
     width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
-
-    .input-with-icon input {
-        padding-right: 40px; /* Spațiu pentru icon */
-    }
-
-    .input-with-icon .fas {
-        position: absolute;
-        right: 10px; /* Icon poziționat corect */
-        top: 50%;
-        transform: translateY(-50%);
-        color: #999999;
-        font-size: 16px;
-    }
 
 .confirm-button {
     background-color: #c9ad7f;
     color: #ffffff;
-    font-size: 16px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%; /* Ocupă întreaga lățime a containerului */
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-bottom: 60px; /* Spațiu mai mare între butoane */
 }
 
     .confirm-button:hover {
@@ -103,39 +83,29 @@ p {
         transform: scale(1.03);
     }
 
-.retrimitere_button {
-    background-color: #ffffff;
+.retrimitere-button {
+    background-color: transparent;
     color: #c9ad7f;
-    font-size: 14px;
-    padding: 10px;
     border: 1px solid #c9ad7f;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 15px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 0; /* Resetarea margin */
 }
 
-    .retrimitere_button:hover {
+    .retrimitere-button:hover {
         background-color: #c9ad7f;
         color: #ffffff;
     }
 
-@media (max-width: 768px) {
+/* Responsivitate */
+@media (max-width: 600px) {
     .confirm-container {
         padding: 20px;
     }
 
     h1 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
-    p {
-        font-size: 13px;
-    }
-
-    .confirm-button, .retrimitere_button {
-        font-size: 14px;
-        padding: 10px;
+    .confirm-button {
+        margin-bottom: 50px; /* Ajustare pentru ecrane mici */
     }
 }

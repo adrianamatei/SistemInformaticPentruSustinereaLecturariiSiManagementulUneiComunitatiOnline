@@ -225,6 +225,7 @@ input {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
+
 .create-account-link {
     margin-top: 10px; /* Spațiu față de buton */
     font-size: 14px;
@@ -242,6 +243,7 @@ input {
     .create-account-link:hover {
         color: #B89A6D; /* Schimbă culoarea la hover */
     }
+
 .input-group {
     position: relative;
     display: flex;
@@ -271,6 +273,38 @@ input {
     display: flex;
     align-items: center;
 }
+
+.alert {
+    display: block !important; /* Asigură afișarea */
+    visibility: visible !important; /* Asigură vizibilitatea */
+    opacity: 1; /* Asigură că nu este transparent */
+    color: #b71c1c; /* Text roșu */
+    background-color: #ffebee; /* Fundal roz deschis */
+    border: 1px solid #b71c1c; /* Bordură roșie */
+    padding: 10px 15px; /* Spațiu interior */
+    margin-top: 10px; /* Spațiu deasupra mesajului */
+    margin-bottom: 20px; /* Spațiu suplimentar sub mesaj */
+    border-radius: 5px; /* Colțuri rotunjite */
+    font-size: 14px; /* Dimensiunea textului */
+    text-align: center; /* Centrare text */
+    max-width: calc(100% - 20px); /* Dimensiune adaptivă, cu spațiu pe margini */
+    word-wrap: break-word; /* Evită suprapunerile de text */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adaugă o umbră subtilă */
+}
+
+.forgot-password-link {
+    margin-top: 10px; /* Spațiu între mesaj și link */
+    font-size: 14px; /* Dimensiunea textului */
+    color: #333333; /* Culoare text */
+    text-decoration: underline; /* Subliniere pentru accesibilitate */
+    text-align: right; /* Aliniere la dreapta */
+    margin-right: 10px; /* Ajustează spațiul față de marginea containerului */
+}
+
+.input-group + .alert {
+    margin-top: 15px; /* Spațiu suplimentar între grupul de input și mesajul de eroare */
+}
+
 
 .input-group {
     position: relative;

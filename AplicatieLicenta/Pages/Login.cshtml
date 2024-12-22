@@ -14,48 +14,62 @@
 </head>
 <body>
     <div class="container" id="container">
-        <!-- Logare ca Administrator -->
+        <!-- Logare Administrator -->
         <div class="form-container admin-login-container">
-            <form asp-action="LoginAdmin" method="post">
+            <form asp-page-handler="LoginAdmin" method="post">
                 <h1>Logare Administrator</h1>
                 <span>Introduceți credențialele de administrator</span>
 
-                <!-- Câmp email pentru Administrator -->
                 <div class="input-group">
-                    <input type="text" placeholder="Email" name="Email" required />
+                    <input type="text" placeholder="Email" name="Email" value="@Model.Email"  />
                     <i class="fas fa-envelope icon-right"></i>
                 </div>
 
-                <!-- Câmp parolă pentru Administrator -->
                 <div class="input-group">
-                    <input type="password" placeholder="Parolă" name="Password" required />
+                    <input type="password" placeholder="Parolă" name="Password"  />
                     <i class="fas fa-lock icon-right"></i>
                 </div>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessageAdmin))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @Model.ErrorMessageAdmin
+                    </div>
+                }
 
                 <button type="submit">Logare</button>
             </form>
         </div>
-        <!-- Logare ca Cititor -->
+
+        <!-- Logare Cititor -->
         <div class="form-container sign-in-container">
-            <form asp-action="LoginReader" method="post">
+            <form asp-page-handler="LoginReader" method="post">
                 <h1>Logare Cititor</h1>
                 <span>Introduceți datele pentru a accesa contul de cititor</span>
 
-                <!-- Câmp email pentru Cititor -->
                 <div class="input-group">
-                    <input type="email" placeholder="Email" name="Email" required />
+                    <input type="email" placeholder="Email" name="Email" value="@Model.Email" />
                     <i class="fas fa-envelope icon-right"></i>
                 </div>
-                <!-- Câmp parolă pentru Cititor -->
+
                 <div class="input-group">
-                    <input type="password" id="readerPassword" placeholder="Parolă" name="Password" required />
+                    <input type="password" placeholder="Parolă" name="Password"  />
                     <i class="fas fa-lock icon-right"></i>
                 </div>
-                <a asp-area="" asp-page="/Users/ResetareParola" class="forgot-password-link">Ați uitat parola?</a>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessageReader))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @Model.ErrorMessageReader
+                    </div>
+                }
+
+                <a asp-page="/Users/ResetareParola" class="forgot-password-link">Ați uitat parola?</a>
                 <button type="submit" class="login-button">Logare</button>
-                <a asp-area="" asp-page="/Users/Inregistrare" class="create-account-link">Nu ai cont? <strong>Înregistrează-te</strong></a>
+                <a asp-page="/Users/Inregistrare" class="create-account-link">Nu ai cont? <strong>Înregistrează-te</strong></a>
             </form>
         </div>
+
         <!-- Overlay -->
         <div class="overlay-container">
             <div class="overlay">

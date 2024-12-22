@@ -10,4 +10,6 @@ public partial class Admin
     public string Email { get; set; } = null!;
 
     public string Parola { get; set; } = null!;
+    public int NumarIncercariEsec { get; set; }
+    public DateTime? BlocatPanaLa { get; set; }
 }
