@@ -3,29 +3,132 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AplicatieLicenta</title>
+    <title>@ViewData["Title"] - BookHaven</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AplicatieLicenta.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookHaven.styles.css" asp-append-version="true" />
+    <style>
+        /* Navbar general */
+        .custom-navbar {
+            width: 100%; /* Lățime completă */
+            background-color: #ffffff; /* Fundal alb */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Umbră subtilă */
+            display: flex;
+            align-items: center; /* Centrează elementele pe verticală */
+            padding: 0 20px; /* Spațiu lateral */
+            position: fixed; /* Fixat în partea de sus */
+            top: 0;
+            z-index: 1000;
+            height: 70px; /* Înălțime fixă */
+            justify-content: center; /* Centrează conținutul pe orizontală */
+        }
+
+        /* Container pentru conținutul navbar-ului */
+        .custom-container {
+            display: flex;
+            justify-content: space-between; /* Logo la stânga, meniul pe dreapta */
+            align-items: center;
+            width: 100%;
+            max-width: 1200px; /* Lățime maximă pentru conținut */
+            margin: 0 auto; /* Centrează containerul */
+        }
+
+        /* Stil pentru logo */
+        .custom-brand {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #C8AD7F; /* Culoare crem */
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: auto; /* Păstrează logo-ul în stânga */
+        }
+
+            .custom-brand:hover {
+                color: #C8A57D;
+            }
+
+        /* Meniu de navigare */
+        .custom-nav-items {
+            display: flex;
+            gap: 50px; /* Spațiu uniform între elementele meniului */
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Stil pentru fiecare link din meniu */
+        .custom-nav-link {
+            display: flex;
+            align-items: center; /* Centrează imaginea și textul pe verticală */
+            text-decoration: none;
+            color: #333333;
+            font-size: 1rem; /* Dimensiunea textului */
+            transition: color 0.3s ease;
+        }
+
+            .custom-nav-link img {
+                width: 30px; /* Dimensiunea iconiței */
+                height: 30px;
+                margin-right: 8px; /* Spațiu între imagine și text */
+            }
+
+            .custom-nav-link:hover {
+                color: #C8A57D;
+            }
+
+        /* Compensare pentru navbar fix */
+        body {
+            margin: 0;
+            padding-top: 80px; /* Asigură că conținutul începe sub navbar */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            .border-top.footer.text-muted
+
+        {
+            font-size: 0.8rem; /* Reduce dimensiunea fontului */
+            position: fixed; /* Fixează footer-ul */
+            bottom: 0; /* Poziționează-l jos */
+            width: 100%; /* Asigură-te că ocupă întreaga lățime a paginii */
+            background-color: #f8f9fa; /* Culoare de fundal discretă */
+            padding: 0.5rem 0; /* Spațiere verticală redusă */
+            border-top: 1px solid #ddd; /* Linie de separare subtilă */
+            text-align: center; /* Centrează textul în interiorul footer-ului */
+            z-index: 10; /* Asigură-te că este deasupra altor elemente */
+        }
+
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">AplicatieLicenta</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Users/Login">Autentificare</a>
-                        </li>
-                    </ul>
+        <nav class="custom-navbar">
+            <div class="custom-container">
+                <a href="/Index" class="custom-brand">BookHaven</a>
+                <div class="custom-nav-items">
+                    <a href="/Index" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/home.png" alt="Home" />
+                        <span>Home</span>
+                    </a>
+                    <a href="/Login" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/loginreader.png" alt="Login" />
+                        <span>Autentificare</span>
+                    </a>
+                    <a href="/CartiPDF" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/cartipdf.png" alt="Carti PDF" />
+                        <span>Carti PDF</span>
+                    </a>
+                    <a href="/CartiAudio" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/cartiaudio.png" alt="Carti Audio" />
+                        <span>Carti Audio</span>
+                    </a>
+                    <a href="/Recenzii" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
+                        <span>Recenzii</span>
+                    </a>
+                    <a href="/ChatBot" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />
+                        <span>ChatBot</span>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -38,7 +141,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - AplicatieLicenta - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2024 - BookHaven - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 

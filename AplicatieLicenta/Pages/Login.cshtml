@@ -6,13 +6,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login as Reader or Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/login.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/site.css" />
+
+    <style>
+        /* Navbar general */
+        .custom-navbar {
+            width: 100%; /* Lățime completă */
+            background-color: #ffffff; /* Fundal alb */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Umbră subtilă */
+            display: flex;
+            align-items: center; /* Centrează elementele pe verticală */
+            padding: 0 20px; /* Spațiu lateral */
+            position: fixed; /* Fixat în partea de sus */
+            top: 0;
+            z-index: 1000;
+            height: 70px; /* Înălțime fixă */
+            justify-content: center; /* Centrează conținutul pe orizontală */
+        }
+
+        /* Container pentru conținutul navbar-ului */
+        .custom-container {
+            display: flex;
+            justify-content: space-between; /* Logo la stânga, meniul pe dreapta */
+            align-items: center;
+            width: 100%;
+            max-width: 1200px; /* Lățime maximă pentru conținut */
+            margin: 0 auto; /* Centrează containerul */
+        }
+
+        /* Stil pentru logo */
+        .custom-brand {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #D2B48C; /* Culoare crem */
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: auto; /* Păstrează logo-ul în stânga */
+        }
+
+            .custom-brand:hover {
+                color: #C8A57D;
+            }
+
+        /* Meniu de navigare */
+        .custom-nav-items {
+            display: flex;
+            gap: 50px; /* Spațiu uniform între elementele meniului */
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Stil pentru fiecare link din meniu */
+        .custom-nav-link {
+            display: flex;
+            align-items: center; /* Centrează imaginea și textul pe verticală */
+            text-decoration: none;
+            color: #333333;
+            font-size: 1rem; /* Dimensiunea textului */
+            transition: color 0.3s ease;
+        }
+
+            .custom-nav-link img {
+                width: 30px; /* Dimensiunea iconiței */
+                height: 30px;
+                margin-right: 8px; /* Spațiu între imagine și text */
+            }
+
+            .custom-nav-link:hover {
+                color: #C8A57D;
+            }
+
+        /* Compensare pentru navbar fix */
+        body {
+            margin: 0;
+            padding-top: 80px; /* Asigură că conținutul începe sub navbar */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
+    <nav class="custom-navbar">
+        <div class="custom-container">
+            <a href="/Index" class="custom-brand">BookHaven</a>
+            <div class="custom-nav-items">
+                <a href="/Index" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/home.png" alt="Home" />
+                    <span>Home</span>
+                </a>
+                <a href="/Login" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/loginreader.png" alt="Login" />
+                    <span>Autentificare</span>
+                </a>
+                <a href="/CartiPDF" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/cartipdf.png" alt="Carti PDF" />
+                    <span>Carti PDF</span>
+                </a>
+                <a href="/CartiAudio" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/cartiaudio.png" alt="Carti Audio" />
+                    <span>Carti Audio</span>
+                </a>
+                <a href="/Recenzii" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
+                    <span>Recenzii</span>
+                </a>
+                <a href="/ChatBot" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />
+                    <span>ChatBot</span>
+                </a>
+            </div>
+        </div>
+    </nav>
     <div class="container" id="container">
         <!-- Logare Administrator -->
         <div class="form-container admin-login-container">
@@ -21,16 +129,17 @@
                 <span>Introduceți credențialele de administrator</span>
 
                 <div class="input-group">
-                    <input type="text" placeholder="Email" name="Email" value="@Model.Email"  />
+                    <input type="text" placeholder="Email" name="Email" value="@Model.Email" />
                     <i class="fas fa-envelope icon-right"></i>
                 </div>
 
                 <div class="input-group">
-                    <input type="password" placeholder="Parolă" name="Password"  />
+                    <input type="password" placeholder="Parolă" name="Password" />
                     <i class="fas fa-lock icon-right"></i>
                 </div>
 
                 @if (!string.IsNullOrEmpty(Model.ErrorMessageAdmin))
+
                 {
                     <div class="alert alert-danger mt-2">
                         @Model.ErrorMessageAdmin
@@ -53,18 +162,21 @@
                 </div>
 
                 <div class="input-group">
-                    <input type="password" placeholder="Parolă" name="Password"  />
+                    <input type="password" placeholder="Parolă" name="Password" />
                     <i class="fas fa-lock icon-right"></i>
                 </div>
 
                 @if (!string.IsNullOrEmpty(Model.ErrorMessageReader))
+
+
+
                 {
                     <div class="alert alert-danger mt-2">
                         @Model.ErrorMessageReader
                     </div>
                 }
 
-                <a asp-page="/Users/ResetareParola" class="forgot-password-link">Ați uitat parola?</a>
+                <a href="/Users/ResetareParola" class="forgot-password-link">Ați uitat parola?</a>
                 <button type="submit" class="login-button">Logare</button>
                 <a asp-page="/Users/Inregistrare" class="create-account-link">Nu ai cont? <strong>Înregistrează-te</strong></a>
             </form>

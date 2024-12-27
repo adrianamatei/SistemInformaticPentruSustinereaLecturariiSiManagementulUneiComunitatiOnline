@@ -1,0 +1,115 @@
+﻿@page "{token?}"
+@model AplicatieLicenta.Pages.Users.ParolaNouaModel
+
+<style>
+    /* Wrapper to center the form */
+    .reset-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 50px); /* Adjust for the menu's height */
+        padding: 20px;
+    }
+
+    /* Form container */
+    .reset-form {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 80px; /* Increased padding for larger height */
+        width: 600px; /* Increased width */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        /* Form elements */
+        .reset-form .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .reset-form label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .reset-form .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Submit button */
+        .reset-form .submit-button {
+            background-color: #c8a06f; /* Beige/gold color */
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+            .reset-form .submit-button:hover {
+                background-color: #b08c5e; /* Slightly darker beige */
+            }
+
+    /* Header */
+    .reset-header {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Success and error messages */
+    .alert {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        text-align: center;
+    }
+</style>
+
+<div class="reset-container">
+    <form method="post" asp-page-handler="ResetPassword" class="reset-form" novalidate>
+        <h2 class="reset-header">Resetare Parolă</h2>
+        <input type="hidden" asp-for="Token" />
+        <div class="form-group">
+            <label>Parola Nouă</label>
+            <input type="password" asp-for="NewPassword" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Confirmă Parola</label>
+            <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        </div>
+        <button type="submit" class="submit-button">Resetare Parolă</button>
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success">@Model.Message</div>
+        }
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+    </form>
+</div>

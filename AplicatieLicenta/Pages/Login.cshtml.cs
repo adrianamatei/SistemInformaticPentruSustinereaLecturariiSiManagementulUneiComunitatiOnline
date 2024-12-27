@@ -27,6 +27,13 @@ namespace AplicatieLicenta.Pages.Users
         // Autentificare Cititor
         public IActionResult OnPostLoginReader()
         {
+            // Verificare câmpuri obligatorii
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessageReader = "Ambele campuri sunt obligatorii!";
+                return Page();
+            }
+
             var reader = _context.Users.FirstOrDefault(u => u.Email == Email);
 
             // Verificã dacã utilizatorul existã
@@ -52,7 +59,7 @@ namespace AplicatieLicenta.Pages.Users
                 if (reader.NumarIncercariEsec >= 3)
                 {
                     reader.BlocatPanaLa = DateTime.Now.AddMinutes(5); // Blocare pentru 5 minute
-                    ErrorMessageReader = "Ari depasit numarul de incercari. Contul este blocat pentru 5 minute.";
+                    ErrorMessageReader = "Ati depasit numarul de incercari. Contul este blocat pentru 5 minute.";
                 }
                 else
                 {
@@ -74,6 +81,13 @@ namespace AplicatieLicenta.Pages.Users
         // Autentificare Administrator
         public IActionResult OnPostLoginAdmin()
         {
+            // Verificare câmpuri obligatorii
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessageAdmin = "Ambele campuri sunt obligatorii!";
+                return Page();
+            }
+
             var admin = _context.Admins.FirstOrDefault(a => a.Email == Email);
 
             // Verificã dacã utilizatorul existã
@@ -110,7 +124,6 @@ namespace AplicatieLicenta.Pages.Users
                 return Page();
             }
 
-            // Resetare contor la autentificare reu?itã
             admin.NumarIncercariEsec = 0;
             admin.BlocatPanaLa = null;
             _context.SaveChanges();

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
+using System.Data.SqlClient;
 
 namespace AplicatieLicenta.Pages.Users
 {
@@ -21,35 +21,45 @@ namespace AplicatieLicenta.Pages.Users
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (string.IsNullOrEmpty(cod_confirmare))
+            if (string.IsNullOrEmpty(cod_confirmare) || string.IsNullOrEmpty(email))
             {
-                Message = "Codul este obligatoriu.";
+                Message = "Email-ul ?i codul de confirmare sunt obligatorii.";
                 return Page();
             }
 
+            // Verificare utilizator în stocarea temporarã
+            if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
+            {
+                Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid.";
+                return Page();
+            }
+
+            // Validare cod de confirmare
+            if (userData.CodConfirmare != cod_confirmare)
+            {
+                Message = "Codul de confirmare este invalid.";
+                return Page();
+            }
+
+            // Inserare utilizator în baza de date
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                // Verificã dacã codul existã ?i email-ul nu a fost confirmat
-                var query = "SELECT id_utilizator FROM Users WHERE cod_confirmare = @CodConfirmare AND email_confirmat = 0";
+                var query = @"
+                    INSERT INTO Users (email, parola, tip_utilizator, categorie_varsta, email_confirmat)
+                    VALUES (@Email, @Parola, @TipUtilizator, @CategorieVarsta, 1)";
                 var command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@CodConfirmare", cod_confirmare);
+
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Parola", userData.HashedPassword);
+                command.Parameters.AddWithValue("@TipUtilizator", userData.TipUtilizator);
+                command.Parameters.AddWithValue("@CategorieVarsta", userData.CategorieVarsta);
 
                 await connection.OpenAsync();
-                var userId = await command.ExecuteScalarAsync();
-
-                if (userId == null)
-                {
-                    Message = "Cod invalid sau email deja confirmat.";
-                    return Page();
-                }
-
-                // Actualizeazã starea utilizatorului (email_confirmat = 1)
-                var updateQuery = "UPDATE Users SET email_confirmat = 1, cod_confirmare = NULL WHERE id_utilizator = @UserId";
-                var updateCommand = new SqlCommand(updateQuery, connection);
-                updateCommand.Parameters.AddWithValue("@UserId", userId);
-
-                await updateCommand.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
             }
+
+            // Eliminare utilizator din stocarea temporarã
+            TemporaryRegistrationStore.PendingRegistrations.Remove(email);
 
             // Redirec?ionare cãtre pagina de login cu un mesaj de succes
             return RedirectToPage("/Login", new { Message = "Email confirmat! Te po?i autentifica." });
@@ -59,29 +69,21 @@ namespace AplicatieLicenta.Pages.Users
         {
             if (string.IsNullOrEmpty(email))
             {
-                Message = "Nu am putut gãsi email-ul asociat.";
+                Message = "Email-ul este obligatoriu pentru retrimiterea codului.";
+                return Page();
+            }
+
+            // Verificare utilizator în stocarea temporarã
+            if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
+            {
+                Message = "Nu am gãsit un utilizator neconfirmat cu acest email.";
                 return Page();
             }
 
             // Generare nou cod de confirmare
             var newCode = GenerateConfirmationCode();
-
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            {
-                var query = "UPDATE Users SET cod_confirmare = @NewCode WHERE email = @Email AND email_confirmat = 0";
-                var command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@NewCode", newCode);
-                command.Parameters.AddWithValue("@Email", email);
-
-                await connection.OpenAsync();
-                int rowsAffected = await command.ExecuteNonQueryAsync();
-
-                if (rowsAffected == 0)
-                {
-                    Message = "Nu am putut gãsi un utilizator neconfirmat cu acest email.";
-                    return Page();
-                }
-            }
+            userData = (userData.HashedPassword, userData.TipUtilizator, userData.CategorieVarsta, newCode);
+            TemporaryRegistrationStore.PendingRegistrations[email] = userData;
 
             // Trimitere nou email cu codul de confirmare
             await SendConfirmationEmail(email, newCode);

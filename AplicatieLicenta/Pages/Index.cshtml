@@ -1,82 +1,10 @@
 ﻿@page
+@model IndexModel
 @{
-    Layout = null;
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="/css/welcome.css" />
-</head>
-<body>
-    <!-- Navbar Section -->
-    <div class="navbar">
-        <a href="/home">
-            <img src="/images/MeniuNavigare/home.png" alt="Home Icon">
-            <span>Home</span>
-        </a>
-        <a href="/about_us">
-            <img src="/images/MeniuNavigare/about_us.png" alt="About Us Icon">
-            <span>Despre</span>
-        </a>
-        <a href="/Login">
-            <img src="/images/MeniuNavigare/loginreader.png" alt="Login Icon">
-            <span>Login</span>
-        </a>
-        <a href="/cartipdf">
-            <img src="/images/MeniuNavigare/cartipdf.png" alt="PDF Books Icon">
-            <span>PDF</span>
-        </a>
-        <a href="/cartiaudio">
-            <img src="/images/MeniuNavigare/cartiaudio.png" alt="Audio Books Icon">
-            <span>Audio</span>
-        </a>
-        <a href="/review">
-            <img src="/images/MeniuNavigare/review.png" alt="Reviews Icon">
-            <span>Recenzii</span>
-        </a>
-        <a href="/chatbot">
-            <img src="/images/MeniuNavigare/chatbot.png" alt="Chatbot Icon">
-            <span>Chatbot</span>
-        </a>
-        
-    </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Vertical Carousel -->
-        <div class="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item">
-                    <img src="/images/alice_in_tara_minunilor.png" alt="Alice în Țara Minunilor">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/aventuri_pinocchio.jpg" alt="Aventurile lui Pinocchio">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/heidi_fetita_muntilor.png" alt="Heidi, fetița munților">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/micul_print.png" alt="Micul Prinț">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/print_si_cersetor.png" alt="Prinț și cerșetor">
-                </div>
-                <div class="carousel-item">
-                    <img src="/images/vrajitorul_din_oz.png" alt="Vrăjitorul din Oz">
-                </div>
-            </div>
-        </div>
-
-        <!-- Welcome Message -->
-        <div class="welcome-message">
-            <h1>Bine ai venit la BookHaven</h1>
-            
-            <p>Locul unde cuvintele prind viață și aventurile se desfășoară printre pagini!</p>
-        </div>
-    </div>
-</body>
-</html>
+<h1>Welcome</h1>
+<p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<p>Find out more <a href="/AboutUs">about us</a> and what we offer.</p>

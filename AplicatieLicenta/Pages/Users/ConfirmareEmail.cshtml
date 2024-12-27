@@ -1,7 +1,7 @@
 ﻿@page
 @model AplicatieLicenta.Pages.Users.ConfirmareEmailModel
 @{
-    Layout = null;
+   
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,7 @@
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <div class="input-with-icon">
-                        <input type="email" id="email" name="email" placeholder="Email" required />
+                        <input type="email" id="email" name="email" placeholder="Email"  />
                        
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="input-group">
                     <label for="code">Cod de confirmare:</label>
                     <div class="input-with-icon">
-                        <input type="text" id="code" name="cod_confirmare" placeholder="Cod de confirmare" required />
+                        <input type="text" id="code" name="cod_confirmare" placeholder="Cod de confirmare"  />
            
                     </div>
                 </div>
@@ -43,6 +43,12 @@
 
                 <!-- Buton de retrimitere cod -->
                 <button formaction="Resend" formmethod="post" class="retrimitere-button">Retrimite email</button>
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-danger mt-2">
+                        @Model.Message
+                    </div>
+                }
             </form>
         </div>
     </div>
