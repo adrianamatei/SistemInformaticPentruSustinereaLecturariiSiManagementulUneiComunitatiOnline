@@ -1,130 +1,171 @@
-﻿body {
+﻿/* Stiluri generale pentru body */
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff; /* Fundal alb */
+    background-color: #ffffff;
     color: black;
-    height: 100vh;
-    overflow: hidden; /* Elimină scrolling-ul */
-    display: flex;
-    flex-direction: column; /* Flex pe verticală */
 }
 
 /* Navbar Styling */
-.navbar {
+.custom-navbar {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: center; /* Aliniază elementele în centru */
     align-items: center;
-    padding: 10px 20px; /* Spațiu interior pentru navbar */
+    padding: 0 20px;
     position: fixed;
     top: 0;
-    width: 100%; /* Navbar-ul ocupă întreaga lățime */
-    height: 60px; /* Înălțime fixă pentru navbar */
-    background-color: white; /* Fundal alb */
-    z-index: 1000; /* Navbar-ul rămâne deasupra altor elemente */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Umbră subtilă pentru navbar */
+    z-index: 1000;
+    height: 70px;
+    justify-content: center;
 }
 
-    .navbar a {
-        margin: 0 15px;
-        text-decoration: none;
-        color: black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+.custom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.custom-brand {
+    font-family: 'Georgia', serif;
+    font-size: 1.8rem;
+    color: #C8AD7F;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: auto; /* Menține logo-ul în partea stângă */
+}
+
+.custom-nav-items {
+    display: flex;
+    gap: 20px; /* Reducerea spațiului dintre elementele meniului */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-end; /* Asigură poziționarea în dreapta */
+}
+
+.custom-nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333333;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+    .custom-nav-link img {
+        width: 25px; /* Iconițe mai mici */
+        height: 25px;
+        margin-right: 5px; /* Spațiu redus între icon și text */
     }
 
-    .navbar img {
-        width: 40px;
-        height: 40px;
-        margin-bottom: 5px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Umbră pentru icon */
-        border-radius: 8px;
+    .custom-nav-link:hover {
+        color: #C8A57D;
     }
 
-    .navbar a:hover img {
-        transform: scale(1.1); /* Mărire la hover */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Umbră mai pronunțată */
-    }
-
-    .navbar a span {
-        font-size: 12px;
-        color: black;
-    }
-
-/* Container Styling */
-.container {
+/* Main Content */
+.main-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    height: calc(100vh - 60px); /* Ajustăm înălțimea pentru a evita navbar-ul */
-    padding-top: 60px; /* Lăsăm spațiu sub navbar */
-    box-sizing: border-box;
+    height: calc(100vh - 70px);
+    margin-top: 70px;
 }
 
 /* Carousel Styling */
 .carousel {
-    width: 30%; /* Lățime fixă pentru carusel */
-    height: 100%; /* Înălțime completă */
-    overflow: hidden; /* Ascunde elementele din afara zonei vizibile */
-    border-right: 1px solid #ddd; /* Linie de delimitare */
-    padding-right: 10px;
-    position: relative;
-    z-index: 1; /* Prioritate mai mică decât navbar-ul */
+    width: 30%;
+    overflow: hidden;
+    border-right: 1px solid #ddd;
+    height: 100%;
 }
 
 .carousel-inner {
     display: flex;
-    flex-direction: column; /* Aranjare pe verticală */
-    height: 100%;
-    animation: scrollUp 5s linear infinite; /* Rulare rapidă pe verticală */
-    transform: translateY(100%); /* Pornește de jos */
+    flex-direction: column;
+    height: auto;
+    animation: scrollUp 30s linear infinite;
 }
 
 .carousel-item {
     flex: 0 0 auto;
     width: 100%;
-    margin: 10px 0; /* Spațiu între imagini */
+    margin: 10px 0;
     display: flex;
-    justify-content: center; /* Centrare a imaginilor pe orizontală */
+    justify-content: center;
     align-items: center;
 }
 
     .carousel-item img {
-        width: 90%; /* Dimensiunea imaginilor redusă */
-        height: auto; /* Păstrează proporțiile */
+        width: 90%;
+        height: auto;
         border-radius: 10px;
-        object-fit: contain; /* Ajustare pentru imagini */
+        object-fit: contain;
     }
 
 /* Welcome Message Styling */
 .welcome-message {
-    width: 50%; /* Spațiu mai mare pentru text */
+    width: 70%;
     padding-left: 20px;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center; /* Centrarea textului */
 }
 
+    /* Titlul de bun venit */
     .welcome-message h1 {
-        font-size: 32px;
-        color: black;
-        margin-bottom: 10px;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #FF0000; /* Roșu vibrant pentru titlu */
+        font-family: 'Fredoka One', cursive; /* Font jucăuș pentru titlu */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), 0 0 25px rgba(255, 0, 0, 0.7); /* Umbrele textului pentru un efect de adâncire */
+        animation: bounce 2s infinite; /* Animație de "sărit" pentru un efect dinamic */
     }
 
+    /* Textul de descriere */
     .welcome-message p {
-        font-size: 16px;
-        color: black;
+        font-size: 1.5rem;
+        color: #D2B48C; /* Crem închis pentru descriere */
+        font-family: 'Comic Sans MS', cursive; /* Font amuzant pentru textul de descriere */
+        margin-top: 10px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Umbre subtile pentru text */
+        animation: fadeIn 2s ease-in-out; /* Animație de apariție pentru descriere */
     }
 
-/* Animație rulare verticală */
-@keyframes scrollUp {
+/* Animație pentru titlul de bun venit */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animație pentru efectul de apariție al textului */
+@keyframes fadeIn {
     0% {
-        transform: translateY(100%); /* Pornește de jos */
+        opacity: 0;
     }
 
     100% {
-        transform: translateY(-100%); /* Rulează până sus */
+        opacity: 1;
+    }
+}
+
+/* Animation */
+@keyframes scrollUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-100%);
     }
 }

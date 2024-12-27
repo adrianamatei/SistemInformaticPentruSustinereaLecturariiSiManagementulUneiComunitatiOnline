@@ -46,7 +46,7 @@
                 // Validare parolã
                 if (parola != ConfirmareParola)
                 {
-                    Message = "Parolele nu coincid!";
+                    Message = "Parolele nu coincid !";
                     return Page();
                 }
 
@@ -94,14 +94,14 @@
                 // Verificare existen?ã utilizator în stocarea temporarã
                 if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
                 {
-                    Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid!";
+                    Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid !";
                     return Page();
                 }
 
                 // Verificare cod de confirmare
                 if (userData.CodConfirmare != cod_confirmare)
                 {
-                    Message = "Codul de confirmare este invalid!";
+                    Message = "Codul de confirmare este invalid !";
                     return Page();
                 }
 

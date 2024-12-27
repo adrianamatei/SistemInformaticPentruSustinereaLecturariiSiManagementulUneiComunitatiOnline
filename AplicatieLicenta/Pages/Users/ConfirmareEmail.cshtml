@@ -42,13 +42,17 @@
                 <button type="submit" class="confirm-button">Confirmă</button>
 
                 <!-- Buton de retrimitere cod -->
-                <button formaction="Resend" formmethod="post" class="retrimitere-button">Retrimite email</button>
+                <form method="post">
+                    <!-- Alte câmpuri, dacă există -->
+                    <button type="submit" asp-page-handler="Resend" class="retrimitere-button">Retrimite email</button>
+                </form>
                 @if (!string.IsNullOrEmpty(Model.Message))
                 {
-                    <div class="alert alert-danger mt-2">
+                    <div class="alert">
                         @Model.Message
                     </div>
                 }
+               
             </form>
         </div>
     </div>

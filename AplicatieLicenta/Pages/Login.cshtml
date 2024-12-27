@@ -12,36 +12,35 @@
     <link rel="stylesheet" href="/css/site.css" />
 
     <style>
-        /* Navbar general */
         .custom-navbar {
-            width: 100%; /* Lățime completă */
-            background-color: #ffffff; /* Fundal alb */
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Umbră subtilă */
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: center; /* Centrează elementele pe verticală */
-            padding: 0 20px; /* Spațiu lateral */
-            position: fixed; /* Fixat în partea de sus */
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
             top: 0;
             z-index: 1000;
-            height: 70px; /* Înălțime fixă */
-            justify-content: center; /* Centrează conținutul pe orizontală */
+            height: 70px;
+            justify-content: center;
         }
 
         /* Container pentru conținutul navbar-ului */
         .custom-container {
             display: flex;
-            justify-content: space-between; /* Logo la stânga, meniul pe dreapta */
+            justify-content: space-between;
             align-items: center;
             width: 100%;
-            max-width: 1200px; /* Lățime maximă pentru conținut */
-            margin: 0 auto; /* Centrează containerul */
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         /* Stil pentru logo */
         .custom-brand {
             font-family: 'Georgia', serif;
             font-size: 1.8rem;
-            color: #D2B48C; /* Culoare crem */
+            color: #C8AD7F;
             font-weight: bold;
             text-decoration: none;
             margin-right: auto; /* Păstrează logo-ul în stânga */
@@ -54,26 +53,27 @@
         /* Meniu de navigare */
         .custom-nav-items {
             display: flex;
-            gap: 50px; /* Spațiu uniform între elementele meniului */
+            gap: 20px; /* Reducem spațiul dintre elementele meniului */
             list-style: none;
             margin: 0;
             padding: 0;
+            justify-content: flex-end; /* Centrează mai bine conținutul pe dreapta */
         }
 
         /* Stil pentru fiecare link din meniu */
         .custom-nav-link {
             display: flex;
-            align-items: center; /* Centrează imaginea și textul pe verticală */
+            align-items: center;
             text-decoration: none;
             color: #333333;
-            font-size: 1rem; /* Dimensiunea textului */
+            font-size: 1rem;
             transition: color 0.3s ease;
         }
 
             .custom-nav-link img {
-                width: 30px; /* Dimensiunea iconiței */
-                height: 30px;
-                margin-right: 8px; /* Spațiu între imagine și text */
+                width: 25px; /* Dimensiune mai mică pentru iconițe */
+                height: 25px;
+                margin-right: 5px; /* Spațiu redus între icon și text */
             }
 
             .custom-nav-link:hover {
@@ -83,10 +83,11 @@
         /* Compensare pentru navbar fix */
         body {
             margin: 0;
-            padding-top: 80px; /* Asigură că conținutul începe sub navbar */
+            padding-top: 80px;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
         }
+
     </style>
 </head>
 <body>
@@ -113,6 +114,10 @@
                 <a href="/Recenzii" class="custom-nav-link">
                     <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
                     <span>Recenzii</span>
+                </a>
+                <a href="/AboutUs" class="custom-nav-link">
+                    <img src="~/images/MeniuNavigare/about_us.png" alt="AboutUs" />
+                    <span>Despre</span>
                 </a>
                 <a href="/ChatBot" class="custom-nav-link">
                     <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />
@@ -197,5 +202,6 @@
         </div>
     </div>
     <script src="/js/login.js"></script>
+
 </body>
 </html>

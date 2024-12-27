@@ -24,7 +24,7 @@ namespace AplicatieLicenta.Pages.Users
         {
             if (string.IsNullOrEmpty(Email))
             {
-                ErrorMessage = "Va rugam sa introduceti o adresa de email.";
+                ErrorMessage = "Va rugam sa introduceti o adresa de email !";
                 return Page();
             }
 
@@ -45,7 +45,7 @@ namespace AplicatieLicenta.Pages.Users
                     {
                         if (!reader.HasRows)
                         {
-                            ErrorMessage = "Email-ul nu este asociat unui cont existent.";
+                            ErrorMessage = "Email-ul nu este asociat unui cont existent !";
                             return Page();
                         }
 
@@ -90,7 +90,7 @@ namespace AplicatieLicenta.Pages.Users
             // Send the reset email
             await SendResetEmail(Email, resetToken);
 
-            Message = "Un email cu instructiuni de resetare a fost trimis.";
+            Message = "Un email cu instructiuni de resetare a fost trimis !";
             return Page();
         }
 

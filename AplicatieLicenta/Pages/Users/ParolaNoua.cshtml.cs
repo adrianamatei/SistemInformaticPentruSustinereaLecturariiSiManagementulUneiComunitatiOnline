@@ -36,7 +36,7 @@ namespace AplicatieLicenta.Pages.Users
             // Validate if passwords match
             if (string.IsNullOrEmpty(NewPassword) || string.IsNullOrEmpty(ConfirmPassword))
             {
-                ErrorMessage = "Toate campurile sunt obligatorii.";
+                ErrorMessage = "Toate campurile sunt obligatorii !";
                 return Page();
             }
 
@@ -63,7 +63,7 @@ namespace AplicatieLicenta.Pages.Users
                     var userId = await command.ExecuteScalarAsync();
                     if (userId == null)
                     {
-                        ErrorMessage = "Token-ul este invalid sau a expirat.";
+                        ErrorMessage = "Token-ul este invalid sau a expirat !";
                         return Page();
                     }
 
@@ -83,7 +83,7 @@ namespace AplicatieLicenta.Pages.Users
             }
 
             // Set the success message and redirect
-            Message = "Parola a fost resetatã cu succes.";
+            Message = "Parola a fost resetatã cu succes !";
             return RedirectToPage("/Login");
         }
     }

@@ -10,92 +10,91 @@
     <style>
         /* Navbar general */
         .custom-navbar {
-            width: 100%; /* Lățime completă */
-            background-color: #ffffff; /* Fundal alb */
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Umbră subtilă */
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: center; /* Centrează elementele pe verticală */
-            padding: 0 20px; /* Spațiu lateral */
-            position: fixed; /* Fixat în partea de sus */
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
             top: 0;
             z-index: 1000;
-            height: 70px; /* Înălțime fixă */
-            justify-content: center; /* Centrează conținutul pe orizontală */
+            height: 70px;
+            justify-content: center;
         }
 
         /* Container pentru conținutul navbar-ului */
         .custom-container {
             display: flex;
-            justify-content: space-between; /* Logo la stânga, meniul pe dreapta */
+            justify-content: space-between;
             align-items: center;
             width: 100%;
-            max-width: 1200px; /* Lățime maximă pentru conținut */
-            margin: 0 auto; /* Centrează containerul */
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         /* Stil pentru logo */
         .custom-brand {
             font-family: 'Georgia', serif;
             font-size: 1.8rem;
-            color: #C8AD7F; /* Culoare crem */
+            color: #C8AD7F;
             font-weight: bold;
             text-decoration: none;
             margin-right: auto; /* Păstrează logo-ul în stânga */
         }
 
-            .custom-brand:hover {
-                color: #C8A57D;
-            }
+        .custom-brand:hover {
+            color: #C8A57D;
+        }
 
         /* Meniu de navigare */
         .custom-nav-items {
             display: flex;
-            gap: 50px; /* Spațiu uniform între elementele meniului */
+            gap: 20px; /* Reducem spațiul dintre elementele meniului */
             list-style: none;
             margin: 0;
             padding: 0;
+            justify-content: flex-end; /* Centrează mai bine conținutul pe dreapta */
         }
 
         /* Stil pentru fiecare link din meniu */
         .custom-nav-link {
             display: flex;
-            align-items: center; /* Centrează imaginea și textul pe verticală */
+            align-items: center;
             text-decoration: none;
             color: #333333;
-            font-size: 1rem; /* Dimensiunea textului */
+            font-size: 1rem;
             transition: color 0.3s ease;
         }
 
-            .custom-nav-link img {
-                width: 30px; /* Dimensiunea iconiței */
-                height: 30px;
-                margin-right: 8px; /* Spațiu între imagine și text */
-            }
+        .custom-nav-link img {
+            width: 25px; /* Dimensiune mai mică pentru iconițe */
+            height: 25px;
+            margin-right: 5px; /* Spațiu redus între icon și text */
+        }
 
-            .custom-nav-link:hover {
-                color: #C8A57D;
-            }
+        .custom-nav-link:hover {
+            color: #C8A57D;
+        }
 
         /* Compensare pentru navbar fix */
         body {
             margin: 0;
-            padding-top: 80px; /* Asigură că conținutul începe sub navbar */
+            padding-top: 80px;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            .border-top.footer.text-muted
-
-        {
-            font-size: 0.8rem; /* Reduce dimensiunea fontului */
-            position: fixed; /* Fixează footer-ul */
-            bottom: 0; /* Poziționează-l jos */
-            width: 100%; /* Asigură-te că ocupă întreaga lățime a paginii */
-            background-color: #f8f9fa; /* Culoare de fundal discretă */
-            padding: 0.5rem 0; /* Spațiere verticală redusă */
-            border-top: 1px solid #ddd; /* Linie de separare subtilă */
-            text-align: center; /* Centrează textul în interiorul footer-ului */
-            z-index: 10; /* Asigură-te că este deasupra altor elemente */
         }
 
+        .border-top.footer.text-muted {
+            font-size: 0.8rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 0.5rem 0;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            z-index: 10;
         }
     </style>
 </head>
@@ -124,6 +123,10 @@
                     <a href="/Recenzii" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
                         <span>Recenzii</span>
+                    </a>
+                    <a href="/AboutUs" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/about_us.png" alt="AboutUs" />
+                        <span>Despre</span>
                     </a>
                     <a href="/ChatBot" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />

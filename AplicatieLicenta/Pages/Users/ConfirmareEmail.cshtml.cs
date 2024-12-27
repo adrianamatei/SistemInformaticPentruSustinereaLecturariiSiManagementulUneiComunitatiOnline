@@ -23,14 +23,14 @@ namespace AplicatieLicenta.Pages.Users
         {
             if (string.IsNullOrEmpty(cod_confirmare) || string.IsNullOrEmpty(email))
             {
-                Message = "Email-ul ?i codul de confirmare sunt obligatorii.";
+                Message = "Email-ul si codul de confirmare sunt obligatorii !";
                 return Page();
             }
 
             // Verificare utilizator în stocarea temporarã
             if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
             {
-                Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid.";
+                Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid !";
                 return Page();
             }
 
@@ -62,21 +62,21 @@ namespace AplicatieLicenta.Pages.Users
             TemporaryRegistrationStore.PendingRegistrations.Remove(email);
 
             // Redirec?ionare cãtre pagina de login cu un mesaj de succes
-            return RedirectToPage("/Login", new { Message = "Email confirmat! Te po?i autentifica." });
+            return RedirectToPage("/Login", new { Message = "Email confirmat! Te poti autentifica !" });
         }
 
         public async Task<IActionResult> OnPostResendAsync()
         {
             if (string.IsNullOrEmpty(email))
             {
-                Message = "Email-ul este obligatoriu pentru retrimiterea codului.";
+                Message = "Email-ul este obligatoriu pentru retrimiterea codului !";
                 return Page();
             }
 
             // Verificare utilizator în stocarea temporarã
             if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
             {
-                Message = "Nu am gãsit un utilizator neconfirmat cu acest email.";
+                Message = "Nu am gãsit un utilizator neconfirmat cu acest email !";
                 return Page();
             }
 
@@ -88,7 +88,7 @@ namespace AplicatieLicenta.Pages.Users
             // Trimitere nou email cu codul de confirmare
             await SendConfirmationEmail(email, newCode);
 
-            Message = "Un nou cod de confirmare a fost trimis pe email.";
+            Message = "Un nou cod de confirmare a fost trimis pe email !";
             return Page();
         }
 
