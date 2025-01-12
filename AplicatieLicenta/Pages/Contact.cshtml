@@ -1,0 +1,150 @@
+﻿@page
+@model AplicatieLicenta.Pages.ContactModel
+@{
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .contact-form {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+            .contact-form h2 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 15px;
+        }
+
+            .contact-form .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            .contact-form .form-group input,
+            .contact-form .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+            .contact-form .form-group textarea {
+                resize: none;
+                height: 150px;
+            }
+
+        .contact-form .form-actions {
+            text-align: center;
+        }
+
+            .contact-form .form-actions button {
+                background-color: #C8AD7F; /* Cream color */
+                color: #ffffff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .contact-form .form-actions button:hover {
+                    background-color: #b2946e;
+                }
+
+        .text-danger {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contact-form">
+        <h2>Formular de contact</h2>
+
+        <!-- Mesaje de succes și eroare -->
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage) || !string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert @(string.IsNullOrEmpty(Model.ErrorMessage) ? "alert-success" : "alert-danger") mt-2">
+                @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+                {
+                    @Model.SuccessMessage
+                }
+                else
+                {
+                    @Model.ErrorMessage
+                }
+            </div>
+        }
+
+        <form method="post">
+            <div class="form-group">
+                <label for="name">Numele dvs</label>
+                <input type="text" id="name" name="ContactForm.Name" value="@Model.ContactForm.Name" class="form-control" placeholder="Nume și prenume" />
+                <span class="text-danger">@ModelState["ContactForm.Name"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+            </div>
+            <div class="form-group">
+                <label for="email">Adresă email</label>
+                <input type="email" id="email" name="ContactForm.Email" value="@Model.ContactForm.Email" class="form-control" placeholder="Adresa dvs de email" />
+                <span class="text-danger">@ModelState["ContactForm.Email"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subiect</label>
+                <input type="text" id="subject" name="ContactForm.Subject" value="@Model.ContactForm.Subject" class="form-control" placeholder="Motivul mesajului" />
+                <span class="text-danger">@ModelState["ContactForm.Subject"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+            </div>
+            <div class="form-group">
+                <label for="message">Mesaj</label>
+                <textarea id="message" name="ContactForm.Message" class="form-control" placeholder="Scrieți mesajul dvs">@Model.ContactForm.Message</textarea>
+                <span class="text-danger">@ModelState["ContactForm.Message"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+            </div>
+            <div class="form-actions">
+                <button type="submit">Trimite</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

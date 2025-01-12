@@ -1,0 +1,158 @@
+﻿@page
+@model AplicatieLicenta.Pages.Admin.AdaugareCartiAudioModel
+@{
+    Layout = "~/Pages/Shared/AdminLayout.cshtml";
+}
+<link rel="stylesheet" href="~/css/adaugareCarte.css" />
+
+<div class="container-adaugare">
+    <h2>Adaugă o Carte Audio</h2>
+    <form method="post" action="/Admin/AdaugareCarte">
+        <input type="hidden" name="tip_carte" value="Audio" />
+
+        <label for="titlu">Titlu:</label>
+        <input type="text" id="titlu" name="titlu" required />
+
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" required />
+
+        <!-- Durata de ascultare -->
+        <label for="durata_ascultare">Durata Ascultare:</label>
+        <input type="time" id="durata_ascultare" name="durata_ascultare" step="1" required
+               style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; width: 100%;" />
+
+        <!-- Drag and Drop pentru Imagine Copertă -->
+        <label for="Imagine_Coperta">Imagine Copertă:</label>
+        <div id="dropzone-coperta" class="dropzone">
+            <p>Trage și plasează imaginea de copertă aici sau apasă pentru a selecta</p>
+            <img id="preview-coperta" src="#" alt="Preview imagine copertă" style="display: none;" />
+            <input type="file" id="Imagine_Coperta" name="Imagine_Coperta" accept="image/*" />
+        </div>
+
+        <!-- Drag and Drop pentru Fișier Audio -->
+        <label for="url_fisier">Fișier Audio:</label>
+        <div id="dropzone-audio" class="dropzone">
+            <p>Trage și plasează fișierul audio aici sau apasă pentru a selecta</p>
+            <input type="file" id="url_fisier" name="url_fisier" accept="audio/mpeg" />
+        </div>
+
+        <label for="categorie_varsta">Categorie Vârstă:</label>
+        <select id="categorie_varsta" name="categorie_varsta" required>
+            <option value="Sub 8 ani">Sub 8 ani</option>
+            <option value="8-10 ani">8-10 ani</option>
+            <option value="10-12 ani">10-12 ani</option>
+            <option value="12-14 ani">12-14 ani</option>
+        </select>
+
+        <button type="submit">Adaugă Carte Audio</button>
+    </form>
+</div>
+
+<script>
+    // Funcționalitate Drag and Drop cu previzualizare pentru imagine
+    const setupDropzoneWithPreview = (dropzoneId, inputId, allowedTypePrefix, previewId) => {
+        const dropzone = document.getElementById(dropzoneId);
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+
+            if (file && file.type.startsWith(allowedTypePrefix)) {
+                input.files = e.dataTransfer.files;
+                dropzone.querySelector('p').textContent = file.name;
+
+                // Previzualizarea imaginii
+                if (allowedTypePrefix === 'image/') {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
+            }
+        });
+
+        dropzone.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+
+            if (file && file.type.startsWith(allowedTypePrefix)) {
+                dropzone.querySelector('p').textContent = file.name;
+
+                // Previzualizarea imaginii
+                if (allowedTypePrefix === 'image/') {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
+            }
+        });
+    };
+
+    // Setup pentru imaginea de copertă cu previzualizare
+    setupDropzoneWithPreview('dropzone-coperta', 'Imagine_Coperta', 'image/', 'preview-coperta');
+
+    // Setup pentru fișier audio (cu verificare corectă pentru mp3)
+    const setupDropzone = (dropzoneId, inputId, allowedType) => {
+        const dropzone = document.getElementById(dropzoneId);
+        const input = document.getElementById(inputId);
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+
+            if (file && (file.type === allowedType || file.type === 'audio/mpeg')) {
+                input.files = e.dataTransfer.files;
+                dropzone.querySelector('p').textContent = file.name;
+            } else {
+                alert(`Fișier invalid. Selectați un fișier de tip ${allowedType}.`);
+            }
+        });
+
+        dropzone.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+
+            if (file && (file.type === allowedType || file.type === 'audio/mpeg')) {
+                dropzone.querySelector('p').textContent = file.name;
+            } else {
+                alert(`Fișier invalid. Selectați un fișier de tip ${allowedType}.`);
+            }
+        });
+    };
+
+    // Setup pentru fișier audio
+    setupDropzone('dropzone-audio', 'url_fisier', 'audio/mpeg');
+</script>

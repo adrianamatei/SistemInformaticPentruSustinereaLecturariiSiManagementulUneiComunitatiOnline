@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AplicatieLicenta.Pages.Admin
+namespace AplicatieLicenta.Pages
 {
-    public class StartAdminModel : PageModel
+    public class RecenziiModel : PageModel
     {
         public void OnGet()
         {

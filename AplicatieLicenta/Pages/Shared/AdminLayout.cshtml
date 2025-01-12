@@ -7,109 +7,109 @@
     <meta name="description" content="Admin Panel">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        #right-panel {
-            margin-left: 250px; /* Compensează lățimea meniului din stânga */
-            padding: 20px; /* Adaugă puțin spațiu pentru conținut */
-            background-color: #ffffff; /* Fundal alb pentru zona principală */
-            min-height: 100vh; /* Asigură că zona principală acoperă întreaga înălțime */
-        }
-
+        /* Panou stânga */
         #left-panel {
-            width: 250px; /* Lățimea panoului din stânga */
-            background-color: #C8AD7F; /* Fundal crem pentru panou */
-            color: #6e4a2d; /* Culoarea textului */
-            height: 100vh; /* Înălțimea completă a ecranului */
+            width: 250px;
+            background-color: #ffffff; /* Fundal alb */
+            color: #C8AD7F; /* Text crem */
+            height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px 0 0 10px; /* Rotunjirea colțurilor panoului */
-            padding: 10px;
-            display: flex;
-            flex-direction: column; /* Asigurăm alinierea verticală */
-        }
-
-            #left-panel img {
-                display: block;
-                width: 100%;
-                max-width: 180px;
-                margin: 15px auto;
-                border-radius: 10px;
-            }
-
-        #main-menu {
-            flex: 1; /* Extindem meniul pentru a ocupa spațiul rămas */
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Distribuim uniform pe verticală */
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); /* Umbră laterală */
+        }
+
+            /* Imagine logo */
+            #left-panel img {
+                display: block;
+                width: 100px; /* Dimensiune pătrată */
+                height: 100px; /* Dimensiune pătrată */
+                object-fit: cover; /* Taie imaginea pentru a se încadra */
+                margin-bottom: 20px;
+            }
+
+            /* Textul logo */
+            #left-panel h1 {
+                font-family: 'Arial', sans-serif;
+                font-size: 24px;
+                color: #C8AD7F;
+                margin: 10px 0;
+            }
+
+        /* Meniu */
+        #main-menu {
+            width: 100%;
         }
 
             #main-menu ul {
                 list-style: none;
-                margin: 0;
                 padding: 0;
+                margin: 0;
             }
 
             #main-menu li {
-                margin: 10px 0; /* Spațiu între opțiuni */
-                padding: 10px; /* Spațiu intern pentru text */
-                background-color: #ffffff; /* Fundal alb pentru fiecare opțiune */
-                color: #6e4a2d; /* Text maro */
-                border: 2px solid #C8AD7F; /* Border maro deschis */
-                border-radius: 8px; /* Rotunjirea colțurilor */
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră pentru efect de ridicare */
-                transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Tranziție pentru hover și clic */
+                text-align: center;
+                margin: 10px 0;
             }
 
-                #main-menu li:hover {
-                    border-color: #8B5E3C; /* Doar bordura își schimbă culoarea */
-                }
-
-                #main-menu li:focus-within {
-                    background-color: #E0C7A1; /* Culoare fundal doar pentru opțiunea selectată */
-                }
-
                 #main-menu li a {
-                    text-decoration: none; /* Eliminăm sublinierea */
-                    color: inherit; /* Păstrează culoarea textului */
-                    display: block; /* Ocupă toată zona elementului */
-                    font-size: 14px; /* Dimensiunea fontului */
-                    text-align: center; /* Centrare text */
+                    display: block;
+                    text-decoration: none;
+                    color: #C8AD7F; /* Text crem */
+                    background-color: #ffffff; /* Fundal alb pentru opțiuni */
+                    padding: 12px 20px; /* Spațiere interioară */
+                    border-radius: 8px; /* Colțuri rotunjite */
+                    font-size: 16px; /* Dimensiunea fontului mărită */
+                    font-weight: bold; /* Face textul mai gros */
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră pentru efect de ridicare */
+                    transition: background-color 0.3s, color 0.3s; /* Efect de tranziție */
                 }
+
+                    /* Hover pe opțiuni */
+                    #main-menu li a:hover {
+                        background-color: #f5f5f5; /* Fundal gri deschis */
+                        color: #8B5E3C; /* Text maro deschis */
+                    }
+
+        /* Panou dreapta */
+        #right-panel {
+            margin-left: 250px; /* Compensează lățimea meniului */
+            padding: 20px;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
     <!-- Left Panel -->
     <aside id="left-panel">
         <div class="navbar-header">
-            <img src="~/images/admin.jpg" alt="Admin Logo"> <!-- Înlocuiește cu URL-ul imaginii tale -->
+            <h1>BookHaven</h1>
+            <!-- Admin Image -->
+            <img src="~/images/admin.jpg" alt="Admin Logo"> <!-- Imaginea pătrată -->
+            <!-- Application Logo -->
+           
         </div>
         <nav id="main-menu">
             <ul>
-                <li>
-                    <ul>
-                        <li><a href="/Admin/AdaugareCartiClasic">Adaugare carti in varianta clasica</a></li>
-                        <li><a href="/Admin/AdaugareCartiScanare">Scanare carte pentru adaugare</a></li>
-                        <li><a href="/Admin/StergereCarti">Stergere carte</a></li>
-                        <li><a href="/Admin/VizualizareCartiPdf">Vizualizare carti pdf</a></li>
-                        <li><a href="/Admin/VizualizareCartiAudio">Vizualizare carti audio</a></li>
-                        <li><a href="/Admin/VizualizareUtilizatoriInregistrati">Vizualizare utilizatori inregistrati</a></li>
-                        <li><a href="/Admin/VizualizareStatistici">Vizualizare statistici</a></li>
-                        <li><a href="/Admin/Logout">Log Out</a></li>
-                    </ul>
-                </li>
+                <li><a href="/Admin/AdaugareCartiPdf">Adaugare carti pdf</a></li>
+                <li><a href="/Admin/AdaugareCartiAudio">Adaugare carti audio</a></li>
+                <li><a href="/Admin/AdaugareCartiScanare">Scanare carte</a></li>
+                <li><a href="/Admin/VizualizareCartiPdf">Vizualizare carti pdf</a></li>
+                <li><a href="/Admin/VizualizareCartiAudio">Vizualizare carti audio</a></li>
+                <li><a href="/Admin/VizualizareUtilizatoriInregistrati">Vizualizare utilizatori</a></li>
+                <li><a href="/Admin/VizualizareStatistici">Vizualizare statistici</a></li>
+                <li><a href="/Admin/Logout">Delogare</a></li>
             </ul>
         </nav>
     </aside>
 
     <!-- Right Panel -->
     <div id="right-panel">
-        <header class="header">
-            <h1>Dashboard</h1>
-        </header>
-        <div class="breadcrumbs">
-            <p>Breadcrumb Navigation</p>
-        </div>
         <div class="content">
             @RenderBody()
         </div>

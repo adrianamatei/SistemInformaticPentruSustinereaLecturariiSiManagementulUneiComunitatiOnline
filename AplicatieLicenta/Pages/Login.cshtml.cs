@@ -128,7 +128,7 @@ namespace AplicatieLicenta.Pages.Users
             admin.BlocatPanaLa = null;
             _context.SaveChanges();
 
-            return RedirectToPage("/Admin/StartAdmin");
+            return RedirectToPage("/Admin/VizualizareStatistici");
         }
     }
 }

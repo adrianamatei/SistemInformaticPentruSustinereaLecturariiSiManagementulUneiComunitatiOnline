@@ -107,59 +107,7 @@ body {
         object-fit: contain;
     }
 
-/* Welcome Message Styling */
-.welcome-message {
-    width: 70%;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center; /* Centrarea textului */
-}
-
-    /* Titlul de bun venit */
-    .welcome-message h1 {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        color: #FF0000; /* Roșu vibrant pentru titlu */
-        font-family: 'Fredoka One', cursive; /* Font jucăuș pentru titlu */
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), 0 0 25px rgba(255, 0, 0, 0.7); /* Umbrele textului pentru un efect de adâncire */
-        animation: bounce 2s infinite; /* Animație de "sărit" pentru un efect dinamic */
-    }
-
-    /* Textul de descriere */
-    .welcome-message p {
-        font-size: 1.5rem;
-        color: #D2B48C; /* Crem închis pentru descriere */
-        font-family: 'Comic Sans MS', cursive; /* Font amuzant pentru textul de descriere */
-        margin-top: 10px;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Umbre subtile pentru text */
-        animation: fadeIn 2s ease-in-out; /* Animație de apariție pentru descriere */
-    }
-
-/* Animație pentru titlul de bun venit */
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-/* Animație pentru efectul de apariție al textului */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-/* Animation */
+/* Animație pentru carousel */
 @keyframes scrollUp {
     0% {
         transform: translateY(0);
@@ -167,5 +115,50 @@ body {
 
     100% {
         transform: translateY(-100%);
+    }
+}
+
+/* Stilizare pentru widget-ul roboțel */
+/* Stilizare pentru widget-ul roboțel */
+.robotel-widget {
+    position: fixed; /* Asigură că roboțelul rămâne fix la marginea paginii */
+    top: 85%; /* Poziționează roboțelul mai jos pe pagină */
+    right: 10px; /* Poziționează roboțelul aproape de marginea dreaptă */
+    z-index: 1000; /* Asigură că roboțelul este deasupra altor elemente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transform: translateY(-50%); /* Aliniere perfectă la mijloc */
+}
+
+.robotel-icon {
+    width: 120px; /* Dimensiune mult mai mare pentru roboțel */
+    height: auto;
+    animation: float 3s ease-in-out infinite;
+}
+
+.robotel-tooltip {
+    margin-bottom: 15px; /* Mai mult spațiu între tooltip și roboțel */
+    padding: 8px 15px; /* Padding mai mare pentru tooltip */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px; /* Font mai mare pentru tooltip */
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: block; /* Tooltip-ul este afișat mereu */
+    white-space: nowrap; /* Previne ca textul să fie pe mai multe linii */
+    text-align: center; /* Centrare text */
+}
+
+/* Animație pentru roboțel */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px); /* Mișcare mai pronunțată */
     }
 }
