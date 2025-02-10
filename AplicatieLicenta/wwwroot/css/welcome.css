@@ -133,7 +133,7 @@ body {
 }
 
 .robotel-icon {
-    width: 120px; /* Dimensiune mult mai mare pentru roboțel */
+    width: 120px; /* Dimensiune pentru roboțel */
     height: auto;
     animation: float 3s ease-in-out infinite;
 }
