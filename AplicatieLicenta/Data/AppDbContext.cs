@@ -18,17 +18,17 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Admin> Admins { get; set; }
 
-    public virtual DbSet<Carti> Cartis { get; set; }
+    public virtual DbSet<Carti> Carti { get; set; }
 
-    public virtual DbSet<CluburiLectura> CluburiLecturas { get; set; }
+    public virtual DbSet<CluburiLectura> CluburiLectura { get; set; }
 
-    public virtual DbSet<MembriClub> MembriClubs { get; set; }
+    public virtual DbSet<MembriClub> MembriClub { get; set; }
 
-    public virtual DbSet<Recenzii> Recenziis { get; set; }
+    public virtual DbSet<Recenzii> Recenzii { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<Vizitatori> Vizitatoris { get; set; }
+    public virtual DbSet<Vizitatori> Vizitatori { get; set; }
     public virtual DbSet<UsersActivity> UsersActivity { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

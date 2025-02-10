@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using AplicatieLicenta.Models;
 
 namespace AplicatieLicenta.Pages.Users
 {
@@ -34,8 +35,6 @@ namespace AplicatieLicenta.Pages.Users
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
-
-                // First query: Check if the user exists and retrieve token info
                 var selectQuery = "SELECT id_utilizator, TokenResetare, ExpirareToken FROM Users WHERE email = @Email";
                 using (var selectCommand = new SqlCommand(selectQuery, connection))
                 {
@@ -54,26 +53,15 @@ namespace AplicatieLicenta.Pages.Users
                         var userId = reader.GetInt32(0);
                         resetToken = reader["TokenResetare"] as string;
                         expirationTime = reader["ExpirareToken"] as DateTime?;
-
-                        // Check if a valid reset token already exists
                         if (!string.IsNullOrEmpty(resetToken) && expirationTime.HasValue && expirationTime > DateTime.Now)
                         {
                             Message = "Un email a fost deja trimis.";
                             return Page();
                         }
-
-                        // Generate a new token and expiration time
                         resetToken = Guid.NewGuid().ToString();
                         expirationTime = DateTime.Now.AddHours(1);
-
-                        // Close the reader before performing the update
                         reader.Close();
-
-                        // Second query: Update the user's reset token and expiration time
-                        var updateQuery = @"
-                            UPDATE Users 
-                            SET TokenResetare = @Token, ExpirareToken = @ExpirationDate 
-                            WHERE id_utilizator = @UserId";
+                        var updateQuery = @" UPDATE Users SET TokenResetare = @Token, ExpirareToken = @ExpirationDate WHERE id_utilizator = @UserId";
 
                         using (var updateCommand = new SqlCommand(updateQuery, connection))
                         {
@@ -86,8 +74,6 @@ namespace AplicatieLicenta.Pages.Users
                     }
                 }
             }
-
-            // Send the reset email
             await SendResetEmail(Email, resetToken);
 
             Message = "Un email cu instructiuni de resetare a fost trimis !";
@@ -117,14 +103,6 @@ namespace AplicatieLicenta.Pages.Users
 
                 await smtpClient.SendMailAsync(mailMessage);
             }
-        }
-
-        public class SmtpSettings
-        {
-            public string Server { get; set; }
-            public int Port { get; set; }
-            public string SenderEmail { get; set; }
-            public string SenderPassword { get; set; }
         }
     }
 }

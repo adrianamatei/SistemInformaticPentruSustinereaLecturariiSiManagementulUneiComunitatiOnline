@@ -28,12 +28,11 @@ namespace AplicatieLicenta.Pages.Users
 
         public void OnGet(string token)
         {
-            Token = token; // Set the token value from the query string
+            Token = token; 
         }
 
         public async Task<IActionResult> OnPostResetPasswordAsync()
         {
-            // Validate if passwords match
             if (string.IsNullOrEmpty(NewPassword) || string.IsNullOrEmpty(ConfirmPassword))
             {
                 ErrorMessage = "Toate campurile sunt obligatorii !";
@@ -49,12 +48,7 @@ namespace AplicatieLicenta.Pages.Users
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 await connection.OpenAsync();
-
-                // Validate the token and its expiration
-                var query = @"
-                    SELECT id_utilizator 
-                    FROM Users 
-                    WHERE TokenResetare = @Token AND ExpirareToken > @Now";
+                var query = @"SELECT id_utilizator FROM Users WHERE TokenResetare = @Token AND ExpirareToken > @Now";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Token", Token);
@@ -66,12 +60,7 @@ namespace AplicatieLicenta.Pages.Users
                         ErrorMessage = "Token-ul este invalid sau a expirat !";
                         return Page();
                     }
-
-                    // Update the password and clear the reset token
-                    query = @"
-                        UPDATE Users 
-                        SET parola = @NewPassword, TokenResetare = NULL, ExpirareToken = NULL 
-                        WHERE id_utilizator = @UserId";
+                    query = @"UPDATE Users SET parola = @NewPassword, TokenResetare = NULL, ExpirareToken = NULL  WHERE id_utilizator = @UserId";
                     using (var updateCommand = new SqlCommand(query, connection))
                     {
                         updateCommand.Parameters.AddWithValue("@NewPassword", BCrypt.Net.BCrypt.HashPassword(NewPassword));
@@ -81,8 +70,6 @@ namespace AplicatieLicenta.Pages.Users
                     }
                 }
             }
-
-            // Set the success message and redirect
             Message = "Parola a fost resetatã cu succes !";
             return RedirectToPage("/Login");
         }

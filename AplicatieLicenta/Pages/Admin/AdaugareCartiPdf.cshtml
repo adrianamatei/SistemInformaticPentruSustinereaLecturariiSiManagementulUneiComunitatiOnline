@@ -1,145 +1,45 @@
 ﻿@page
-@model AplicatieLicenta.Pages.Admin.AdaugareCartiClasicModel
+@model AplicatieLicenta.Pages.Admin.AdaugareCartiPdfModel
 @{
     Layout = "~/Pages/Shared/AdminLayout.cshtml";
 }
 <link rel="stylesheet" href="~/css/adaugareCarte.css" />
+
 <div class="container-adaugare">
-    <h2>Adaugarea unei carti in varianta pdf</h2>
-    <form method="post" action="/Admin/AdaugareCarte">
-        <input type="hidden" name="tip_carte" value="PDF" />
+    <h2>Adăugarea unei cărți în varianta PDF</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="TipCarte" value="PDF" />
 
         <label for="titlu">Titlu:</label>
-        <input type="text" id="titlu" name="titlu" required />
+        <input type="text" id="titlu" name="Titlu" required />
 
         <label for="autor">Autor:</label>
-        <input type="text" id="autor" name="autor" required />
+        <input type="text" id="autor" name="Autor" required />
 
-        <label for="Imagine_Coperta">Imagine Copertă:</label>
+        <label for="ImagineCoperta">Imagine Copertă:</label>
         <div id="dropzone-coperta" class="dropzone">
             <p>Trage și plasează imaginea de copertă aici sau apasă pentru a selecta</p>
-            <img id="preview-coperta" src="#" alt="Preview imagine copertă" style="display: none; max-width: 100%; height: auto; margin-top: 10px;" />
-            <input type="file" id="Imagine_Coperta" name="Imagine_Coperta" accept="image/*" />
+            <img id="preview-coperta" src="#" alt="Preview imagine copertă" style="display: none; max-width: 100%;" />
+            <input type="file" id="ImagineCoperta" name="ImagineCoperta" accept="image/*" required />
         </div>
 
-        <label for="url_fisier">Fișier PDF:</label>
+        <label for="UrlFisier">Fișier PDF:</label>
         <div id="dropzone-pdf" class="dropzone">
             <p>Trage și plasează fișierul PDF aici sau apasă pentru a selecta</p>
-            <input type="file" id="url_fisier" name="url_fisier" accept="application/pdf" required />
+            <input type="file" id="UrlFisier" name="UrlFisier" accept="application/pdf" required />
         </div>
 
-        <label for="categorie_varsta">Categorie Vârstă:</label>
-        <select id="categorie_varsta" name="categorie_varsta" required>
+        <label for="CategorieVarsta">Categorie Vârstă:</label>
+        <select id="CategorieVarsta" name="CategorieVarsta" required>
             <option value="Sub 8 ani">Sub 8 ani</option>
             <option value="8-10 ani">8-10 ani</option>
             <option value="10-12 ani">10-12 ani</option>
             <option value="12-14 ani">12-14 ani</option>
         </select>
+
         <button type="submit">Adaugă Carte PDF</button>
     </form>
+
 </div>
 
-<script>
-    // Funcționalitate Drag and Drop cu previzualizare pentru imagine
-    const setupDropzoneWithPreview = (dropzoneId, inputId, allowedTypePrefix, previewId) => {
-        const dropzone = document.getElementById(dropzoneId);
-        const input = document.getElementById(inputId);
-        const preview = document.getElementById(previewId);
-
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropzone.classList.add('dragover');
-        });
-
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('dragover');
-        });
-
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-
-            if (file && file.type.startsWith(allowedTypePrefix)) {
-                input.files = e.dataTransfer.files;
-                dropzone.querySelector('p').textContent = file.name;
-
-                // Previzualizarea imaginii
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
-            }
-        });
-
-        dropzone.addEventListener('click', () => input.click());
-
-        input.addEventListener('change', () => {
-            const file = input.files[0];
-
-            if (file && file.type.startsWith(allowedTypePrefix)) {
-                dropzone.querySelector('p').textContent = file.name;
-
-                // Previzualizarea imaginii
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
-            }
-        });
-    };
-
-    // Setup pentru imaginea de copertă cu previzualizare
-    setupDropzoneWithPreview('dropzone-coperta', 'Imagine_Coperta', 'image/', 'preview-coperta');
-
-    // Setup pentru fișier PDF (fără previzualizare)
-    const setupDropzone = (dropzoneId, inputId, allowedTypePrefix) => {
-        const dropzone = document.getElementById(dropzoneId);
-        const input = document.getElementById(inputId);
-
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropzone.classList.add('dragover');
-        });
-
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('dragover');
-        });
-
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-
-            if (file && file.type.startsWith(allowedTypePrefix)) {
-                input.files = e.dataTransfer.files;
-                dropzone.querySelector('p').textContent = file.name;
-            } else {
-                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
-            }
-        });
-
-        dropzone.addEventListener('click', () => input.click());
-
-        input.addEventListener('change', () => {
-            const file = input.files[0];
-
-            if (file && file.type.startsWith(allowedTypePrefix)) {
-                dropzone.querySelector('p').textContent = file.name;
-            } else {
-                alert(`Fișier invalid. Selectați un fișier de tip ${allowedTypePrefix}.`);
-            }
-        });
-    };
-
-    // Setup pentru fișier PDF
-    setupDropzone('dropzone-pdf', 'url_fisier', 'application/pdf');
-</script>
+<script src="~/js/adaugareCarte.js"></script>

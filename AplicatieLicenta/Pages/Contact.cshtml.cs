@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Reflection;
+using AplicatieLicenta.Models; 
+
 
 namespace AplicatieLicenta.Pages
 {
@@ -20,7 +22,7 @@ namespace AplicatieLicenta.Pages
         {
             if (!ModelState.IsValid)
             {
-                ErrorMessage = "Toate campurile sunt obligatorii !";
+                ErrorMessage = "Toate campurile sunt obligatorii ! ";
                 return Page();
             }
             try
@@ -28,7 +30,7 @@ namespace AplicatieLicenta.Pages
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new System.Net.NetworkCredential("ionelaamatei2004@gmail.com","wnkx kjuh mawj cnjv"),
+                    Credentials = new System.Net.NetworkCredential("ionelaamatei2004@gmail.com", "wnkx kjuh mawj cnjv"),
                     EnableSsl = true
                 };
                 var mailMessage = new MailMessage
@@ -43,23 +45,13 @@ namespace AplicatieLicenta.Pages
                 SuccessMessage = "Mesajul a fost trimis cu succes !";
                 ModelState.Clear();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 ErrorMessage = $"A aparut o eroare la trimiterea mesajului {ex.Message}";
+
             }
             return Page();
         }
     }
-    public class ContactForm
-    {
-        [Required(ErrorMessage ="Numele este obligatoriu !")]
-        public string Name {  get; set; }
-        [Required(ErrorMessage ="Adresa de eamil este obligatorie !")]
-        [EmailAddress(ErrorMessage = "Adresa de email nu este validã !")]
-        public string Email { get; set; }
-        [Required(ErrorMessage ="Subiectul este obligatoriu !")]
-        public string Subject { get; set; }
-        [Required(ErrorMessage ="Mesajul este obligatoriu !")]
-        public string Message { get; set; }
-    }
+   
 }
-
