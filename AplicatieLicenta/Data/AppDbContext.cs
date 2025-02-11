@@ -101,7 +101,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("nume");
 
-            entity.HasOne(d => d.IdCreatorNavigation).WithMany(p => p.CluburiLecturas)
+            entity.HasOne(d => d.IdCreatorNavigation).WithMany(p => p.CluburiLectura)
                 .HasForeignKey(d => d.IdCreator)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CluburiLe__id_cr__4D94879B");
@@ -121,12 +121,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdClub).HasColumnName("id_club");
             entity.Property(e => e.IdUtilizator).HasColumnName("id_utilizator");
 
-            entity.HasOne(d => d.IdClubNavigation).WithMany(p => p.MembriClubs)
+            entity.HasOne(d => d.IdClubNavigation).WithMany(p => p.MembriClub)
                 .HasForeignKey(d => d.IdClub)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__MembriClu__id_cl__5165187F");
 
-            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.MembriClubs)
+            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.MembriClub)
                 .HasForeignKey(d => d.IdUtilizator)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__MembriClu__id_ut__52593CB8");
@@ -150,12 +150,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdUtilizator).HasColumnName("id_utilizator");
             entity.Property(e => e.Rating).HasColumnName("rating");
 
-            entity.HasOne(d => d.IdCarteNavigation).WithMany(p => p.Recenziis)
+            entity.HasOne(d => d.IdCarteNavigation).WithMany(p => p.Recenzii)
                 .HasForeignKey(d => d.IdCarte)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Recenzii__id_car__48CFD27E");
 
-            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.Recenziis)
+            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.Recenzii)
                 .HasForeignKey(d => d.IdUtilizator)
                 .HasConstraintName("FK__Recenzii__id_uti__49C3F6B7");
         });
@@ -201,7 +201,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("tip_utilizator");
 
-            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.Vizitatoris)
+            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.Vizitatori)
                 .HasForeignKey(d => d.IdUtilizator)
                 .HasConstraintName("FK__Vizitator__id_ut__440B1D61");
         });

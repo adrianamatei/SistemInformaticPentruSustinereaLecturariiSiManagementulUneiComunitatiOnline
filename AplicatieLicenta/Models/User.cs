@@ -22,11 +22,11 @@ public partial class User
 
     public DateTime? ExpirareToken { get; set; } 
 
-    public virtual ICollection<CluburiLectura> CluburiLecturas { get; set; } = new List<CluburiLectura>();
+    public virtual ICollection<CluburiLectura> CluburiLectura { get; set; } = new List<CluburiLectura>();
 
-    public virtual ICollection<MembriClub> MembriClubs { get; set; } = new List<MembriClub>();
+    public virtual ICollection<MembriClub> MembriClub { get; set; } = new List<MembriClub>();
 
-    public virtual ICollection<Recenzii> Recenziis { get; set; } = new List<Recenzii>();
+    public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
 
-    public virtual ICollection<Vizitatori> Vizitatoris { get; set; } = new List<Vizitatori>();
+    public virtual ICollection<Vizitatori> Vizitatori { get; set; } = new List<Vizitatori>();
 }

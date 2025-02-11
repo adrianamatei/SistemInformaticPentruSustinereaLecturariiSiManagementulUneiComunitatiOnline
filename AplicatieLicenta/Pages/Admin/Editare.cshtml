@@ -1,0 +1,133 @@
+﻿@page
+@model AplicatieLicenta.Pages.Admin.EditareModel
+
+@{
+    ViewData["Title"] = "Editare";
+    Layout = "~/Pages/Shared/AdminLayout.cshtml";
+}
+<h1 style="color: #C8AD7F;">Editare</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Carti.IdCarte" />
+            <div class="form-group mb-3">
+                <label asp-for="Carti.Titlu" class="control-label "></label>
+                <input asp-for="Carti.Titlu" class="form-control" />
+                <span asp-validation-for="Carti.Titlu" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Carti.Autor" class="control-label"></label>
+                <input asp-for="Carti.Autor" class="form-control" />
+                <span asp-validation-for="Carti.Autor" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Carti.DurataAscultare" class="control-label"></label>
+                <input asp-for="Carti.DurataAscultare" class="form-control" />
+                <span asp-validation-for="Carti.DurataAscultare" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Carti.ImagineCoperta" class="control-label"></label>
+                <input asp-for="Carti.ImagineCoperta" class="form-control" />
+                <span asp-validation-for="Carti.ImagineCoperta" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class ="form-group mb-3">
+                <label asp-for="Carti.DataAdaugarii" class="control-label"></label>
+                <input asp-for="Carti.DataAdaugarii" class="form-control" />
+                <span asp-validation-for="Carti.DataAdaugarii" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Carti.UrlFisier" class="control-label"></label>
+                <input asp-for="Carti.UrlFisier" class="form-control" />
+                <span asp-validation-for="Carti.UrlFisier" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Carti.TipCarte" class="control-label"></label>
+                <input asp-for="Carti.TipCarte" class="form-control" />
+                <span asp-validation-for="Carti.TipCarte" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Carti.CategorieVarsta" class="control-label"></label>
+                <input asp-for="Carti.CategorieVarsta" class="form-control" />
+                <span asp-validation-for="Carti.CategorieVarsta" class="text-danger"></span>
+            </div>
+            <div class="mb-5"></div>
+
+            <div class="form-group mb-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            <div class="mb-5"></div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Admin/VizualizareCartiPdf" class="custom-link">Renuntare la editarea cartii </a>
+</div>
+
+<style>
+    label {
+        font-weight: bold !important;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+        
+    h1 {
+        margin-bottom: 20px; 
+    }
+
+    form {
+        padding: 10px; 
+    }
+
+    .btn {
+        margin-top: 10px; 
+        background-color: #C8AD7F;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+    }
+
+    a {
+        display: block;
+        margin-top: 15px; 
+    }
+
+   
+    .btn:hover {
+            background-color: #A88F5D; 
+        }
+    .custom-link {
+        color: #C8AD7F; 
+        font-weight: bold;
+        text-decoration: none;
+        display: block;
+        margin-top: 15px;
+    }
+
+        .custom-link:hover {
+            color: #A88F5D; 
+        }
+</style>

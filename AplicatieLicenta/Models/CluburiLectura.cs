@@ -17,5 +17,5 @@ public partial class CluburiLectura
 
     public virtual User IdCreatorNavigation { get; set; } = null!;
 
-    public virtual ICollection<MembriClub> MembriClubs { get; set; } = new List<MembriClub>();
+    public virtual ICollection<MembriClub> MembriClub { get; set; } = new List<MembriClub>();
 }

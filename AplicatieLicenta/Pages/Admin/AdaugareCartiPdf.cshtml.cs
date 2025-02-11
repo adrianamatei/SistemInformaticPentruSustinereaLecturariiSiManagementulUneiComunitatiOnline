@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AplicatieLicenta.Data;
 using AplicatieLicenta.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace AplicatieLicenta.Pages.Admin
 {
@@ -69,7 +70,12 @@ namespace AplicatieLicenta.Pages.Admin
                 {
                     return Page();
                 }
-
+                var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu);
+                if (existingBook != null)
+                {
+                    ModelState.AddModelError(string.Empty, "O carte cu acest titlu exista deja in baza de date !");
+                    return Page();
+                }
                 string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
                 if (!Directory.Exists(uploadPath))
                 {
@@ -109,9 +115,10 @@ namespace AplicatieLicenta.Pages.Admin
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "A apãrut o eroare la procesarea cererii !");
+                ModelState.AddModelError(string.Empty, "A aparut o eroare la procesarea cererii !");
                 return Page();
             }
         }
+
     }
 }

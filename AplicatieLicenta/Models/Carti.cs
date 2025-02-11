@@ -23,5 +23,5 @@ public partial class Carti
 
     public string CategorieVarsta { get; set; } = null!;
 
-    public virtual ICollection<Recenzii> Recenziis { get; set; } = new List<Recenzii>();
+    public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
 }

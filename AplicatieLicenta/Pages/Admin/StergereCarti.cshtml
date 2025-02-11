@@ -1,5 +1,110 @@
 ﻿@page
 @model AplicatieLicenta.Pages.Admin.StergereCartiModel
+
 @{
+    ViewData["Title"] = "StergereCarti";
     Layout = "~/Pages/Shared/AdminLayout.cshtml";
 }
+
+<h1>Stergere carti</h1>
+
+<h3>Esti sigur ca vrei sa stergi aceasta carte ?</h3>
+<div>
+    <h4>Carti</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.Titlu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.Titlu)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.Autor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.Autor)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.DurataAscultare)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.DurataAscultare)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.ImagineCoperta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.ImagineCoperta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.DataAdaugarii)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.DataAdaugarii)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.UrlFisier)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.UrlFisier)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.TipCarte)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.TipCarte)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Carti.CategorieVarsta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Carti.CategorieVarsta)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Carti.IdCarte" />
+        <input type="submit" value="Stergere" class="btn btn-danger" /> 
+        <a asp-page="/Admin/VizualizareCartiPdf" class="custom-link">Renunta la stergerea cartii </a>
+    </form>
+</div>
+<style>
+    h1 {
+        color: #C8AD7F;
+        font-weight: bold;
+    }
+
+         dd {
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        margin-top: 10px;
+        background-color: #C8AD7F;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #A88F5D;
+    }
+    .custom-link {
+        color: #C8AD7F;
+        font-weight: bold;
+        text-decoration: none;
+        display: block;
+        margin-top: 15px;
+    }
+
+        .custom-link:hover {
+            color: #A88F5D;
+        }
+</style>
