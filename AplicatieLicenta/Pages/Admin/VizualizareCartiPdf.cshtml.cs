@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using AplicatieLicenta.Data;
 using AplicatieLicenta.Models;
+using System.Linq;
 
 
 namespace AplicatieLicenta.Pages.Admin
@@ -21,7 +22,7 @@ namespace AplicatieLicenta.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            Carti=await _context.Carti.ToListAsync();
+            Carti=await _context.Carti.Where(c => c.TipCarte == "PDF").ToListAsync();
         }
     }
 }

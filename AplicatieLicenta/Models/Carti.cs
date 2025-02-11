@@ -11,7 +11,7 @@ public partial class Carti
 
     public string Autor { get; set; } = null!;
 
-    public TimeOnly? DurataAscultare { get; set; }
+    public TimeSpan? DurataAscultare { get; set; }
 
     public string ImagineCoperta { get; set; } = null!;
 

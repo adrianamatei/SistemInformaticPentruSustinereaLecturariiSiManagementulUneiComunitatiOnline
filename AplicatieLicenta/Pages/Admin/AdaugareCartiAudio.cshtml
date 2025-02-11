@@ -7,7 +7,7 @@
 
 <div class="container-adaugare">
     <h2>Adaugă o Carte Audio</h2>
-    <form method="post" action="/Admin/AdaugareCarte">
+    <form method="post" action="/Admin/AdaugareCarteAudio">
         <input type="hidden" name="tip_carte" value="Audio" />
 
         <label for="titlu">Titlu:</label>
@@ -17,8 +17,8 @@
         <input type="text" id="autor" name="autor" required />
 
         <!-- Durata de ascultare -->
-        <label for="durata_ascultare">Durata Ascultare:</label>
-        <input type="time" id="durata_ascultare" name="durata_ascultare" step="1" required
+        <label for="DurataAscultare">Durata Ascultare:</label>
+        <input type="time" id="DurataAscultare" name="DurataAscultare" step="1" required
                style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; width: 100%;" />
 
         <!-- Drag and Drop pentru Imagine Copertă -->

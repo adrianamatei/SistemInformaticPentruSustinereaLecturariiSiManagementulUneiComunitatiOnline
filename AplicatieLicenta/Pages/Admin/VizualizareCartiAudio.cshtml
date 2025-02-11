@@ -2,4 +2,67 @@
 @model AplicatieLicenta.Pages.Admin.VizualizareCartiAudioModel
 @{
     Layout = "~/Pages/Shared/AdminLayout.cshtml";
-}
+    }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lista de carti PDF</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 p-6">
+        <div class="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800"> Lista de carti in varianta PDF</h2>
+                <a href="/Admin/AdaugareCartiAudio" class="bg-[#C8AD7F] text-white px-4 py-2 rounded-lg hover:bg-[#A88F5D] transition">
+                    + Adauga o noua carte
+                </a>
+
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full border border-gray-300 rounded-lg bg-white shadow-md">
+
+                    <thead class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal border-b border-gray-300">
+                        <tr>
+                            <th class="px-6 py-3 text-left border-r">Titlu</th>
+                            <th class="px-6 py-3 text-left border-r">Autor</th>
+                            <th class="px-6 py-3 text-center border-r">Imagine Coperta</th>
+                            <th class="px-6 py-3 text-center border-r">Durata ascultare</th>
+                            <th class="px-6 py-3 text-center border-r">Fisier</th>
+                            <th class="px-6 py-3 text-center border-r">Categorie varsta</th>
+                            <th class="px-6 py-3 text-center border-r">Data adaugarii</th>
+                            <th class="px-6 py-3 text-center">Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm divide-y divide-gray-300">
+                        @foreach (var carte in Model.Carti)
+                        {
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 font-medium border-r">@carte.Titlu</td>
+                                <td class="px-6 py-4 border-r">@carte.Autor</td>
+                                <td class="px-6 py-4 text-center border-r">
+                                    <img src="@carte.ImagineCoperta" alt="Copertă" class="w-20 h-28 rounded-md mx-auto shadow-md border border-gray-300">
+                                </td>
+                                <td class="px-6 py-4 border-r">@carte.DurataAscultare</td>
+                                <td class="px-6 py-4 text-center border-r">
+                                    <a href="@carte.UrlFisier" class="text-[#C8AD7F] hover:text-[#A88F5D] font-semibold ">Descarca</a>
+                                </td>
+                                <td class="px-6 py-4 text-center border-r">@carte.CategorieVarsta</td>
+                                <td class="px-6 py-4 text-center border-r">@carte.DataAdaugarii</td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex justify-center space-x-4">
+                                        <a href="/Admin/Editare?id=@carte.IdCarte" class="text-[#C8AD7F] hover:text-[#A88F5D]  font-semibold">Editeaza</a>
+                                        <a href="/Admin/StergereCarti?id=@carte.IdCarte" class="text-[#C8AD7F] hover:text-[#A88F5D]  font-semibold"> Sterge</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    </html>
+

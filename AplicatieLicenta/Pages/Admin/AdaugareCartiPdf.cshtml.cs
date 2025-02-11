@@ -82,7 +82,7 @@ namespace AplicatieLicenta.Pages.Admin
                     Directory.CreateDirectory(uploadPath);
                 }
 
-                string imagineFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImagineCoperta.FileName);
+                string imagineFileName =  Path.GetFileName(ImagineCoperta.FileName);
                 string imaginePath = Path.Combine(uploadPath, imagineFileName);
                 using (var fileStream = new FileStream(imaginePath, FileMode.Create))
                 {
@@ -90,7 +90,7 @@ namespace AplicatieLicenta.Pages.Admin
                 }
                 string imagineUrl = $"/uploads/{imagineFileName}";
 
-                string pdfFileName = Guid.NewGuid().ToString() + Path.GetExtension(UrlFisier.FileName);
+                string pdfFileName =  Path.GetFileName(UrlFisier.FileName);
                 string pdfPath = Path.Combine(uploadPath, pdfFileName);
                 using (var fileStream = new FileStream(pdfPath, FileMode.Create))
                 {
