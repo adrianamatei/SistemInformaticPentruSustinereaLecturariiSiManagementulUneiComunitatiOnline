@@ -7,45 +7,78 @@
 
 <div class="container-adaugare">
     <h2>Adaugă o Carte Audio</h2>
-    <form method="post" action="/Admin/AdaugareCarteAudio">
-        <input type="hidden" name="tip_carte" value="Audio" />
+    @if (!string.IsNullOrEmpty(Model.messageError))
+    {
+        <div class="alert alert-danger mt-2">
+            @Model.messageError
+        </div>
+    }
+    <form method="post" enctype="multipart/form-data" >
+        <input type="hidden" asp-for="tip_carte" value="Audio" />
+     
 
         <label for="titlu">Titlu:</label>
-        <input type="text" id="titlu" name="titlu" required />
+        <input type="text" id="titlu" asp-for="titlu" class="form-control" />
+        
 
         <label for="autor">Autor:</label>
-        <input type="text" id="autor" name="autor" required />
+        <input type="text" id="autor" asp-for="autor"  class="form-control" />
+        
 
-        <!-- Durata de ascultare -->
-        <label for="DurataAscultare">Durata Ascultare:</label>
-        <input type="time" id="DurataAscultare" name="DurataAscultare" step="1" required
-               style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; width: 100%;" />
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <label for="ore">Ore:</label>
+            <input type="number" id="ore" asp-for="ore" min="0" step="1"  class="form-control"
+                   style="width: 60px; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 5px;" />
+           
 
-        <!-- Drag and Drop pentru Imagine Copertă -->
+            <label for="minute">Minute:</label>
+            <input type="number" id="minute" asp-for="minute" min="0" max="59" step="1" class="form-control" 
+                   style="width: 60px; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 5px;" />
+            
+
+            <label for="secunde">Secunde:</label>
+            <input type="number" id="secunde" asp-for="secunde" min="0" max="59" step="1" class="form-control" 
+                   style="width: 60px; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 5px;" />
+           
+        </div>
+
         <label for="Imagine_Coperta">Imagine Copertă:</label>
         <div id="dropzone-coperta" class="dropzone">
             <p>Trage și plasează imaginea de copertă aici sau apasă pentru a selecta</p>
             <img id="preview-coperta" src="#" alt="Preview imagine copertă" style="display: none;" />
-            <input type="file" id="Imagine_Coperta" name="Imagine_Coperta" accept="image/*" />
+            <input type="file" id="Imagine_Coperta" asp-for="Imagine_Coperta" accept="image/*" />
+            
         </div>
 
-        <!-- Drag and Drop pentru Fișier Audio -->
+        
         <label for="url_fisier">Fișier Audio:</label>
         <div id="dropzone-audio" class="dropzone">
             <p>Trage și plasează fișierul audio aici sau apasă pentru a selecta</p>
-            <input type="file" id="url_fisier" name="url_fisier" accept="audio/mpeg" />
+            <input type="file" id="url_fisier" asp-for="url_fisier" accept="audio/mpeg" />
+            
         </div>
 
         <label for="categorie_varsta">Categorie Vârstă:</label>
-        <select id="categorie_varsta" name="categorie_varsta" required>
+        <select id="categorie_varsta" asp-for="categorie_varsta" >
             <option value="Sub 8 ani">Sub 8 ani</option>
             <option value="8-10 ani">8-10 ani</option>
             <option value="10-12 ani">10-12 ani</option>
             <option value="12-14 ani">12-14 ani</option>
         </select>
-
         <button type="submit">Adaugă Carte Audio</button>
+       
     </form>
 </div>
 <script src="~/js/adaugareCarteAudio.js"></script>
-
+<style>
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid #f5c6cb;
+        margin-bottom: 10px;
+    }
+</style>
+ 

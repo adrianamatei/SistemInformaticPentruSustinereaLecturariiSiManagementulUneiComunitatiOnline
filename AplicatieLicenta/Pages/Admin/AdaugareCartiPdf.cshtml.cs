@@ -31,49 +31,54 @@ namespace AplicatieLicenta.Pages.Admin
         [BindProperty] public IFormFile UrlFisier { get; set; }
         [BindProperty] public string CategorieVarsta { get; set; }
         [BindProperty] public string TipCarte { get; set; } = "PDF";
+        public string messageError { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
             try
             {
-                if (string.IsNullOrEmpty(Titlu) || string.IsNullOrEmpty(Autor) || UrlFisier == null || ImagineCoperta == null || string.IsNullOrEmpty(CategorieVarsta))
+                if (string.IsNullOrEmpty(Titlu) && string.IsNullOrEmpty(Autor) && UrlFisier == null && ImagineCoperta == null )
                 {
-                    ModelState.AddModelError(string.Empty, "Toate câmpurile sunt obligatorii !");
+                    messageError = "Toate campurile sunt obligatorii !";
+                    return Page();
                 }
 
                 if (string.IsNullOrEmpty(Titlu))
                 {
-                    ModelState.AddModelError(string.Empty, "Titlul este obligatoriu !");
+                    messageError = "Titlul este obligatoriu !";
+                    return Page();
                 }
                 if (string.IsNullOrEmpty(Autor))
                 {
-                    ModelState.AddModelError(string.Empty, "Autorul este obligatoriu !");
+                    messageError = "Autorul este obligatoriu !";
+                    return Page();
                 }
                 if (UrlFisier == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Fisierul PDF este obligatoriu !");
+                    messageError= "Fisierul PDF este obligatoriu !";
+                    return Page();
                 }
                 if (ImagineCoperta == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Imaginea copertei este obligatorie !");
+                    messageError= "Imaginea copertei este obligatorie !";
+                    return Page();
                 }
                 if (string.IsNullOrEmpty(CategorieVarsta))
                 {
-                    ModelState.AddModelError(string.Empty, "Categoria de varsta este obligatorie !");
+                   messageError= "Categoria de varsta este obligatorie !";
+                    return Page();
                 }
                 if (TipCarte != "PDF")
                 {
-                    ModelState.AddModelError(string.Empty, "Doar fisiere PDF sunt acceptate !");
-                }
-
-                if (!ModelState.IsValid)
-                {
+                    messageError= "Doar fisiere PDF sunt acceptate !";
                     return Page();
                 }
+
+               
                 var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu);
                 if (existingBook != null)
                 {
-                    ModelState.AddModelError(string.Empty, "O carte cu acest titlu exista deja in baza de date !");
+                    messageError = "O carte cu acest titlu exista deja in baza de date !";
                     return Page();
                 }
                 string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");

@@ -21,96 +21,124 @@ namespace AplicatieLicenta.Pages.Admin
             _context = context;
             _environment = environment;
         }
+
         public IActionResult OnGet()
         {
             return Page();
         }
-        [BindProperty] public string Titlu { get; set; }
-        [BindProperty] public string Autor { get; set; }
-        [BindProperty] public IFormFile ImagineCoperta { get; set; }
-        [BindProperty] public IFormFile UrlFisier { get; set; }
-        [BindProperty] public string CategorieVarsta { get; set; }
-        [BindProperty] public string TipCarte { get; set; } = "Audio";
-        [BindProperty] public TimeSpan DurataAscultare { get; set; }
-      
+
+        [BindProperty] public string titlu { get; set; }
+        [BindProperty] public string autor { get; set; }
+        [BindProperty] public IFormFile Imagine_Coperta { get; set; }
+        [BindProperty] public IFormFile url_fisier { get; set; }
+        [BindProperty] public string categorie_varsta { get; set; }
+        [BindProperty] public string tip_carte { get; set; } = "Audio";
+        [BindProperty] public int ore { get; set; }
+        [BindProperty] public int minute { get; set; }
+        [BindProperty] public int secunde { get; set; }
+
+        // Proprietate unicã pentru toate mesajele de eroare
+        public string messageError { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine($"Titlu primit: {titlu}");
+            Console.WriteLine($"Autor primit: {autor}");
+            Console.WriteLine($"Ore: {ore}, Minute: {minute}, Secunde: {secunde}");
+            Console.WriteLine($"Categorie Varsta: {categorie_varsta}");
+            Console.WriteLine($"Imagine Coperta: {Imagine_Coperta?.FileName}");
+            Console.WriteLine($"Fisier Audio: {url_fisier?.FileName}");
+
+            if(string.IsNullOrWhiteSpace(titlu) && string.IsNullOrWhiteSpace(autor) && Imagine_Coperta == null && url_fisier == null )
+            {
+                messageError = "Toate campurile sunt obligatorii !";
+                return Page();
+            }
+            if (string.IsNullOrWhiteSpace(titlu)) 
+            { 
+                messageError = "Titlul este obligatoriu !";
+                return Page();
+            }
+            if (string.IsNullOrWhiteSpace(autor))
+            {
+                messageError = "Autorul este obligatoriu !";
+                return Page();
+            }
+            if (Imagine_Coperta == null) 
+            {
+                messageError = "Imaginea de coperta este obligatorie !"; 
+                return Page();
+            }
+            if (url_fisier == null) 
+            {
+                messageError = "Fisierul audio este obligatoriu !";
+                return Page(); 
+            }
+            if (string.IsNullOrWhiteSpace(categorie_varsta))
+            { 
+                messageError = "Categoria de varsta este obligatorie !";
+                return Page();
+            }
+            if (ore < 0 || minute < 0 || minute >= 60 || secunde < 0 || secunde >= 60)
+            {
+                messageError = "Introduceti o durata valida !";
+                return Page();
+            }
+
+            string extensieFisier = Path.GetExtension(url_fisier.FileName).ToLower();
+            if (extensieFisier != ".mp3" && extensieFisier != ".wav")
+            {
+                messageError = "Doar fisiere MP3 si WAV sunt acceptate !";
+                return Page();
+            }
+
+            var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == titlu);
+            if (existingBook != null)
+            {
+                messageError = "O carte cu acest titlu exista deja in baza de date !";
+                return Page();
+            }
+
             try
             {
-                if (string.IsNullOrEmpty(Titlu) || string.IsNullOrEmpty(Autor) || UrlFisier == null || ImagineCoperta == null || string.IsNullOrEmpty(CategorieVarsta))
-                {
-                    ModelState.AddModelError(string.Empty, "Toate câmpurile sunt obligatorii !");
-                }
-
-                if (string.IsNullOrEmpty(Titlu))
-                {
-                    ModelState.AddModelError(string.Empty, "Titlul este obligatoriu !");
-                }
-                if (string.IsNullOrEmpty(Autor))
-                {
-                    ModelState.AddModelError(string.Empty, "Autorul este obligatoriu !");
-                }
-                if (UrlFisier == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Fisierul audio este obligatoriu !");
-                }
-                if (ImagineCoperta == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Imaginea copertei este obligatorie !");
-                }
-                if (string.IsNullOrEmpty(CategorieVarsta))
-                {
-                    ModelState.AddModelError(string.Empty, "Categoria de varsta este obligatorie !");
-                }
-                if (TipCarte != "Audio")
-                {
-                    ModelState.AddModelError(string.Empty, "Doar fisiere audio sunt acceptate !");
-                }
-             
-
-                if (!ModelState.IsValid)
-                {
-                    return Page();
-                }
-                var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu);
-                if (existingBook != null)
-                {
-                    ModelState.AddModelError(string.Empty, "O carte cu acest titlu exista deja in baza de date !");
-                    return Page();
-                }
+                
                 string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
 
-                string imagineFileName = Path.GetFileName(ImagineCoperta.FileName);
+            
+                string imagineFileName = $"{Path.GetFileNameWithoutExtension(Imagine_Coperta.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(Imagine_Coperta.FileName)}";
                 string imaginePath = Path.Combine(uploadPath, imagineFileName);
                 using (var fileStream = new FileStream(imaginePath, FileMode.Create))
                 {
-                    await ImagineCoperta.CopyToAsync(fileStream);
+                    await Imagine_Coperta.CopyToAsync(fileStream);
                 }
                 string imagineUrl = $"/uploads/{imagineFileName}";
-                string audioFileName = $"{Path.GetFileNameWithoutExtension(UrlFisier.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(UrlFisier.FileName)}";
+
+              
+                string audioFileName = $"{Path.GetFileNameWithoutExtension(url_fisier.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(url_fisier.FileName)}";
                 string audioPath = Path.Combine(uploadPath, audioFileName);
                 using (var fileStream = new FileStream(audioPath, FileMode.Create))
                 {
-                    await UrlFisier.CopyToAsync(fileStream);
+                    await url_fisier.CopyToAsync(fileStream);
                 }
                 string audioUrl = $"/uploads/{audioFileName}";
 
+                TimeSpan durataAscultare = new TimeSpan(ore, minute, secunde);
+
+           
                 var carte = new Carti
                 {
-                    Titlu = Titlu,
-                    Autor = Autor,
+                    Titlu = titlu,
+                    Autor = autor,
                     ImagineCoperta = imagineUrl,
                     UrlFisier = audioUrl,
                     TipCarte = "Audio",
-                    CategorieVarsta = CategorieVarsta,
-                    DurataAscultare =DurataAscultare
+                    CategorieVarsta = categorie_varsta,
+                    DurataAscultare = durataAscultare
                 };
-
 
                 _context.Carti.Add(carte);
                 await _context.SaveChangesAsync();
@@ -119,10 +147,10 @@ namespace AplicatieLicenta.Pages.Admin
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "A aparut o eroare la procesarea cererii !");
+                Console.WriteLine($"Eroare server: {ex.Message}");
+                messageError = "A aparut o eroare la procesarea cererii !";
                 return Page();
             }
         }
-
     }
 }
