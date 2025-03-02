@@ -36,8 +36,6 @@ namespace AplicatieLicenta.Pages.Admin
         [BindProperty] public int ore { get; set; }
         [BindProperty] public int minute { get; set; }
         [BindProperty] public int secunde { get; set; }
-
-        // Proprietate unicã pentru toate mesajele de eroare
         public string messageError { get; set; }
 
         public async Task<IActionResult> OnPostAsync()

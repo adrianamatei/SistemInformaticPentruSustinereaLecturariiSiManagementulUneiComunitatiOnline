@@ -4,7 +4,9 @@
     using System.Threading.Tasks;
     using BCrypt.Net;
     using AplicatieLicenta.Models;
+using System.Text.RegularExpressions;
     namespace AplicatieLicenta.Pages.Users
+
     {
         public class InregistrareModel : PageModel
         {
@@ -32,13 +34,50 @@
             public async Task<IActionResult> OnPostAsync()
             {
                
-                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(parola) || string.IsNullOrWhiteSpace(ConfirmareParola) || string.IsNullOrWhiteSpace(tip_utilizator) ||string.IsNullOrWhiteSpace(categorie_varsta))
+                if (string.IsNullOrWhiteSpace(email) && string.IsNullOrWhiteSpace(parola) && string.IsNullOrWhiteSpace(ConfirmareParola) && string.IsNullOrWhiteSpace(tip_utilizator) && string.IsNullOrWhiteSpace(categorie_varsta))
                 {
-                    Message = "Toate câmpurile trebuie completate!";
+                    Message = "Toate campurile sunt obligatorii !";
                     return Page();
                 }
+             if(string.IsNullOrWhiteSpace(email))
+            {
+                Message = "Campul email este obligatoriu !";
+                return Page();
+            }
+             string emailPattern= @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            if(!Regex.IsMatch(email, emailPattern))
+            {
+                Message = "Adresa de email nu este valida ! ";
+                return Page();
+            }
 
-                if (parola != ConfirmareParola)
+            if (string.IsNullOrWhiteSpace(parola))
+            {
+                Message = "Campul parola este obligatoriu !";
+                return Page();
+            }
+            if (parola.Length < 8)  
+            {
+                Message = "Parola trebuie sa aiba cel putin 8 caractere !";
+                return Page();
+            }
+            if (string.IsNullOrWhiteSpace(ConfirmareParola))
+            {
+                Message = "Campul confirmare parola este obligatoriu !";
+                return Page();
+            }
+            if (string.IsNullOrWhiteSpace(tip_utilizator))
+            {
+                Message = "Campul tip utilizator este obligatoriu !";
+                return Page();
+            }
+            if (string.IsNullOrWhiteSpace(categorie_varsta))
+            {
+                Message = "Campul categorie varsta este obligatoriu !";
+                return Page();
+            }
+
+            if (parola != ConfirmareParola)
                 {
                     Message = "Parolele nu coincid !";
                     return Page();
@@ -76,7 +115,7 @@
                 {
                     From = new System.Net.Mail.MailAddress(smtpSettings.SenderEmail),
                     Subject = "Confirmare email",
-                    Body = $"Codul tãu de confirmare este: {cod_confirmare}",
+                    Body = $"Codul tau de confirmare este: {cod_confirmare}",
                     IsBodyHtml = false,
                 };
 
@@ -96,7 +135,7 @@
                
                 if (!TemporaryRegistrationStore.PendingRegistrations.TryGetValue(email, out var userData))
                 {
-                    Message = "Email-ul nu este înregistrat sau codul de confirmare este invalid !";
+                    Message = "Email-ul nu este inregistrat sau codul de confirmare este invalid !";
                     return Page();
                 }
 

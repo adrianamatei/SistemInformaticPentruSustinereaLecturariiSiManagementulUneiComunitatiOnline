@@ -6,6 +6,8 @@ using BCrypt.Net;
 using AplicatieLicenta.Data;
 using System;
 using AplicatieLicenta.Models;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Text.RegularExpressions;
 namespace AplicatieLicenta.Pages.Users
 {
     public class LoginModel : PageModel
@@ -28,20 +30,28 @@ namespace AplicatieLicenta.Pages.Users
                 ErrorMessageReader = "Ambele campuri sunt obligatorii !";
                 return Page();
             }
+            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            if (!Regex.IsMatch(Email, emailPattern))
+            {
+                ErrorMessageReader = "Introduceti o adresa de email valida ! ";
+                return Page();
+            }
+            
             var reader=_context.Users.FirstOrDefault(u=>u.Email == Email);
             if (reader == null)
             {
                 ErrorMessageReader = "Email-ul introdus nu exista !";
                 return Page();
             }
-            if(reader.BlocatPanaLa.HasValue && reader.BlocatPanaLa.Value >DateTime.Now)
+            
+            if (reader.BlocatPanaLa.HasValue && reader.BlocatPanaLa.Value >DateTime.Now)
             {
                 ErrorMessageReader = $"Contul este blocat pana la {reader.BlocatPanaLa.Value:HH:MM:SS}.";
                 return Page();
             }
             if (!BCrypt.Net.BCrypt.Verify(Password,reader.Parola))
             {
-                reader.NumarIncercariEsec += 1;
+                reader.NumarIncercariEsec =reader.NumarIncercariEsec+ 1;
                 if(reader.NumarIncercariEsec>=3)
                 {
                     reader.BlocatPanaLa = DateTime.Now.AddMinutes(5);
@@ -73,19 +83,35 @@ namespace AplicatieLicenta.Pages.Users
         }
         public IActionResult OnPostLoginAdmin()
         {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(Email) && string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessageAdmin = "Ambele campuri sunt obligatorii !";
                 return Page();
             }
-
+            if(string.IsNullOrWhiteSpace(Email) )
+            {
+                ErrorMessageAdmin = "Campul email este obligatoriu !";
+                return Page();
+            }
+            string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            if (!Regex.IsMatch(Email, emailPattern))
+            {
+                ErrorMessageAdmin = "Introduceti o adresa de email valida ! ";
+                return Page();
+            }
             var admin = _context.Admins.FirstOrDefault(a => a.Email == Email);
             if(admin==null)
             {
                 ErrorMessageAdmin = "Emial-ul introdus nu exista !";
                 return Page();  
             }
-            if(!BCrypt.Net.BCrypt.Verify(Password,admin.Parola))
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessageAdmin = "Campul parola este obligatoriu !";
+                return Page();
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(Password,admin.Parola))
             {
                 admin.NumarIncercariEsec += 1;
                 if(admin.NumarIncercariEsec>=3)

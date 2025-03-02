@@ -55,7 +55,7 @@ namespace AplicatieLicenta.Pages.Users
                         expirationTime = reader["ExpirareToken"] as DateTime?;
                         if (!string.IsNullOrEmpty(resetToken) && expirationTime.HasValue && expirationTime > DateTime.Now)
                         {
-                            Message = "Un email a fost deja trimis.";
+                            Message = "Un email a fost deja trimis !";
                             return Page();
                         }
                         resetToken = Guid.NewGuid().ToString();

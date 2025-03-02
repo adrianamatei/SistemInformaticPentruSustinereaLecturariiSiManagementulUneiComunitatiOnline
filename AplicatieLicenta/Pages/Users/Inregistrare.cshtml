@@ -14,10 +14,9 @@
 <body>
     <div class="container">
         <div class="form-wrapper">
-            <!-- Formular de Înregistrare -->
             <form asp-action="Inregistrare" method="post">
-                <h1>Înregistrare</h1>
-                <span>Completează formularul pentru a-ți crea un cont</span>
+                <h1 style="color: #C8AD7F;">Inregistrare</h1>
+                <span>Completeaza formularul pentru a-ti crea un cont</span>
 
 @if (!string.IsNullOrEmpty(Model.Message))
 {
@@ -25,64 +24,51 @@
         @Model.Message
     </div>
 }
-
-                <!-- Câmp Email cu icon -->
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <div class="input-with-icon">
-                        <input type="email" id="email" name="email" placeholder="Email"  />
+                        <input type="text" id="email" name="email" placeholder="Email"  />
                         <i class="fas fa-envelope"></i>
                     </div>
                 </div>
-
-                <!-- Câmp Parolă cu icon -->
                 <div class="input-group">
-                    <label for="parola">Parolă:</label>
+                    <label for="parola">Parola:</label>
                     <div class="input-with-icon">
                         <input type="password" id="parola" name="parola" placeholder="Parolă" />
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
-
-                <!-- Câmp Confirmare Parolă cu icon -->
                 <div class="input-group">
-                    <label for="confirmPassword">Confirmare parolă:</label>
+                    <label for="confirmPassword">Confirmare parola:</label>
                     <div class="input-with-icon">
                         <input type="password" id="confirmPassword" name="ConfirmareParola" placeholder="Confirmare parolă" />
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
-
-                <!-- Selecție Tip Utilizator -->
                 <div class="input-group">
                     <label for="tip-utilizator">Tip Utilizator:</label>
                     <select id="tip-utilizator" name="tip_utilizator" >
-                        <option value="">Selectează</option>
-                        <option value="parinte">Părinte</option>
+                        <option value="">Selecteaza</option>
+                        <option value="parinte">Parinte</option>
                         <option value="copil">Copil</option>
                     </select>
                 </div>
-
-                <!-- Selecție Categorie Vârstă -->
                 <div class="input-group">
                     <label for="categorie-varsta">Categoria de Vârstă:</label>
                     <select id="categorie-varsta" name="categorie_varsta">
-                        <option value="">Selectează</option>
+                        <option value="">Selecteaza</option>
                         <option value="sub 8 ani">Sub 8 ani</option>
                         <option value="8-10">8-10 ani</option>
                         <option value="10-12">10-12 ani</option>
                         <option value="12-14">12-14 ani</option>
+                        <option value="peste 14 ani">Peste 14 ani</option>
                     </select>
                 </div>
-
-                <!-- Buton Înregistrare -->
-                <button type="submit" class="register-button">Înregistrează-te</button>
-
-                <!-- Link către Autentificare -->
-                <a asp-area="" asp-page="/Login" class="create-account-link">Ai deja un cont? <strong>Autentifică-te</strong></a>
+                <button type="submit" class="register-button">Inregistreaza-te</button>
+                <a asp-area="" asp-page="/Login" class="create-account-link">Ai deja un cont? <strong>Autentifica-te</strong></a>
             </form>
         </div>
-        <!-- Imagine decorativă -->
+    
     </div>
 </body>
 </html>

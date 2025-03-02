@@ -41,7 +41,7 @@ namespace AplicatieLicenta.Pages.Users
 
             if (NewPassword != ConfirmPassword)
             {
-                ErrorMessage = "Parolele nu se potrivesc.";
+                ErrorMessage = "Parolele nu se potrivesc !";
                 return Page();
             }
 
@@ -70,7 +70,7 @@ namespace AplicatieLicenta.Pages.Users
                     }
                 }
             }
-            Message = "Parola a fost resetatã cu succes !";
+            Message = "Parola a fost resetata cu succes !";
             return RedirectToPage("/Login");
         }
     }
