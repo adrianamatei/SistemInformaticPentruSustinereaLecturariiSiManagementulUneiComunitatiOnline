@@ -58,36 +58,58 @@
             
         </div>
 
-        <label for="categorie_varsta">Categorie varsta:</label>
-        <div>
-            <input type="checkbox" id="sub8" name="categorie_varsta" value="Sub 8 ani" />
-            <label for="sub8">Sub 8 ani</label>
-            <input type="checkbox" id="8_10" name="categorie_varsta" value="8-10 ani" />
-            <label for="8_10">8-10 ani</label>
-            <input type="checkbox" id="10_12" name="categorie_varsta" value="10-12 ani" />
-            <label for="10_12">10-12 ani</label>
-            <input type="checkbox" id="12_14" name="categorie_varsta" value="12-14 ani" />
-            <label for="12_14">12-14 ani</label>
-            <input type="checkbox" id="peste14" name="categorie_varsta" value="Peste 14 ani" />
-            <label for="peste14">Peste 14 ani</label>
+        <label for="CategorieVarsta">Categorie varsta:</label>
+        <div class="checkbox-group">
+            <div>
+                <input type="checkbox" id="sub8" name="CategorieVarsta" value="Sub 8 ani" />
+                <label for="sub8">Sub 8 ani</label>
+            </div>
+           <div> 
+                <input type="checkbox" id="8_10" name="CategorieVarsta" value="8-10 ani" />
+                <label for="8_10">8-10 ani</label>
+           </div>
+           <div>
+                <input type="checkbox" id="10_12" name="CategorieVarsta" value="10-12 ani" />
+                <label for="10_12">10-12 ani</label>
+           </div>
+            <div>
+                <input type="checkbox" id="12_14" name="CategorieVarsta" value="12-14 ani" />
+                <label for="12_14">12-14 ani</label>
+            </div>
+           <div>
+                <input type="checkbox" id="peste14" name="CategorieVarsta" value="Peste 14 ani" />
+                <label for="peste14">Peste 14 ani</label>
+           </div>
+            
         </div>
         <label for="gen">Gen</label>
-        <div>
-            <input type="checkbox" id="aventura" name="gen" value="Aventura" />
+        <div class="checkbox-group">
+            <div>
+            <input type="checkbox" id="aventura" name="Gen" value="Aventura" />
             <label for="aventura">Aventura</label>
-            <input type="checkbox" id="fictiune" name="gen" value="Fictiune" />
+            </div>
+            <div>
+            <input type="checkbox" id="fictiune" name="Gen" value="Fictiune" />
             <label for="fictiune">Fictiune</label>
-            <input type="checkbox" id="fantezie" name="gen" value="Fantezie" />
+            </div>
+            <div>
+            <input type="checkbox" id="fantezie" name="Gen" value="Fantezie" />
             <label for="fantezie">Fantezie</label>
-            <input type="checkbox" id="basm" name="gen" value="Basm" />
+            </<div>
+                <div>
+            <input type="checkbox" id="basm" name="Gen" value="Basm" />
             <label for="basm">Basm</label>
+            </div>
         </div>
-        <button type="submit">Adaugă Carte Audio</button>
+        <button type="submit" class="btn-submit">Adaugă Carte Audio</button>
        
     </form>
 </div>
 <script src="~/js/adaugareCarteAudio.js"></script>
 <style>
+    .btn-submit{
+        margin-top:20px
+    }
     .alert-danger {
         background-color: #f8d7da;
         color: #721c24;

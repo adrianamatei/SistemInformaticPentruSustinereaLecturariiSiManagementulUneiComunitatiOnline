@@ -29,7 +29,9 @@ namespace AplicatieLicenta.Pages.Admin
         [BindProperty] public string Autor { get; set; }
         [BindProperty] public IFormFile ImagineCoperta { get; set; }
         [BindProperty] public IFormFile UrlFisier { get; set; }
-        [BindProperty] public string CategorieVarsta { get; set; }
+        [BindProperty] public List<string> CategorieVarsta { get; set; } = new List<string>();
+        [BindProperty]
+        public List<string> Gen { get; set; } = new List<string>();
         [BindProperty] public string TipCarte { get; set; } = "PDF";
         public string messageError { get; set; }
 
@@ -63,19 +65,16 @@ namespace AplicatieLicenta.Pages.Admin
                     messageError= "Imaginea copertei este obligatorie !";
                     return Page();
                 }
-                if (string.IsNullOrEmpty(CategorieVarsta))
-                {
-                   messageError= "Categoria de varsta este obligatorie !";
-                    return Page();
-                }
+            
                 if (TipCarte != "PDF")
                 {
                     messageError= "Doar fisiere PDF sunt acceptate !";
                     return Page();
                 }
 
-               
-                var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu);
+
+                var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu && c.Autor == Autor && c.TipCarte == "PDF");
+
                 if (existingBook != null)
                 {
                     messageError = "O carte cu acest titlu exista deja in baza de date !";
@@ -103,14 +102,24 @@ namespace AplicatieLicenta.Pages.Admin
                 }
                 string pdfUrl = $"/uploads/{pdfFileName}";
 
+                var categoriiSelectate = await _context.CategoriiVarsta
+           .Where(cv => CategorieVarsta.Contains(cv.Denumire))
+           .ToListAsync();
+
+                var genuriSelectate = await _context.Genuri
+                    .Where(g => Gen.Contains(g.Denumire))
+                    .ToListAsync();
+
+               
                 var carte = new Carti
                 {
                     Titlu = Titlu,
                     Autor = Autor,
-                    ImagineCoperta = imagineUrl,
-                    UrlFisier = pdfUrl,
+                    ImagineCoperta = $"/uploads/{imagineFileName}",
+                    UrlFisier = $"/uploads/{pdfFileName}",
                     TipCarte = "PDF",
-                    CategorieVarsta = CategorieVarsta
+                    CategoriiVarsta = categoriiSelectate,
+                    Genuri = genuriSelectate
                 };
 
                 _context.Carti.Add(carte);

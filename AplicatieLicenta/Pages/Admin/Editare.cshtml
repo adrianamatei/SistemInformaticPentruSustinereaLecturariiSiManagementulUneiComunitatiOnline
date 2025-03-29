@@ -61,12 +61,34 @@
             </div>
             <div class="mb-5"></div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Carti.CategorieVarsta" class="control-label"></label>
-                <input asp-for="Carti.CategorieVarsta" class="form-control" />
-                <span asp-validation-for="Carti.CategorieVarsta" class="text-danger"></span>
-            </div>
-            <div class="mb-5"></div>
+          <div class="form-group mb-3">
+    <label class="control-label">Categorie vârstă:</label>
+    <div class="checkbox-group">
+                    @foreach (var categorie in new List<string> { "Sub 8 ani", "8-10 ani", "10-12 ani", "12-14 ani", "Peste 14 ani" })
+                    {
+                <div>
+                    <input type="checkbox" name="CategorieVarstaValori" value="@categorie"
+                            @(Model.CategorieVarstaValori.Contains(categorie) ? "checked" : "") />
+                    <label>@categorie</label>
+                </div>
+                    }
+    </div>
+</div>
+
+<div class="form-group mb-3">
+    <label class="control-label">Gen:</label>
+    <div class="checkbox-group">
+                    @foreach (var gen in new List<string> { "Aventura", "Fictiune", "Fantezie", "Basm" })
+                    {
+                <div>
+                    <input type="checkbox" name="GenValori" value="@gen"
+                            @(Model.GenValori.Contains(gen) ? "checked" : "") />
+                    <label>@gen</label>
+                </div>
+                    }
+    </div>
+</div>
+
 
             <div class="form-group mb-3">
                 <input type="submit" value="Save" class="btn btn-primary" />

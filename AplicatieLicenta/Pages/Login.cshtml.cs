@@ -79,7 +79,16 @@ namespace AplicatieLicenta.Pages.Users
             _context.SaveChanges();
             HttpContext.Session.SetString("UserEmail",reader.Email);
             HttpContext.Session.SetInt32("UserId",reader.IdUtilizator);
+            var returnUrl = HttpContext.Session.GetString("ReturnUrl");
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                HttpContext.Session.Remove("ReturnUrl");
+                return Redirect(returnUrl);
+            }
+
             return RedirectToPage("/Users/StartUser");
+
         }
         public IActionResult OnPostLoginAdmin()
         {

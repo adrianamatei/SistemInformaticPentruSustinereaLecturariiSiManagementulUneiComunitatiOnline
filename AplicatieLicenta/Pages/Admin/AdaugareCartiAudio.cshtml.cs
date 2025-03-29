@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -8,9 +8,11 @@ using AplicatieLicenta.Data;
 using AplicatieLicenta.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
 namespace AplicatieLicenta.Pages.Admin
 {
+    [RequestSizeLimit(104857600)]
+
     public class AdaugareCartiAudioModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -31,7 +33,8 @@ namespace AplicatieLicenta.Pages.Admin
         [BindProperty] public string autor { get; set; }
         [BindProperty] public IFormFile Imagine_Coperta { get; set; }
         [BindProperty] public IFormFile url_fisier { get; set; }
-        [BindProperty] public string categorie_varsta { get; set; }
+        [BindProperty] public List<string> CategorieVarsta { get; set; } = new List<string>();
+        [BindProperty] public List<string> Gen { get; set; } = new List<string>();
         [BindProperty] public string tip_carte { get; set; } = "Audio";
         [BindProperty] public int ore { get; set; }
         [BindProperty] public int minute { get; set; }
@@ -43,17 +46,18 @@ namespace AplicatieLicenta.Pages.Admin
             Console.WriteLine($"Titlu primit: {titlu}");
             Console.WriteLine($"Autor primit: {autor}");
             Console.WriteLine($"Ore: {ore}, Minute: {minute}, Secunde: {secunde}");
-            Console.WriteLine($"Categorie Varsta: {categorie_varsta}");
+            Console.WriteLine($"Categorie Varsta: {string.Join(", ", CategorieVarsta)}");
+            Console.WriteLine($"Gen: {string.Join(", ", Gen)}");
             Console.WriteLine($"Imagine Coperta: {Imagine_Coperta?.FileName}");
             Console.WriteLine($"Fisier Audio: {url_fisier?.FileName}");
 
-            if(string.IsNullOrWhiteSpace(titlu) && string.IsNullOrWhiteSpace(autor) && Imagine_Coperta == null && url_fisier == null )
+            if (string.IsNullOrWhiteSpace(titlu) && string.IsNullOrWhiteSpace(autor) && Imagine_Coperta == null && url_fisier == null)
             {
                 messageError = "Toate campurile sunt obligatorii !";
                 return Page();
             }
-            if (string.IsNullOrWhiteSpace(titlu)) 
-            { 
+            if (string.IsNullOrWhiteSpace(titlu))
+            {
                 messageError = "Titlul este obligatoriu !";
                 return Page();
             }
@@ -62,21 +66,17 @@ namespace AplicatieLicenta.Pages.Admin
                 messageError = "Autorul este obligatoriu !";
                 return Page();
             }
-            if (Imagine_Coperta == null) 
+            if (Imagine_Coperta == null)
             {
-                messageError = "Imaginea de coperta este obligatorie !"; 
+                messageError = "Imaginea de coperta este obligatorie !";
                 return Page();
             }
-            if (url_fisier == null) 
+            if (url_fisier == null)
             {
                 messageError = "Fisierul audio este obligatoriu !";
-                return Page(); 
-            }
-            if (string.IsNullOrWhiteSpace(categorie_varsta))
-            { 
-                messageError = "Categoria de varsta este obligatorie !";
                 return Page();
             }
+
             if (ore < 0 || minute < 0 || minute >= 60 || secunde < 0 || secunde >= 60)
             {
                 messageError = "Introduceti o durata valida !";
@@ -90,7 +90,8 @@ namespace AplicatieLicenta.Pages.Admin
                 return Page();
             }
 
-            var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == titlu);
+            var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == titlu && c.Autor == autor && c.TipCarte == "Audio");
+
             if (existingBook != null)
             {
                 messageError = "O carte cu acest titlu exista deja in baza de date !";
@@ -99,14 +100,12 @@ namespace AplicatieLicenta.Pages.Admin
 
             try
             {
-                
                 string uploadPath = Path.Combine(_environment.WebRootPath, "uploads");
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
 
-            
                 string imagineFileName = $"{Path.GetFileNameWithoutExtension(Imagine_Coperta.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(Imagine_Coperta.FileName)}";
                 string imaginePath = Path.Combine(uploadPath, imagineFileName);
                 using (var fileStream = new FileStream(imaginePath, FileMode.Create))
@@ -115,7 +114,6 @@ namespace AplicatieLicenta.Pages.Admin
                 }
                 string imagineUrl = $"/uploads/{imagineFileName}";
 
-              
                 string audioFileName = $"{Path.GetFileNameWithoutExtension(url_fisier.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{Path.GetExtension(url_fisier.FileName)}";
                 string audioPath = Path.Combine(uploadPath, audioFileName);
                 using (var fileStream = new FileStream(audioPath, FileMode.Create))
@@ -126,7 +124,15 @@ namespace AplicatieLicenta.Pages.Admin
 
                 TimeSpan durataAscultare = new TimeSpan(ore, minute, secunde);
 
-           
+                var categoriiSelectate = await _context.CategoriiVarsta
+           .Where(cv => CategorieVarsta.Contains(cv.Denumire))
+           .ToListAsync();
+
+                var genuriSelectate = await _context.Genuri
+                    .Where(g => Gen.Contains(g.Denumire))
+                    .ToListAsync();
+
+
                 var carte = new Carti
                 {
                     Titlu = titlu,
@@ -134,8 +140,10 @@ namespace AplicatieLicenta.Pages.Admin
                     ImagineCoperta = imagineUrl,
                     UrlFisier = audioUrl,
                     TipCarte = "Audio",
-                    CategorieVarsta = categorie_varsta,
-                    DurataAscultare = durataAscultare
+                    DurataAscultare = durataAscultare,
+                    DataAdaugarii = DateTime.Now,
+                    Genuri = genuriSelectate,
+                    CategoriiVarsta = categoriiSelectate
                 };
 
                 _context.Carti.Add(carte);
@@ -150,5 +158,6 @@ namespace AplicatieLicenta.Pages.Admin
                 return Page();
             }
         }
+
     }
 }

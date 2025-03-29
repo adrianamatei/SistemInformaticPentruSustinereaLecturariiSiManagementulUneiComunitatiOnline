@@ -22,7 +22,13 @@ namespace AplicatieLicenta.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            Carti = await _context.Carti.Where(c => c.TipCarte == "Audio").ToListAsync();
+            Carti = await _context.Carti
+     .Where(c => c.TipCarte == "Audio")
+     .Include(c => c.CategoriiVarsta)
+     .Include(c => c.Genuri)
+     .ToListAsync();
+
+
         }
     }
 }

@@ -1,4 +1,5 @@
 using AplicatieLicenta.Data;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,10 @@ builder.Services.AddSession(options=>
     options.Cookie.IsEssential = true;
 }
     );
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 104857600; // 100 MB
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();

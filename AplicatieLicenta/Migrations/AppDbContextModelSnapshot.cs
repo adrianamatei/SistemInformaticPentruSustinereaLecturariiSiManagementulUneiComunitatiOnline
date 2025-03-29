@@ -73,19 +73,13 @@ namespace AplicatieLicenta.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("autor");
 
-                    b.Property<string>("CategorieVarsta")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("categorie_varsta");
-
                     b.Property<DateTime?>("DataAdaugarii")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("data_adaugarii")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<TimeOnly?>("DurataAscultare")
+                    b.Property<TimeSpan?>("DurataAscultare")
                         .HasColumnType("time")
                         .HasColumnName("durata_ascultare");
 
@@ -117,6 +111,23 @@ namespace AplicatieLicenta.Migrations
                         .HasName("PK__Carti__D3C2E8FD46C36E6A");
 
                     b.ToTable("Carti", (string)null);
+                });
+
+            modelBuilder.Entity("AplicatieLicenta.Models.CategorieVarsta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Denumire")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriiVarsta");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.CluburiLectura", b =>
@@ -155,6 +166,23 @@ namespace AplicatieLicenta.Migrations
                     b.HasIndex("IdCreator");
 
                     b.ToTable("CluburiLectura", (string)null);
+                });
+
+            modelBuilder.Entity("AplicatieLicenta.Models.Gen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Denumire")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genuri");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.MembriClub", b =>
@@ -358,10 +386,40 @@ namespace AplicatieLicenta.Migrations
                     b.ToTable("Vizitatori", (string)null);
                 });
 
+            modelBuilder.Entity("CartiCategorieVarsta", b =>
+                {
+                    b.Property<int>("CartiIdCarte")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriiVarstaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartiIdCarte", "CategoriiVarstaId");
+
+                    b.HasIndex("CategoriiVarstaId");
+
+                    b.ToTable("CarteCategorieVarsta", (string)null);
+                });
+
+            modelBuilder.Entity("CartiGen", b =>
+                {
+                    b.Property<int>("CartiIdCarte")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenuriId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartiIdCarte", "GenuriId");
+
+                    b.HasIndex("GenuriId");
+
+                    b.ToTable("CarteGen", (string)null);
+                });
+
             modelBuilder.Entity("AplicatieLicenta.Models.CluburiLectura", b =>
                 {
                     b.HasOne("AplicatieLicenta.Models.User", "IdCreatorNavigation")
-                        .WithMany("CluburiLecturas")
+                        .WithMany("CluburiLectura")
                         .HasForeignKey("IdCreator")
                         .IsRequired()
                         .HasConstraintName("FK__CluburiLe__id_cr__4D94879B");
@@ -372,13 +430,13 @@ namespace AplicatieLicenta.Migrations
             modelBuilder.Entity("AplicatieLicenta.Models.MembriClub", b =>
                 {
                     b.HasOne("AplicatieLicenta.Models.CluburiLectura", "IdClubNavigation")
-                        .WithMany("MembriClubs")
+                        .WithMany("MembriClub")
                         .HasForeignKey("IdClub")
                         .IsRequired()
                         .HasConstraintName("FK__MembriClu__id_cl__5165187F");
 
                     b.HasOne("AplicatieLicenta.Models.User", "IdUtilizatorNavigation")
-                        .WithMany("MembriClubs")
+                        .WithMany("MembriClub")
                         .HasForeignKey("IdUtilizator")
                         .IsRequired()
                         .HasConstraintName("FK__MembriClu__id_ut__52593CB8");
@@ -391,13 +449,13 @@ namespace AplicatieLicenta.Migrations
             modelBuilder.Entity("AplicatieLicenta.Models.Recenzii", b =>
                 {
                     b.HasOne("AplicatieLicenta.Models.Carti", "IdCarteNavigation")
-                        .WithMany("Recenziis")
+                        .WithMany("Recenzii")
                         .HasForeignKey("IdCarte")
                         .IsRequired()
                         .HasConstraintName("FK__Recenzii__id_car__48CFD27E");
 
                     b.HasOne("AplicatieLicenta.Models.User", "IdUtilizatorNavigation")
-                        .WithMany("Recenziis")
+                        .WithMany("Recenzii")
                         .HasForeignKey("IdUtilizator")
                         .HasConstraintName("FK__Recenzii__id_uti__49C3F6B7");
 
@@ -409,32 +467,62 @@ namespace AplicatieLicenta.Migrations
             modelBuilder.Entity("AplicatieLicenta.Models.Vizitatori", b =>
                 {
                     b.HasOne("AplicatieLicenta.Models.User", "IdUtilizatorNavigation")
-                        .WithMany("Vizitatoris")
+                        .WithMany("Vizitatori")
                         .HasForeignKey("IdUtilizator")
                         .HasConstraintName("FK__Vizitator__id_ut__440B1D61");
 
                     b.Navigation("IdUtilizatorNavigation");
                 });
 
+            modelBuilder.Entity("CartiCategorieVarsta", b =>
+                {
+                    b.HasOne("AplicatieLicenta.Models.Carti", null)
+                        .WithMany()
+                        .HasForeignKey("CartiIdCarte")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AplicatieLicenta.Models.CategorieVarsta", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriiVarstaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CartiGen", b =>
+                {
+                    b.HasOne("AplicatieLicenta.Models.Carti", null)
+                        .WithMany()
+                        .HasForeignKey("CartiIdCarte")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AplicatieLicenta.Models.Gen", null)
+                        .WithMany()
+                        .HasForeignKey("GenuriId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AplicatieLicenta.Models.Carti", b =>
                 {
-                    b.Navigation("Recenziis");
+                    b.Navigation("Recenzii");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.CluburiLectura", b =>
                 {
-                    b.Navigation("MembriClubs");
+                    b.Navigation("MembriClub");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.User", b =>
                 {
-                    b.Navigation("CluburiLecturas");
+                    b.Navigation("CluburiLectura");
 
-                    b.Navigation("MembriClubs");
+                    b.Navigation("MembriClub");
 
-                    b.Navigation("Recenziis");
+                    b.Navigation("Recenzii");
 
-                    b.Navigation("Vizitatoris");
+                    b.Navigation("Vizitatori");
                 });
 #pragma warning restore 612, 618
         }

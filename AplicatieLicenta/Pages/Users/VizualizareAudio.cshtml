@@ -1,0 +1,98 @@
+﻿@page
+@model AplicatieLicenta.Pages.Users.VizualizareAudioModel
+@{
+    var litere = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+
+<h2 class="mb-4 fw-bold">Cărți Audio disponibile</h2>
+
+<!-- SORTARE IN DREAPTA -->
+<div class="d-flex justify-content-end align-items-center mb-3">
+    <form method="get" class="d-flex align-items-center flex-wrap gap-2">
+        <label for="SortBy" class="fw-bold mb-0" style="color: #C8AD7F;">Sort by:</label>
+        <select id="SortBy" name="SortBy" onchange="this.form.submit()" class="form-select w-auto">
+            <option value="Titlu" selected="@("Titlu" == Model.SortBy)">Title</option>
+            <option value="Autor" selected="@("Autor" == Model.SortBy)">Author</option>
+            <option value="CategorieVarsta" selected="@("CategorieVarsta" == Model.SortBy)">Categorie vârstă</option>
+        </select>
+
+        @if (Model.SortBy == "CategorieVarsta")
+        {
+            <select name="CategorieSelectata" onchange="this.form.submit()" class="form-select w-auto">
+                <option value="">Toate categoriile</option>
+                @{
+                    var categoriiFixe = new List<string>
+            {
+            "Sub 8 ani", "8-10 ani", "10-12 ani", "12-14 ani", "Peste 14 ani"
+            };
+                }
+
+                @foreach (var categorie in categoriiFixe)
+                {
+                    <option value="@categorie" selected="@(categorie == Model.CategorieSelectata)">
+                        @categorie
+                    </option>
+                }
+
+            </select>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Litera))
+        {
+            <input type="hidden" name="Litera" value="@Model.Litera" />
+        }
+    </form>
+
+</div>
+
+<!-- INDEX ALFABETIC -->
+<div class="mb-4">
+    <span class="fw-bold me-2">Index:</span>
+    @foreach (var lit in litere)
+    {
+        <a asp-page="./VizualizareAudio" asp-route-Litera="@lit" asp-route-SortBy="@Model.SortBy"
+           class="mx-2"
+           style="font-weight: bold; color: #C8AD7F; letter-spacing: 2px; text-decoration: none;">
+            @lit
+        </a>
+    }
+    <a asp-page="./VizualizareAudio" asp-route-SortBy="@Model.SortBy"
+       class="mx-2 text-decoration-underline"
+       style="font-weight: bold; color: #C8AD7F;">All</a>
+</div>
+
+<hr />
+
+<!-- LISTA CARTI -->
+<div class="row">
+    @foreach (var carte in Model.Carti)
+    {
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card h-100 text-center shadow-sm">
+                <img src="@carte.ImagineCoperta"
+                     class="card-img-top"
+                     alt="@carte.Titlu"
+                     style="height: 350px; width: 100%; object-fit: contain; background-color: #f8f8f8;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #990033;">@carte.Titlu</h5>
+                    <p class="card-text text-muted">Autor: <strong>@carte.Autor</strong></p>
+                    <a asp-page-handler="Asculta" asp-route-id="@carte.IdCarte" class="btn custom-citeste-btn mt-2">Ascultă</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .custom-citeste-btn {
+        background-color: #C8AD7F;
+        color: white;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-citeste-btn:hover {
+        background-color: #a98f63;
+        color: white;
+    }
+</style>

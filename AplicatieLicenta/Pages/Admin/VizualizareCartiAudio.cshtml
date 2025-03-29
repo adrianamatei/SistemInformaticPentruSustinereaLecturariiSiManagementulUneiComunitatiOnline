@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md">
 
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800"> Lista de carti in varianta PDF</h2>
+                <h2 class="text-2xl font-bold text-gray-800"> Lista de carti in varianta Audio</h2>
                 <a href="/Admin/AdaugareCartiAudio" class="bg-[#C8AD7F] text-white px-4 py-2 rounded-lg hover:bg-[#A88F5D] transition">
                     + Adauga o noua carte
                 </a>
@@ -32,6 +32,7 @@
                             <th class="px-6 py-3 text-center border-r">Durata ascultare</th>
                             <th class="px-6 py-3 text-center border-r">Fisier</th>
                             <th class="px-6 py-3 text-center border-r">Categorie varsta</th>
+                        <th class="px-6 py-3 text-center border-r">Gen</th>
                             <th class="px-6 py-3 text-center border-r">Data adaugarii</th>
                             <th class="px-6 py-3 text-center">Acțiuni</th>
                         </tr>
@@ -49,7 +50,12 @@
                                 <td class="px-6 py-4 text-center border-r">
                                     <a href="@carte.UrlFisier" class="text-[#C8AD7F] hover:text-[#A88F5D] font-semibold ">Descarca</a>
                                 </td>
-                                <td class="px-6 py-4 text-center border-r">@carte.CategorieVarsta</td>
+                            <td class="px-6 py-4 text-center border-r">
+                                @string.Join(", ", carte.CategoriiVarsta.Select(c => c.Denumire))
+                            </td>
+                            <td class="px-6 py-4 text-center border-r">
+                                @string.Join(", ", carte.Genuri.Select(g => g.Denumire))
+                            </td>
                                 <td class="px-6 py-4 text-center border-r">@carte.DataAdaugarii</td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center space-x-4">

@@ -21,7 +21,9 @@ public partial class Carti
 
     public string TipCarte { get; set; } = null!;
 
-    public string CategorieVarsta { get; set; } = null!;
+   
+    public List<CategorieVarsta> CategoriiVarsta { get; set; } = new List<CategorieVarsta>();
+    public List<Gen> Genuri { get; set; } = new List<Gen>();
 
     public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
 }

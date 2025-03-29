@@ -19,6 +19,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Admin> Admins { get; set; }
 
     public virtual DbSet<Carti> Carti { get; set; }
+    public DbSet<CategorieVarsta>CategoriiVarsta { get; set; }
+    public DbSet<Gen> Genuri { get; set; }
 
     public virtual DbSet<CluburiLectura> CluburiLectura { get; set; }
 
@@ -37,6 +39,8 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+
         modelBuilder.Entity<Admin>(entity =>
         {
             entity.HasKey(e => e.IdAdmin).HasName("PK__Admins__89472E95FD08EAAE");
@@ -62,9 +66,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Autor)
                 .HasMaxLength(100)
                 .HasColumnName("autor");
-            entity.Property(e => e.CategorieVarsta)
-                .HasMaxLength(20)
-                .HasColumnName("categorie_varsta");
             entity.Property(e => e.DataAdaugarii)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -83,6 +84,26 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("url_fisier");
         });
+
+        modelBuilder.Entity<Carti>()
+     .HasMany(c => c.Genuri)
+     .WithMany(g => g.Carti)
+     .UsingEntity<Dictionary<string, object>>(
+         "CarteGen",
+         j => j.HasOne<Gen>().WithMany().HasForeignKey("GenuriId"),
+         j => j.HasOne<Carti>().WithMany().HasForeignKey("CartiIdCarte")
+     );
+
+        modelBuilder.Entity<Carti>()
+            .HasMany(c => c.CategoriiVarsta)
+            .WithMany(cv => cv.Carti)
+            .UsingEntity<Dictionary<string, object>>(
+                "CarteCategorieVarsta",
+                j => j.HasOne<CategorieVarsta>().WithMany().HasForeignKey("CategoriiVarstaId"),
+                j => j.HasOne<Carti>().WithMany().HasForeignKey("CartiIdCarte")
+            );
+
+
 
         modelBuilder.Entity<CluburiLectura>(entity =>
         {

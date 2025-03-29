@@ -1,28 +1,31 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using AplicatieLicenta.Data;
 using AplicatieLicenta.Models;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace AplicatieLicenta.Pages.Admin
 {
     public class VizualizareCartiPdfModel : PageModel
     {
         private readonly AppDbContext _context;
-        public IList<Carti> Carti { get; set; }
 
         public VizualizareCartiPdfModel(AppDbContext context)
         {
             _context = context;
         }
 
+        public List<Carti> Carti { get; set; }
+
         public async Task OnGetAsync()
         {
-            Carti=await _context.Carti.Where(c => c.TipCarte == "PDF").ToListAsync();
+            Carti = await _context.Carti
+                .Where(c => c.TipCarte == "PDF")
+                .Include(c => c.Genuri) // Aici incluzi genurile
+                .Include(c => c.CategoriiVarsta) // Aici incluzi categoriile de varstã
+                .ToListAsync();
         }
     }
 }

@@ -6,76 +6,75 @@
     Layout = "~/Pages/Shared/AdminLayout.cshtml";
 }
 
-<h1>Stergere carti</h1>
+<h1>Stergere carte</h1>
 
-<h3>Esti sigur ca vrei sa stergi aceasta carte ?</h3>
+<h3>Esti sigur ca vrei sa stergi aceasta carte?</h3>
 <div>
-    <h4>Carti</h4>
+    <h4>Informații carte</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.Titlu)
-        </dt>
+        <dt class="col-sm-2">Titlu</dt>
+        <dd class="col-sm-10">@Model.Carti.Titlu</dd>
+
+        <dt class="col-sm-2">Autor</dt>
+        <dd class="col-sm-10">@Model.Carti.Autor</dd>
+
+        <dt class="col-sm-2">Durată ascultare</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.Titlu)
+            @(Model.Carti.DurataAscultare.HasValue ? Model.Carti.DurataAscultare.ToString() : "-")
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.Autor)
-        </dt>
+
+        <dt class="col-sm-2">Imagine copertă</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.Autor)
+            <img src="@Model.Carti.ImagineCoperta" alt="Copertă" class="rounded shadow" style="max-height: 200px;" />
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.DurataAscultare)
-        </dt>
+
+        <dt class="col-sm-2">Data adăugării</dt>
+        <dd class="col-sm-10">@Model.Carti.DataAdaugarii?.ToString("dd/MM/yyyy HH:mm")</dd>
+
+        <dt class="col-sm-2">Fișier</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.DurataAscultare)
+            <a href="@Model.Carti.UrlFisier" target="_blank" class="custom-link">Deschide fișier</a>
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.ImagineCoperta)
-        </dt>
+
+        <dt class="col-sm-2">Tip carte</dt>
+        <dd class="col-sm-10">@Model.Carti.TipCarte</dd>
+
+        <dt class="col-sm-2">Categorie vârstă</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.ImagineCoperta)
+            @string.Join(", ", Model.Carti.CategoriiVarsta.Select(c => c.Denumire))
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.DataAdaugarii)
-        </dt>
+
+        <dt class="col-sm-2">Genuri</dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.DataAdaugarii)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.UrlFisier)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.UrlFisier)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.TipCarte)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.TipCarte)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Carti.CategorieVarsta)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Carti.CategorieVarsta)
+            @string.Join(", ", Model.Carti.Genuri.Select(g => g.Denumire))
         </dd>
     </dl>
-    
+
     <form method="post">
         <input type="hidden" asp-for="Carti.IdCarte" />
-        <input type="submit" value="Stergere" class="btn btn-danger" /> 
-        <a asp-page="/Admin/VizualizareCartiPdf" class="custom-link">Renunta la stergerea cartii </a>
+        <input type="submit" value="Ștergere" class="btn btn-danger" />
+        <a asp-page="/Admin/VizualizareCartiPdf" class="custom-link">Renunță la ștergere</a>
     </form>
 </div>
+
 <style>
     h1 {
         color: #C8AD7F;
         font-weight: bold;
     }
 
-         dd {
+    h3 {
+        margin-bottom: 20px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #444;
+        margin-top: 8px;
+    }
+
+    dd {
         font-weight: bold;
         margin-bottom: 15px;
     }
@@ -96,15 +95,17 @@
     .btn:hover {
         background-color: #A88F5D;
     }
+
     .custom-link {
         color: #C8AD7F;
         font-weight: bold;
         text-decoration: none;
-        display: block;
+        display: inline-block;
         margin-top: 15px;
+        margin-left: 20px;
     }
 
-        .custom-link:hover {
-            color: #A88F5D;
-        }
+    .custom-link:hover {
+        color: #A88F5D;
+    }
 </style>

@@ -22,6 +22,10 @@ namespace AplicatieLicenta.Pages.Admin
 
         [BindProperty]
         public Carti Carti { get; set; } = default!;
+        [BindProperty]
+        public List<string> CategorieVarstaValori { get; set; } = new List<string>();
+        [BindProperty]
+        public List<string> GenValori { get; set; } = new List<string>();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,48 +34,64 @@ namespace AplicatieLicenta.Pages.Admin
                 return NotFound();
             }
 
-            var carti =  await _context.Carti.FirstOrDefaultAsync(m => m.IdCarte == id);
+            var carti =  await _context.Carti
+                .Include(c => c.CategoriiVarsta)
+                .Include(c => c.Genuri)
+                .FirstOrDefaultAsync(m => m.IdCarte == id);
             if (carti == null)
             {
                 return NotFound();
             }
-            Carti = carti;
+            Carti= carti;
+            CategorieVarstaValori = Carti.CategoriiVarsta.Select(cv => cv.Denumire).ToList();
+            GenValori= Carti.Genuri.Select(g => g.Denumire).ToList();
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+       
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            var cartiDb = await _context.Carti
+               .Include(c => c.CategoriiVarsta)
+               .Include(c => c.Genuri)
+               .FirstOrDefaultAsync(c => c.IdCarte == Carti.IdCarte);
 
-            _context.Attach(Carti).State = EntityState.Modified;
 
-            try
+            if (cartiDb == null) 
+                return NotFound();
+
+            cartiDb.Titlu = Carti.Titlu;
+            cartiDb.Autor = Carti.Autor;
+            cartiDb.ImagineCoperta = Carti.ImagineCoperta;
+            cartiDb.UrlFisier = Carti.UrlFisier;
+            cartiDb.TipCarte = Carti.TipCarte;
+            cartiDb.DurataAscultare = Carti.DurataAscultare;
+
+            cartiDb.CategoriiVarsta = await _context.CategoriiVarsta
+                .Where(cv => CategorieVarstaValori.Contains(cv.Denumire))
+                .ToListAsync();
+
+            cartiDb.Genuri = await _context.Genuri
+                .Where(g => GenValori.Contains(g.Denumire))
+                .ToListAsync();
+
+            await _context.SaveChangesAsync();
+            if (cartiDb.TipCarte == "Audio")
             {
-                await _context.SaveChangesAsync();
+                return RedirectToPage("/Admin/VizualizareCartiAudio");
             }
-            catch (DbUpdateConcurrencyException)
+            else 
             {
-                if (!CartiExists(Carti.IdCarte))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("/Admin/VizualizareCartiPdf");
             }
 
-            return RedirectToPage("/Admin/VizualizareCartiPdf");
         }
 
-        private bool CartiExists(int id)
-        {
-            return _context.Carti.Any(e => e.IdCarte == id);
-        }
+
     }
 }
