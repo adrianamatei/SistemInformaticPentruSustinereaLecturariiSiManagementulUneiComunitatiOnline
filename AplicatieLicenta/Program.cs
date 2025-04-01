@@ -1,6 +1,8 @@
 using AplicatieLicenta.Data;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using AplicatieLicenta.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -18,6 +20,7 @@ builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
 });
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -31,6 +34,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.MapHub<ChatHub>("/chatHub");
 app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();

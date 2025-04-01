@@ -2,4 +2,198 @@
 @model AplicatieLicenta.Pages.Users.StartUserModel
 @{
 }
-<h1>Bine ai venit, cititor!</h1>
+
+@if (Model.CluburiRelevante.Any())
+{
+    <h2>Cluburi de lectură pentru categoria ta de vârstă: <strong>@Model.CategorieVarsta</strong></h2>
+
+    @foreach (var club in Model.CluburiRelevante)
+    {
+        var membru = club.MembriClub.FirstOrDefault(m => m.IdUtilizator == Model.UserId);
+
+        <div class="club-card">
+            <h5>@club.Nume</h5>
+            <p><strong>Descriere:</strong> @club.Descriere</p>
+            <p><strong>Categorie:</strong> @club.CategorieVarsta</p>
+
+            @if (membru != null)
+            {
+                if (membru.Status == "Aprobat")
+                {
+                    <button class="chat-open-btn" onclick="openChat('@club.Nume', @club.IdClub)">
+                        Alătură-te discuțiilor despre cărțile preferate!
+                    </button>
+                }
+                else if (membru.Status == "In asteptare")
+                {
+                    <span class="pending-msg">Cererea ta a fost trimisă către admin.</span>
+                }
+            }
+            else
+            {
+                <form method="post" asp-page-handler="Join">
+                    <input type="hidden" name="clubId" value="@club.IdClub" />
+                    <button type="submit" class="chat-open-btn">Intră acum în club!</button>
+                </form>
+            }
+        </div>
+    }
+}
+else
+{
+    <p>Momentan nu există cluburi de lectură pentru categoria ta de vârstă.</p>
+}
+
+<div id="chat-box" class="hidden">
+    <div class="chat-header">
+        <span id="chat-title">Discuție Club</span>
+        <button onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-body" id="chat-messages"></div>
+    <div class="chat-footer">
+        <input id="messageInput" type="text" placeholder="Scrie un mesaj..." />
+        <button onclick="sendMessage()">Trimite</button>
+        <button onclick="startRecording()">Start</button>
+        <button onclick="stopRecording()">Stop</button>
+    </div>
+
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/designStartUser.css" />
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        let connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        let currentClubId = 0;
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordedBlob = null;
+
+        connection.start().then(() => {
+            console.log("✅ Conectat la SignalR");
+        }).catch(err => console.error("❌ Eroare la conectare:", err));
+
+        connection.on("ReceiveMessage", (email, mesaj, ora) => {
+            addMessage(email, mesaj, ora);
+        });
+
+        connection.on("ReceiveVocal", (email, fileName, ora) => {
+            const chatBody = document.getElementById("chat-messages");
+            const mesajNou = document.createElement("div");
+            mesajNou.innerHTML = `<strong>${email}</strong> (${ora}):<br><audio controls src="/vocale/${fileName}"></audio>`;
+            chatBody.appendChild(mesajNou);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        });
+
+        function openChat(clubName, clubId) {
+            currentClubId = clubId;
+            document.getElementById("chat-title").textContent = "Discutie în " + clubName;
+            document.getElementById("chat-box").classList.remove("hidden");
+            document.getElementById("chat-box").classList.add("chat-box-visible");
+
+            loadMesaje(clubId);
+            connection.invoke("JoinClub", clubId).catch(err => console.error(err));
+        }
+
+        function toggleChat() {
+            const chatBox = document.getElementById("chat-box");
+            chatBox.classList.add("hidden");
+            chatBox.classList.remove("chat-box-visible");
+        }
+
+        function addMessage(email, mesaj, ora) {
+            const chatBody = document.getElementById("chat-messages");
+            const mesajNou = document.createElement("div");
+            mesajNou.innerHTML = `<strong>${email}</strong> (${ora}): ${mesaj}`;
+            chatBody.appendChild(mesajNou);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function loadMesaje(idClub) {
+            fetch('/Users/StartUser?handler=IncarcaMesaje&idClub=' + idClub)
+                .then(res => res.json())
+                .then(data => {
+                    const chatBody = document.getElementById("chat-messages");
+                    chatBody.innerHTML = "";
+                    data.forEach(msg => {
+                        addMessage(msg.email, msg.continut, msg.dataTrimiterii);
+                    });
+                })
+                .catch(err => console.error("❌ Eroare la incarcarea mesajelor:", err));
+        }
+
+        function startRecording() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = e => {
+                        console.log("🎙️ Chunk audio primit");
+                        audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        recordedBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        console.log("✅ Înregistrare completă:", recordedBlob);
+                    };
+
+                    mediaRecorder.start();
+                    console.log("▶️ Înregistrare pornită...");
+                })
+                .catch(err => console.error("❌ Acces microfon refuzat:", err));
+        }
+
+        function stopRecording() {
+            console.log("🟥 Ai apăsat STOP");
+
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+                console.log("⛔ Înregistrare oprită");
+            } else {
+                console.warn("⚠️ Recorder NU era activ");
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const mesaj = input.value.trim();
+
+            if (mesaj !== "") {
+                connection.invoke("SendMessage", currentClubId, @Model.UserId, "@Model.UserEmail", mesaj)
+                    .catch(err => console.error("❌ Eroare la trimitere text:", err));
+                input.value = "";
+            }
+
+            if (recordedBlob) {
+                const formData = new FormData();
+                formData.append('vocal', recordedBlob, 'voce.webm');
+                formData.append('idClub', currentClubId);
+                formData.append('userId', @Model.UserId);
+                formData.append('userEmail', "@Model.UserEmail");
+
+                fetch('/Users/StartUser?handler=Vocal', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(r => r.text())
+                    .then(fileName => {
+                        console.log("📤 Mesaj vocal trimis:", fileName);
+                        connection.invoke("SendVocal", currentClubId, @Model.UserId, "@Model.UserEmail", fileName);
+                        recordedBlob = null;
+                        audioChunks = [];
+                    })
+                    .catch(err => console.error("❌ Eroare la upload vocal:", err));
+            }
+        }
+    </script>
+}
+
+

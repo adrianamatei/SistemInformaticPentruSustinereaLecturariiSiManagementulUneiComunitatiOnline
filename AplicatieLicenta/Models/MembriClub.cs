@@ -12,6 +12,7 @@ public partial class MembriClub
     public int IdUtilizator { get; set; }
 
     public DateTime? DataInscrierii { get; set; }
+    public string Status { get; set; } = "In asteptare";
 
     public virtual CluburiLectura IdClubNavigation { get; set; } = null!;
 

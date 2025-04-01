@@ -51,6 +51,13 @@ namespace AplicatieLicenta.Pages.Users
             if (user == null)
                 return RedirectToPage("/Users/Login");
 
+            // ?? Încãrcãm cartea aici ca sã avem acces la titlu
+            Carte = await _context.Carti.FirstOrDefaultAsync(c => c.IdCarte == id);
+            if (Carte == null)
+            {
+                return NotFound(); // sau altã paginã de eroare
+            }
+
             var recenzie = new Recenzii
             {
                 IdCarte = id,
@@ -62,11 +69,21 @@ namespace AplicatieLicenta.Pages.Users
             };
 
             _context.Recenzii.Add(recenzie);
+
+            _context.UsersActivity.Add(new UsersActivity
+            {
+                UserId = userId.Value,
+                Action = "Recenzie carte",
+                Data = $"Utilizatorul a scris o recenzie la cartea: {Carte.Titlu}",
+                Timestamp = DateTime.Now
+            });
+
             await _context.SaveChangesAsync();
 
-            await LoadCarteSiRecenzii(id, userId.Value);
+            await LoadCarteSiRecenzii(id, userId.Value); // po?i lãsa ?i asta dacã vrei sã reîncarci tot
             return Page();
         }
+
 
         private async Task LoadCarteSiRecenzii(int carteId, int userId)
         {

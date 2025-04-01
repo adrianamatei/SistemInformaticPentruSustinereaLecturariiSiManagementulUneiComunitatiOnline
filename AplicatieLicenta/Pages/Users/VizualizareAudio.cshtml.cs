@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AplicatieLicenta.Data;
 using AplicatieLicenta.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,35 +26,50 @@ namespace AplicatieLicenta.Pages.Users
 
         [BindProperty(SupportsGet = true)]
         public string Litera { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public string CategorieSelectata { get; set; }
 
-        public List<string> CategoriiDisponibile { get; set; } = new();
+        [BindProperty(SupportsGet = true)]
+        public string GenSelectat { get; set; }
 
+        public List<string> GenuriDisponibile { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
             var query = _context.Carti
-                .Where(c => c.TipCarte == "Audio");
+                .Where(c => c.TipCarte == "Audio")
+                .Include(c => c.Genuri)
+                .Include(c => c.CategoriiVarsta)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(Litera))
             {
                 query = query.Where(c => c.Titlu.StartsWith(Litera));
             }
+
             if (!string.IsNullOrEmpty(CategorieSelectata))
             {
                 query = query.Where(c => c.CategoriiVarsta.Any(cv => cv.Denumire == CategorieSelectata));
             }
 
+            if (!string.IsNullOrEmpty(GenSelectat))
+            {
+                query = query.Where(c => c.Genuri.Any(g => g.Denumire == GenSelectat));
+            }
 
             query = SortBy switch
             {
                 "Autor" => query.OrderBy(c => c.Autor),
-                "CategorieVarsta" => query.OrderBy(c => c.CategoriiVarsta.FirstOrDefault().Denumire),
+                "CategorieVarsta" => query.OrderBy(c => c.CategoriiVarsta.Select(cv => cv.Denumire).FirstOrDefault()),
+                "Gen" => query.OrderBy(c => c.Genuri.Select(g => g.Denumire).FirstOrDefault()),
                 _ => query.OrderBy(c => c.Titlu)
             };
 
-            Carti = query.ToList();
+            Carti = await query.ToListAsync();
+
+            GenuriDisponibile = await _context.Genuri.Select(g => g.Denumire).ToListAsync();
+
             return Page();
         }
 
@@ -63,11 +79,9 @@ namespace AplicatieLicenta.Pages.Users
 
             if (!esteLogat)
             {
-               
                 HttpContext.Session.SetString("ReturnUrl", $"/Users/DetaliiAudio?id={id}");
                 return RedirectToPage("/Login");
             }
-
 
             return RedirectToPage("/Users/DetaliiAudio", new { id });
         }

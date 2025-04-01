@@ -14,6 +14,8 @@ public partial class CluburiLectura
     public int IdCreator { get; set; }
 
     public DateTime? DataCrearii { get; set; }
+    public string CategorieVarsta { get; set; } = "";
+
 
     public virtual User IdCreatorNavigation { get; set; } = null!;
 

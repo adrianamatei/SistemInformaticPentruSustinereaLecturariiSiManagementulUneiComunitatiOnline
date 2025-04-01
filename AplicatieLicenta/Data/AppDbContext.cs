@@ -29,9 +29,13 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Recenzii> Recenzii { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public DbSet<MesajClub> MesajClub { get; set; }
+
 
     public virtual DbSet<Vizitatori> Vizitatori { get; set; }
     public virtual DbSet<UsersActivity> UsersActivity { get; set; }
+    public DbSet<MesajClub> MesajeClub { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -84,6 +88,15 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("url_fisier");
         });
+        modelBuilder.Entity<MesajClub>()
+        .HasOne(m => m.Club)
+        .WithMany()
+        .HasForeignKey(m => m.IdClub);
+
+        modelBuilder.Entity<MesajClub>()
+            .HasOne(m => m.Utilizator)
+            .WithMany()
+            .HasForeignKey(m => m.IdUtilizator);
 
         modelBuilder.Entity<Carti>()
      .HasMany(c => c.Genuri)

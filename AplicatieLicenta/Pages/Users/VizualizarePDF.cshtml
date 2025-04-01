@@ -4,9 +4,8 @@
     var litere = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 }
 
-<h2 class="mb-4 fw-bold">Cărți disponibile (PDF)</h2>
+<h2 class="mb-4 fw-bold">Cărți Pdf</h2>
 
-<!-- SORTARE MUTATA IN DREAPTA -->
 <div class="d-flex justify-content-end align-items-center mb-3">
     <form method="get" class="d-flex align-items-center flex-wrap gap-2">
         <label for="SortBy" class="fw-bold mb-0" style="color: #C8AD7F;">Sort by:</label>
@@ -14,6 +13,7 @@
             <option value="Titlu" selected="@("Titlu" == Model.SortBy)">Titlu</option>
             <option value="Autor" selected="@("Autor" == Model.SortBy)">Autor</option>
             <option value="CategorieVarsta" selected="@("CategorieVarsta" == Model.SortBy)">Categorie vârstă</option>
+            <option value="Gen" selected="@("Gen" == Model.SortBy)">Gen</option>
         </select>
 
         @if (Model.SortBy == "CategorieVarsta")
@@ -32,6 +32,19 @@
             </select>
         }
 
+        @if (Model.SortBy == "Gen")
+        {
+            <select name="GenSelectat" onchange="this.form.submit()" class="form-select w-auto">
+                <option value="">Toate genurile</option>
+                @foreach (var gen in Model.GenuriDisponibile)
+                {
+                    <option value="@gen" selected="@(gen == Model.GenSelectat)">
+                        @gen
+                    </option>
+                }
+            </select>
+        }
+
         @if (!string.IsNullOrEmpty(Model.Litera))
         {
             <input type="hidden" name="Litera" value="@Model.Litera" />
@@ -39,8 +52,6 @@
     </form>
 </div>
 
-
-<!-- INDEX ALFABETIC -->
 <div class="mb-4">
     <span class="fw-bold me-2">Index:</span>
     @foreach (var lit in litere)
@@ -57,8 +68,6 @@
 </div>
 
 <hr />
-
-<!-- LISTA CARTI -->
 <div class="row">
     @foreach (var carte in Model.Carti)
     {
@@ -71,6 +80,14 @@
                 <div class="card-body">
                     <h5 class="card-title" style="color: #990033;">@carte.Titlu</h5>
                     <p class="card-text text-muted">Autor: <strong>@carte.Autor</strong></p>
+
+                    @if (carte.Genuri?.Any() == true)
+                    {
+                        <p class="mb-1">
+                            <small>Gen: <strong>@string.Join(", ", carte.Genuri.Select(g => g.Denumire))</strong></small>
+                        </p>
+                    }
+
                     <a asp-page-handler="Citeste" asp-route-id="@carte.IdCarte" class="btn custom-citeste-btn mt-2">Citește</a>
                 </div>
             </div>

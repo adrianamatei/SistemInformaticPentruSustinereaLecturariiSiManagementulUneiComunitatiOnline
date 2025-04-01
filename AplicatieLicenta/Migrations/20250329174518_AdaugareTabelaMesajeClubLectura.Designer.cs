@@ -4,6 +4,7 @@ using AplicatieLicenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AplicatieLicenta.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329174518_AdaugareTabelaMesajeClubLectura")]
+    partial class AdaugareTabelaMesajeClubLectura
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,10 +142,6 @@ namespace AplicatieLicenta.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdClub"));
 
-                    b.Property<string>("CategorieVarsta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("DataCrearii")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -253,7 +252,7 @@ namespace AplicatieLicenta.Migrations
 
                     b.HasIndex("IdUtilizator");
 
-                    b.ToTable("MesajClub");
+                    b.ToTable("MesajeClub");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.Recenzii", b =>

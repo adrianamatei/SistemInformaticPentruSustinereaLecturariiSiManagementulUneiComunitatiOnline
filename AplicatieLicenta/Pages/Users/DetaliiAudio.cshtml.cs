@@ -55,7 +55,13 @@ namespace AplicatieLicenta.Pages.Users
                 return RedirectToPage("/Users/Login");
             }
 
-            // Adãugãm recenzia
+            // ?? Încãrcãm cartea înainte de a folosi Carte.Titlu
+            Carte = await _context.Carti.FirstOrDefaultAsync(c => c.IdCarte == id && c.TipCarte == "Audio");
+            if (Carte == null)
+            {
+                return NotFound(); // Sau RedirectToPage("/Eroare")
+            }
+
             var recenzie = new Recenzii
             {
                 IdCarte = id,
@@ -64,17 +70,24 @@ namespace AplicatieLicenta.Pages.Users
                 Comentariu = Comentariu,
                 Rating = Rating,
                 DataPublicarii = DateOnly.FromDateTime(DateTime.Now)
-
             };
 
             _context.Recenzii.Add(recenzie);
-            await _context.SaveChangesAsync();
 
-            // Reload cartea ?i recenziile
+            _context.UsersActivity.Add(new UsersActivity
+            {
+                UserId = userId.Value,
+                Action = "Recenzie carte",
+                Data = $"Utilizatorul a scris o recenzie la cartea: {Carte.Titlu}",
+                Timestamp = DateTime.Now
+            });
+
+            await _context.SaveChangesAsync();
             await LoadCarteSiRecenzii(id, userId.Value);
 
             return Page();
         }
+
 
         private async Task LoadCarteSiRecenzii(int carteId, int userId)
         {

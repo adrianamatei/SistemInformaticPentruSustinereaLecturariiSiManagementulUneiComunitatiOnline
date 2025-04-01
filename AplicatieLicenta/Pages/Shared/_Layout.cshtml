@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookHaven.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
     <style>
         /* Navbar general */
         .custom-navbar {
@@ -120,23 +121,21 @@
                         <img src="~/images/MeniuNavigare/cartiaudio.png" alt="Carti Audio" />
                         <span>Carti Audio</span>
                     </a>
-                    <a href="/Recenzii" class="custom-nav-link">
-                        <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
-                        <span>Recenzii</span>
-                    </a>
-                    <a href="/AboutUs" class="custom-nav-link">
-                        <img src="~/images/MeniuNavigare/about_us.png" alt="AboutUs" />
-                        <span>Despre</span>
-                    </a>
-                     <a href="/Contact" class="custom-nav-link">
-                    <img src="~/images/MeniuNavigare/contact.png" alt="Contact" />
-                    <span>Contact</span>
-                </a>
+                   
                     <a href="/ChatBot" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />
                         <span>ChatBot</span>
                     </a>
+                    <a href="/Users/StartUser" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/contulMeu.jpeg" alt="Contul meu" />
+                        <span>Contul meu</span>
+                    </a>
+                    <a href="/Users/Logout" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/logout.jpeg" alt="Logout" />
+                        <span>Logout</span>
+                    </a>
                 </div>
+
             </div>
         </nav>
     </header>
@@ -157,5 +156,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+  
+
 </body>
 </html>
