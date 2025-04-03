@@ -5,12 +5,12 @@
 }
 
 <h2 class="mb-4 fw-bold">Cărți Audio</h2>
-<div class="d-flex justify-content-end align-items-center mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
     <form method="get" class="d-flex align-items-center flex-wrap gap-2">
         <label for="SortBy" class="fw-bold mb-0" style="color: #C8AD7F;">Sort by:</label>
         <select id="SortBy" name="SortBy" onchange="this.form.submit()" class="form-select w-auto">
-            <option value="Titlu" selected="@("Titlu" == Model.SortBy)">Title</option>
-            <option value="Autor" selected="@("Autor" == Model.SortBy)">Author</option>
+            <option value="Titlu" selected="@("Titlu" == Model.SortBy)">Titlu</option>
+            <option value="Autor" selected="@("Autor" == Model.SortBy)">Autor</option>
             <option value="CategorieVarsta" selected="@("CategorieVarsta" == Model.SortBy)">Categorie vârstă</option>
             <option value="Gen" selected="@("Gen" == Model.SortBy)">Gen</option>
         </select>
@@ -48,7 +48,30 @@
         {
             <input type="hidden" name="Litera" value="@Model.Litera" />
         }
+        @if (!string.IsNullOrEmpty(Model.CategorieSelectata))
+        {
+            <input type="hidden" name="CategorieSelectata" value="@Model.CategorieSelectata" />
+        }
+        @if (!string.IsNullOrEmpty(Model.GenSelectat))
+        {
+            <input type="hidden" name="GenSelectat" value="@Model.GenSelectat" />
+        }
+        @if (!string.IsNullOrEmpty(Request.Query["Autor"]))
+        {
+            <input type="hidden" name="Autor" value="@Request.Query["Autor"]" />
+        }
+        @if (!string.IsNullOrEmpty(Request.Query["Titlu"]))
+        {
+            <input type="hidden" name="Titlu" value="@Request.Query["Titlu"]" />
+        }
     </form>
+
+    <div class="d-flex align-items-center gap-2">
+        <button onclick="pornesteVoiceSearch()" class="btn btn-outline-secondary">
+            🎙 Caută prin voce
+        </button>
+        <input type="text" id="searchInput" class="form-control w-auto border border-warning text-center fw-semibold" readonly placeholder="Caută-ți vocal cartea audio preferată..." />
+    </div>
 </div>
 
 <div class="mb-4">
@@ -107,3 +130,67 @@
             color: white;
         }
 </style>
+
+<script>
+    function pornesteVoiceSearch() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ro-RO';
+        recognition.start();
+
+        recognition.onresult = function (event) {
+            const text = event.results[0][0].transcript;
+            document.getElementById("searchInput").value = text;
+            interpreteazaComanda(text);
+        };
+
+        recognition.onerror = function (event) {
+            console.error("Eroare recunoaștere:", event.error);
+        };
+    }
+
+    function interpreteazaComanda(text) {
+        const comanda = text.toLowerCase();
+        const params = new URLSearchParams(window.location.search);
+
+        if (comanda.includes("scris de")) {
+            const autor = comanda.split("scris de")[1].trim();
+            params.set("SortBy", "Autor");
+            params.set("Autor", autor);
+        }
+        else if (comanda.includes("autor")) {
+            const autor = comanda.split("autor")[1].trim();
+            params.set("SortBy", "Autor");
+            params.set("Autor", autor);
+        }
+        else if (comanda.includes("titlu")) {
+            const titlu = comanda.split("titlu")[1].trim();
+            params.set("SortBy", "Titlu");
+            params.set("Titlu", titlu);
+        }
+        else if (comanda.includes("pentru") || comanda.includes("vârstă")) {
+            const varsta = comanda.match(/\d{1,2}/);
+            if (varsta) {
+                let categorie = "";
+                const v = parseInt(varsta[0]);
+                if (v < 8) categorie = "Sub 8 ani";
+                else if (v <= 10) categorie = "8-10 ani";
+                else if (v <= 12) categorie = "10-12 ani";
+                else if (v <= 14) categorie = "12-14 ani";
+                else categorie = "Peste 14 ani";
+
+                params.set("SortBy", "CategorieVarsta");
+                params.set("CategorieSelectata", categorie);
+            }
+        }
+        else if (comanda.split(" ").length === 1) {
+            params.set("SortBy", "Autor");
+            params.set("Autor", comanda.trim());
+        }
+        else {
+            params.set("SortBy", "Titlu");
+            params.set("Titlu", comanda.trim());
+        }
+
+        window.location.search = params.toString();
+    }
+</script>

@@ -1,58 +1,31 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using AplicatieLicenta.Data;
-using AplicatieLicenta.Models;
 using System.Threading.Tasks;
 using System;
 
-namespace AplicatieLicenta.Hubs;
-
-public class ChatHub : Hub
+namespace AplicatieLicenta.Hubs
 {
-    private readonly AppDbContext _context;
-
-    public ChatHub(AppDbContext context)
+    public class ChatHub : Hub
     {
-        _context = context;
-    }
-
-    public async Task SendMessage(int idClub, int idUtilizator, string email, string mesaj)
-    {
-        var mesajNou = new MesajClub
+        public async Task SendMessage(int idClub, int idUtilizator, string email, string mesaj)
         {
-            IdClub = idClub,
-            IdUtilizator = idUtilizator,
-            Continut = mesaj,
-            DataTrimiterii = DateTime.Now
-        };
+            var ora = DateTime.Now.ToString("HH:mm");
 
-        _context.MesajClub.Add(mesajNou);
-        await _context.SaveChangesAsync();
+            await Clients.Group($"Club-{idClub}")
+                .SendAsync("ReceiveMessage", email, mesaj, ora);
+        }
 
-        await Clients.Group($"Club-{idClub}")
-            .SendAsync("ReceiveMessage", email, mesaj, mesajNou.DataTrimiterii.ToString("HH:mm"));
-    }
-    public async Task SendVocal(int idClub, int userId, string email, string fileName)
-    {
-        var url = $"/vocale/{fileName}";
-        var mesaj = $"<audio controls src='{url}'></audio>";
-
-        var mesajNou = new MesajClub
+        public async Task SendVocal(int idClub, int userId, string email, string fileUrl)
         {
-            IdClub = idClub,
-            IdUtilizator = userId,
-            Continut = mesaj,
-            DataTrimiterii = DateTime.Now
-        };
+            var mesaj = "[Audio]";
+            var ora = DateTime.Now.ToString("HH:mm");
 
-        _context.MesajClub.Add(mesajNou);
-        await _context.SaveChangesAsync();
+            await Clients.Group($"Club-{idClub}")
+                .SendAsync("ReceiveMessage", email, mesaj, ora, fileUrl);
+        }
 
-        await Clients.Group($"Club-{idClub}")
-            .SendAsync("ReceiveMessage", email, mesaj, mesajNou.DataTrimiterii.ToString("HH:mm"));
-    }
-
-    public async Task JoinClub(int idClub)
-    {
-        await Groups.AddToGroupAsync(Context.ConnectionId, $"Club-{idClub}");
+        public async Task JoinClub(int idClub)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"Club-{idClub}");
+        }
     }
 }

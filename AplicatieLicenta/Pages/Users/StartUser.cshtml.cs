@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using AplicatieLicenta.Pages.API;
+using Microsoft.AspNetCore.Http.Features;
+
 
 namespace AplicatieLicenta.Pages.Users
 {
@@ -104,7 +105,8 @@ namespace AplicatieLicenta.Pages.Users
                 {
                     email = m.Utilizator.Email,
                     continut = m.Continut,
-                    dataTrimiterii = m.DataTrimiterii.ToString("HH:mm")
+                    dataTrimiterii = m.DataTrimiterii.ToString("HH:mm"),
+                    audioUrl = string.IsNullOrEmpty(m.UrlFisierAudio) ? null : m.UrlFisierAudio
                 })
                 .ToListAsync();
 
@@ -112,31 +114,61 @@ namespace AplicatieLicenta.Pages.Users
         }
 
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> OnPostVocalAsync(IFormFile vocal, int idClub, int userId, string userEmail)
+        [RequestSizeLimit(100_000_000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000)]
+        public async Task<IActionResult> OnPostVocalAsync()
         {
-            if (vocal == null || vocal.Length == 0)
-                return BadRequest("Fisier vocal invalid.");
-
-            var extensie = Path.GetExtension(vocal.FileName);
-            var fileName = $"{Guid.NewGuid()}{extensie}";
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/vocale", fileName);
-
-            using (var stream = new FileStream(path, FileMode.Create))
+            try
             {
-                await vocal.CopyToAsync(stream);
+                var vocal = Request.Form.Files["vocal"];
+                var idClub = Convert.ToInt32(Request.Form["idClub"]);
+                var userId = Convert.ToInt32(Request.Form["userId"]);
+                var userEmail = Request.Form["userEmail"];
+
+                if (vocal == null || vocal.Length == 0)
+                    return BadRequest("Fi?ierul audio nu a fost primit corect!");
+
+                var extensie = Path.GetExtension(vocal.FileName) ?? ".webm";
+                var fileName = $"{Guid.NewGuid()}{extensie}";
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "vocale");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var path = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await vocal.CopyToAsync(stream);
+                }
+
+                _context.UsersActivity.Add(new UsersActivity
+                {
+                    UserId = userId,
+                    Action = $"A trimis un mesaj vocal în clubul cu ID {idClub}",
+                    Data = $"Fi?ier: {fileName}",
+                    Timestamp = DateTime.Now
+                });
+
+                _context.MesajClub.Add(new MesajClub
+                {
+                    IdClub = idClub,
+                    IdUtilizator = userId,
+                    Continut = "Audio",
+                    UrlFisierAudio = $"/vocale/{fileName}",
+                    DataTrimiterii = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+
+                return Content(fileName); // numele pentru JavaScript
             }
-
-            _context.UsersActivity.Add(new UsersActivity
+            catch (Exception ex)
             {
-                UserId = userId,
-                Action = $"A trimis un mesaj vocal in clubul cu ID {idClub}",
-                Data = $"Fisier: {fileName}",
-                Timestamp = DateTime.Now
-            });
-
-            await _context.SaveChangesAsync();
-
-            return Content(fileName);
+                Console.WriteLine("?? EXCEP?IE: " + ex.Message);
+                return BadRequest("Eroare internã: " + ex.Message);
+            }
         }
+
     }
 }

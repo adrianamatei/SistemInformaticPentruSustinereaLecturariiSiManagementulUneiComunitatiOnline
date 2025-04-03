@@ -33,6 +33,12 @@ namespace AplicatieLicenta.Pages.Users
         [BindProperty(SupportsGet = true)]
         public string GenSelectat { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string Autor { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Titlu { get; set; }
+
         public List<string> GenuriDisponibile { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync()
@@ -56,6 +62,16 @@ namespace AplicatieLicenta.Pages.Users
             if (!string.IsNullOrEmpty(GenSelectat))
             {
                 query = query.Where(c => c.Genuri.Any(g => g.Denumire == GenSelectat));
+            }
+
+            if (!string.IsNullOrEmpty(Autor))
+            {
+                query = query.Where(c => c.Autor.ToLower().Contains(Autor.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(Titlu))
+            {
+                query = query.Where(c => c.Titlu.ToLower().Contains(Titlu.ToLower()));
             }
 
             query = SortBy switch

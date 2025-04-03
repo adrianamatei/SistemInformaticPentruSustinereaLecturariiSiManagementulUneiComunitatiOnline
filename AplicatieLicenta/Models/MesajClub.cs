@@ -15,6 +15,8 @@ namespace AplicatieLicenta.Models
         public int IdUtilizator { get; set; }
 
         public string Continut { get; set; } = "";
+        public string? UrlFisierAudio { get; set; }
+
         public DateTime DataTrimiterii { get; set; }
 
         public virtual CluburiLectura Club { get; set; } = null!;
