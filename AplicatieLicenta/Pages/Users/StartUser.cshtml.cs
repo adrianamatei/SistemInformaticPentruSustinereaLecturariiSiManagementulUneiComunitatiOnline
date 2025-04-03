@@ -158,6 +158,8 @@ namespace AplicatieLicenta.Pages.Users
                     UrlFisierAudio = $"/vocale/{fileName}",
                     DataTrimiterii = DateTime.Now
                 });
+                Console.WriteLine(" Salvare vocal în: " + path);
+
 
                 await _context.SaveChangesAsync();
 
