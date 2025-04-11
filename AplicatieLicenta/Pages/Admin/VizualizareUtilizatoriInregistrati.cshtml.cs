@@ -37,7 +37,7 @@ namespace AplicatieLicenta.Pages.Admin
                         {
                             Email = user.Email,
                             Actiune = activitate.Action,
-                            Detalii = activitate.Data, // <-- aici adãugãm titlul cãr?ii sau detalii
+                            Detalii = activitate.Data,
                             Timestamp = activitate.Timestamp
                         }).ToListAsync();
                     TotalActivitati = Activitati.Count;
@@ -50,7 +50,7 @@ namespace AplicatieLicenta.Pages.Admin
         {
             public string Email { get; set; }
             public string Actiune { get; set; }
-            public string Detalii { get; set; } // <-- asigurã-te cã e definit aici
+            public string Detalii { get; set; } 
             public DateTime Timestamp { get; set; }
         }
     }

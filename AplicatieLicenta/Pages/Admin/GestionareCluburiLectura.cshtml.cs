@@ -30,7 +30,7 @@ namespace AplicatieLicenta.Pages.Admin
 
         public async Task<IActionResult> OnPostCreeazaAsync()
         {
-            var adminId = 1; // Înlocuie?te cu ID-ul real dacã ai autentificare
+            var adminId = 1; 
             ClubNou.IdCreator = adminId;
             ClubNou.DataCrearii = DateTime.Now;
 
@@ -48,7 +48,6 @@ namespace AplicatieLicenta.Pages.Admin
 
             if (club != null)
             {
-                // ?terge membrii clubului înainte
                 _context.MembriClub.RemoveRange(club.MembriClub);
                 _context.CluburiLectura.Remove(club);
                 await _context.SaveChangesAsync();

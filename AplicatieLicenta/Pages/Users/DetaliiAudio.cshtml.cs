@@ -55,11 +55,10 @@ namespace AplicatieLicenta.Pages.Users
                 return RedirectToPage("/Users/Login");
             }
 
-            // ?? Încãrcãm cartea înainte de a folosi Carte.Titlu
             Carte = await _context.Carti.FirstOrDefaultAsync(c => c.IdCarte == id && c.TipCarte == "Audio");
             if (Carte == null)
             {
-                return NotFound(); // Sau RedirectToPage("/Eroare")
+                return NotFound(); 
             }
 
             var recenzie = new Recenzii

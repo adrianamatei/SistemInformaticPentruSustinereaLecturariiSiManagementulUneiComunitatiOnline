@@ -25,7 +25,7 @@ namespace AplicatieLicenta.Pages.Users
         public string ErrorMessageAdmin { get; set; }
         public IActionResult OnPostLoginReader()
         {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (string.IsNullOrWhiteSpace(Email) && string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessageReader = "Ambele campuri sunt obligatorii !";
                 return Page();

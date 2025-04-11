@@ -1,0 +1,39 @@
+﻿@page
+@model AplicatieLicenta.Pages.Admin.VizualizareTesteModel
+@{
+    Layout = "~/Pages/Shared/AdminLayout.cshtml";
+}
+
+<h2 class="text-center mt-4 mb-4" style="color: #C8AD7F;">Teste disponibile</h2>
+
+@if (Model.Teste != null && Model.Teste.Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Titlu Test</th>
+                <th>Cartea asociată</th>
+                <th>Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var test in Model.Teste)
+            {
+                <tr>
+                    <td>@test.Titlu</td>
+                    <td>@test.CarteTitlu</td>
+                    <td>
+                        <a asp-page="/Admin/EditeazaTest" asp-route-id="@test.FileName" class="btn btn-outline-secondary">
+                            ✏️ Editează
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nu există teste salvate momentan.</p>
+}

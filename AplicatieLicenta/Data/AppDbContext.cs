@@ -35,6 +35,15 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Vizitatori> Vizitatori { get; set; }
     public virtual DbSet<UsersActivity> UsersActivity { get; set; }
     public DbSet<MesajClub> MesajeClub { get; set; }
+    public DbSet<Quiz> Quizuri { get; set; }
+    public DbSet<IntrebareQuiz> IntrebariQuiz { get; set; }
+    public DbSet<VariantaRaspuns> VarianteRaspuns { get; set; }
+    public DbSet<RezultatQuiz> RezultateQuiz { get; set; }
+
+    public DbSet<Avatar> Avatare { get; set; }
+    public DbSet<PiesaAvatar> PieseAvatar { get; set; }
+    public DbSet<PiesaDeblocata> PieseDeblocate { get; set; }
+
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -239,6 +248,7 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.IdUtilizator)
                 .HasConstraintName("FK__Vizitator__id_ut__440B1D61");
         });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

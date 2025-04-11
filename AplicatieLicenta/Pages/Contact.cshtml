@@ -105,8 +105,6 @@
 <body>
     <div class="contact-form">
         <h2>Formular de contact</h2>
-
-        <!-- Mesaje de succes și eroare -->
         @if (!string.IsNullOrEmpty(Model.SuccessMessage) || !string.IsNullOrEmpty(Model.ErrorMessage))
         {
             <div class="alert @(string.IsNullOrEmpty(Model.ErrorMessage) ? "alert-success" : "alert-danger") mt-2">

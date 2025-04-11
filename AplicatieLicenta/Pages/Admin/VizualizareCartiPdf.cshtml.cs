@@ -23,8 +23,8 @@ namespace AplicatieLicenta.Pages.Admin
         {
             Carti = await _context.Carti
                 .Where(c => c.TipCarte == "PDF")
-                .Include(c => c.Genuri) // Aici incluzi genurile
-                .Include(c => c.CategoriiVarsta) // Aici incluzi categoriile de varstã
+                .Include(c => c.Genuri) 
+                .Include(c => c.CategoriiVarsta) 
                 .ToListAsync();
         }
     }

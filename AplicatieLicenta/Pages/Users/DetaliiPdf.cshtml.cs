@@ -51,11 +51,11 @@ namespace AplicatieLicenta.Pages.Users
             if (user == null)
                 return RedirectToPage("/Users/Login");
 
-            // ?? Încãrcãm cartea aici ca sã avem acces la titlu
+            
             Carte = await _context.Carti.FirstOrDefaultAsync(c => c.IdCarte == id);
             if (Carte == null)
             {
-                return NotFound(); // sau altã paginã de eroare
+                return NotFound(); 
             }
 
             var recenzie = new Recenzii
@@ -80,7 +80,7 @@ namespace AplicatieLicenta.Pages.Users
 
             await _context.SaveChangesAsync();
 
-            await LoadCarteSiRecenzii(id, userId.Value); // po?i lãsa ?i asta dacã vrei sã reîncarci tot
+            await LoadCarteSiRecenzii(id, userId.Value); 
             return Page();
         }
 

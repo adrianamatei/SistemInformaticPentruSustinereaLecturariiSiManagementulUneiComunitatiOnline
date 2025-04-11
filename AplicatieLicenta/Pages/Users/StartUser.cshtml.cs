@@ -163,7 +163,7 @@ namespace AplicatieLicenta.Pages.Users
 
                 await _context.SaveChangesAsync();
 
-                return Content(fileName); // numele pentru JavaScript
+                return Content(fileName); 
             }
             catch (Exception ex)
             {
