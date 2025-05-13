@@ -1,30 +1,15 @@
+using AplicatieLicenta.Data;
+using AplicatieLicenta.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Xml.Linq;
-using System.ComponentModel.DataAnnotations;
-using AplicatieLicenta.Data;
+using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace AplicatieLicenta.Pages.Admin
 {
     public class CreeazaTestModel : PageModel
     {
-        [BindProperty]
-        [Required(ErrorMessage = "Titlul testului este obligatoriu")]
-        public string TitluTest { get; set; }
-
-        [BindProperty]
-        [Required(ErrorMessage = "Selecteazã o carte !")]
-        public int? CarteId { get; set; }
-
-        [BindProperty]
-        public IntrebareForm IntrebareCurenta { get; set; } = new();
-
-        public List<SelectListItem> Carti { get; set; } = new();
-
-        [BindProperty(SupportsGet = false)]
-        public List<IntrebareForm> Intrebari { get; set; } = new();
-
         private readonly AppDbContext _context;
 
         public CreeazaTestModel(AppDbContext context)
@@ -32,114 +17,154 @@ namespace AplicatieLicenta.Pages.Admin
             _context = context;
         }
 
+        [BindProperty] public Quiz Quiz { get; set; } = new();
+        [BindProperty] public IntrebareQuiz IntrebareNoua { get; set; }
+        [BindProperty] public List<VariantaRaspuns> VarianteRaspunsNou { get; set; } = new();
+
+        public SelectList CartiDisponibile { get; set; }
+
+        public List<IntrebareQuiz> IntrebariTemp
+        {
+            get
+            {
+                if (TempData.TryGetValue("Intrebari", out var json))
+                    return JsonSerializer.Deserialize<List<IntrebareQuiz>>(json.ToString());
+                return new List<IntrebareQuiz>();
+            }
+        }
+
+        private void IncarcaCarti()
+        {
+            CartiDisponibile = new SelectList(_context.Carti.ToList(), "IdCarte", "Titlu");
+        }
+
         public void OnGet()
         {
-            Carti = _context.Carti
-                .Select(c => new SelectListItem
-                {
-                    Value = c.IdCarte.ToString(),
-                    Text = $"{c.Titlu} ({c.TipCarte})"
-                })
-                .ToList();
+            IncarcaCarti();
+
+            if (TempData.TryGetValue("QuizTitlu", out var titlu))
+                Quiz.Titlu = titlu?.ToString();
+
+            if (TempData.TryGetValue("QuizCarteId", out var carteIdStr) && int.TryParse(carteIdStr?.ToString(), out int id))
+                Quiz.CarteId = id;
+
+            TempData.Keep("Intrebari");
+            TempData.Keep("QuizTitlu");
+            TempData.Keep("QuizCarteId");
         }
 
         public IActionResult OnPostAdaugaIntrebare()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            IncarcaCarti();
+            var intrebari = IntrebariTemp;
 
-            Intrebari.Add(new IntrebareForm
+            if (string.IsNullOrWhiteSpace(IntrebareNoua.Enunt))
             {
-                Enunt = IntrebareCurenta.Enunt,
-                Categorie = IntrebareCurenta.Categorie,
-                Variante = new List<VariantaForm>
-                {
-                    new VariantaForm { Text = IntrebareCurenta.Varianta1, Corecta = IntrebareCurenta.Corecta == 1 },
-                    new VariantaForm { Text = IntrebareCurenta.Varianta2, Corecta = IntrebareCurenta.Corecta == 2 },
-                    new VariantaForm { Text = IntrebareCurenta.Varianta3, Corecta = IntrebareCurenta.Corecta == 3 },
-                }
-            });
+                ModelState.AddModelError("", "Enun?ul întrebãrii nu poate fi gol.");
+                return Page();
+            }
 
-            IntrebareCurenta = new IntrebareForm();
-            ModelState.Clear();
-            OnGet();
-            return Page();
+            IntrebareNoua.Variante = VarianteRaspunsNou.Where(v => !string.IsNullOrWhiteSpace(v.Text)).ToList();
+
+            if (!IntrebareNoua.Variante.Any())
+            {
+                ModelState.AddModelError("", "Trebuie sã adaugi cel pu?in un rãspuns.");
+                return Page();
+            }
+
+            intrebari.Add(IntrebareNoua);
+
+            TempData["Intrebari"] = JsonSerializer.Serialize(intrebari);
+            TempData["QuizTitlu"] = Quiz?.Titlu;
+            TempData["QuizCarteId"] = Quiz?.CarteId;
+
+            TempData.Keep("Intrebari");
+            TempData.Keep("QuizTitlu");
+            TempData.Keep("QuizCarteId");
+
+            return RedirectToPage();
         }
 
         public IActionResult OnPostSalveazaTest()
         {
-            // ?? Eliminãm erorile doar pentru IntrebareCurenta (care e goalã ?i irelevantã acum)
-            ModelState.Remove("IntrebareCurenta.Enunt");
-            ModelState.Remove("IntrebareCurenta.Categorie");
-            ModelState.Remove("IntrebareCurenta.Varianta1");
-            ModelState.Remove("IntrebareCurenta.Varianta2");
-            ModelState.Remove("IntrebareCurenta.Varianta3");
+            IncarcaCarti();
+            var intrebari = IntrebariTemp;
 
-            // Verificãm validitatea doar pentru titlu, carte ?i lista de întrebãri
-            if (!ModelState.IsValid || Intrebari.Count == 0)
+            var titlu = Request.Form["quizTitluHidden"];
+            var carteIdStr = Request.Form["quizCarteIdHidden"];
+
+            if (string.IsNullOrWhiteSpace(titlu) || string.IsNullOrWhiteSpace(carteIdStr) || !int.TryParse(carteIdStr, out int carteId))
+            {
+                ModelState.AddModelError("", "Datele testului nu au fost transmise corect.");
                 return Page();
+            }
 
-            var xml = new XElement("Test",
-                new XElement("Titlu", TitluTest),
-                new XElement("CarteId", CarteId),
-                new XElement("Intrebari",
-                    Intrebari.Select(i =>
-                        new XElement("Intrebare",
-                            new XElement("Enunt", i.Enunt),
-                            new XElement("Categorie", i.Categorie),
-                            new XElement("Variante",
-                                i.Variante.Select(v =>
-                                    new XElement("Varianta",
-                                        new XAttribute("corecta", v.Corecta.ToString().ToLower()),
-                                        v.Text
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            );
+            if (intrebari == null || !intrebari.Any())
+            {
+                ModelState.AddModelError("", "Nu ai adãugat nicio întrebare.");
+                return Page();
+            }
 
-            var fileName = $"wwwroot/teste/quiz_carte_{CarteId}.xml";
-            Directory.CreateDirectory("wwwroot/teste");
-            xml.Save(fileName);
+            Quiz = new Quiz
+            {
+                Titlu = titlu,
+                CarteId = carteId,
+                Intrebari = intrebari
+            };
 
-            TitluTest = string.Empty;
-            CarteId = null;
-            Intrebari = new List<IntrebareForm>();
+            _context.Quizuri.Add(Quiz);
+            _context.SaveChanges();
 
-            TempData["Message"] = "Testul a fost salvat cu succes!";
-            return RedirectToPage();
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "teste");
+            Directory.CreateDirectory(folderPath);
+
+            string fileName = $"quiz_{Quiz.Id}.xml";
+            string filePath = Path.Combine(folderPath, fileName);
+
+            var quizXml = new QuizXml
+            {
+                Titlu = Quiz.Titlu,
+                CarteTitlu = _context.Carti.FirstOrDefault(c => c.IdCarte == Quiz.CarteId)?.Titlu,
+                Intrebari = Quiz.Intrebari.Select(i => new IntrebareXml
+                {
+                    Enunt = i.Enunt,
+                    Categorie = i.Categorie,
+                    Variante = i.Variante?.Select(v => new VariantaXml
+                    {
+                        Text = v.Text,
+                        EsteCorect = v.EsteCorect
+                    }).ToList() ?? new List<VariantaXml>()
+                }).ToList()
+            };
+
+            var serializer = new XmlSerializer(typeof(QuizXml));
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                serializer.Serialize(stream, quizXml);
+            }
+
+            TempData.Clear();
+            return RedirectToPage("/Admin/VizualizareTeste");
         }
 
-
-        public class IntrebareForm
+        public class QuizXml
         {
-            [Required(ErrorMessage = "Scrie un enunt pentru intrebare !")]
+            public string Titlu { get; set; }
+            public string CarteTitlu { get; set; }
+            public List<IntrebareXml> Intrebari { get; set; }
+        }
+
+        public class IntrebareXml
+        {
             public string Enunt { get; set; }
-
-            [Required(ErrorMessage = "Alege o categorie !")]
             public string Categorie { get; set; }
-
-            [Required(ErrorMessage = "Completeazã varianta 1 !")]
-            public string Varianta1 { get; set; }
-
-            [Required(ErrorMessage = "Completeazã varianta 2 !")]
-            public string Varianta2 { get; set; }
-
-            [Required(ErrorMessage = "Completeazã varianta 3 !")]
-            public string Varianta3 { get; set; }
-
-            public int Corecta { get; set; }
-
-            public List<VariantaForm> Variante { get; set; } = new();
+            public List<VariantaXml> Variante { get; set; }
         }
 
-        public class VariantaForm
+        public class VariantaXml
         {
-            [Required(ErrorMessage = "Completeazã textul variantei.")]
             public string Text { get; set; }
-            public bool Corecta { get; set; }
+            public bool EsteCorect { get; set; }
         }
     }
 }
