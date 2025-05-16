@@ -111,7 +111,7 @@ namespace AplicatieLicenta.Pages.Users
             var admin = _context.Admins.FirstOrDefault(a => a.Email == Email);
             if(admin==null)
             {
-                ErrorMessageAdmin = "Emial-ul introdus nu exista !";
+                ErrorMessageAdmin = "Email-ul introdus nu exista !";
                 return Page();  
             }
             if (string.IsNullOrWhiteSpace(Password))
@@ -141,7 +141,7 @@ namespace AplicatieLicenta.Pages.Users
             _context.SaveChanges();
             HttpContext.Session.SetString("AdminEmail",admin.Email);
             HttpContext.Session.SetInt32("AdminId", admin.IdAdmin);
-            return RedirectToPage("/Admin/VizualizareStatistici");
+            return RedirectToPage("/Admin/VizualizareUtilizatoriInregistrati");
 
         }
     }

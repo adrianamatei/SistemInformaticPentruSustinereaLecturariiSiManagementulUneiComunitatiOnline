@@ -3,48 +3,118 @@
 @model AplicatieLicenta.Pages.Users.StartUserModel
 @{
     ViewData["Title"] = "Cluburi de lectură";
-}
-
-@if (Model.CluburiRelevante.Any())
-{
-    <h2>Cluburi de lectură pentru categoria ta de vârstă: <strong>@Model.CategorieVarsta</strong></h2>
-
-    @foreach (var club in Model.CluburiRelevante)
+    @if (TempData["Success"] != null)
     {
-        var membru = club.MembriClub.FirstOrDefault(m => m.IdUtilizator == Model.UserId);
-
-        <div class="club-card">
-            <h5>@club.Nume</h5>
-            <p><strong>Descriere:</strong> @club.Descriere</p>
-            <p><strong>Categorie:</strong> @club.CategorieVarsta</p>
-
-            @if (membru != null)
-            {
-                if (membru.Status == "Aprobat")
-                {
-                    <button class="chat-open-btn" onclick="openChat('@club.Nume', @club.IdClub)">
-                        Alătură-te discuțiilor despre cărțile preferate!
-                    </button>
-                }
-                else if (membru.Status == "In asteptare")
-                {
-                    <span class="pending-msg">Cererea ta a fost trimisă către admin.</span>
-                }
-            }
-            else
-            {
-                <form method="post" asp-page-handler="Join">
-                    <input type="hidden" name="clubId" value="@club.IdClub" />
-                    <button type="submit" class="chat-open-btn">Intră acum în club!</button>
-                </form>
-            }
-        </div>
+        <div class="alert alert-success text-center fw-bold">@TempData["Success"]</div>
     }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center fw-bold">@TempData["Error"]</div>
+    }
+
 }
-else
-{
-    <p>Momentan nu există cluburi de lectură pentru categoria ta de vârstă.</p>
-}
+
+<!-- HEADER CU AVATAR ȘI EMAIL -->
+<div style="display: flex; align-items: center; margin-bottom: 1rem;">
+    <img src="/images/avatar/@Model.AvatarImagine" alt="Avatar" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-right: 1rem;">
+    <h2 style="color: #5a422a; margin: 0;">@Model.UserEmail</h2>
+</div>
+
+<div style="display: flex; gap: 2rem;">
+    <!-- STÂNGA: CLASAMENT + PROGRES -->
+    <div style="flex: 1; background-color: #fff8e6; padding: 1rem; border-radius: 10px;">
+        <!-- SECTIUNEA PROGRES PERSONAL -->
+        <div class="sectiune-joc">
+            <h3 style="color: #8b5e3c;">Progresul tău în joc</h3>
+            <div class="avatar-box">
+                <p><strong>Avatar curent:</strong> @ViewData["AvatarCurent"]</p>
+                <p><strong>Scor total:</strong> @ViewData["ScorTotal"]</p>
+                <p><strong>Piese obținute:</strong> @ViewData["Piese"] / @ViewData["TotalPiese"]</p>
+                @if ((int)ViewData["Piese"] < (int)ViewData["TotalPiese"])
+                {
+                    <p><strong>Mai ai @((int)ViewData["TotalPiese"] - (int)ViewData["Piese"]) piesă(e) până la următorul nivel</strong></p>
+                }
+                else
+                {
+                    <p><strong>Ai atins nivelul maxim! 🎉</strong></p>
+                }
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- SECTIUNEA CLASAMENT GLOBAL -->
+        <div class="clasament-global">
+            <h3 style="color: #8b5e3c;">Clasamentul copiilor (Top utilizatori)</h3>
+            <table class="table table-striped" style="background-color: #fffaf0;">
+                <thead>
+                    <tr>
+                        <th>Loc</th>
+                        <th>Nume</th>
+                        <th>Scor total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 0;
+                    }
+                    @foreach (var u in (IEnumerable<dynamic>)ViewData["TopUtilizatori"])
+                    {
+                        <tr>
+                            <td>@(++index)</td>
+                            <td>@u.Email</td>
+                            <td>@u.Scor</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a class="btn btn-primary" style="background-color: #C8AD7F; border: none; color: white; padding: 0.5rem 1.5rem; border-radius: 5px;" href="/Users/VizualizareTeste">
+                    Vezi testele tale
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DREAPTA: CLUBURI DE LECTURĂ -->
+    <div style="flex: 1; background-color: #fff8e6; padding: 1rem; border-radius: 10px;">
+        <h3 style="color: #8b5e3c;">Cluburi de lectură pentru categoria ta de vârstă: <strong>@Model.CategorieVarsta</strong></h3>
+
+        @foreach (var club in Model.CluburiRelevante)
+        {
+            var membru = club.MembriClub.FirstOrDefault(m => m.IdUtilizator == Model.UserId);
+
+            <div class="club-card" style="background-color: #fffef4; padding: 1rem; border: 1px solid #e0c9a6; margin-bottom: 1rem; border-radius: 8px;">
+                <h5>@club.Nume</h5>
+                <p><strong>Descriere:</strong> @club.Descriere</p>
+                <p><strong>Categorie:</strong> @club.CategorieVarsta</p>
+
+                @if (membru != null)
+                {
+                    if (membru.Status == "Aprobat")
+                    {
+                        <button class="chat-open-btn" onclick="openChat('@club.Nume', @club.IdClub)">
+                            Alătură-te discuțiilor despre cărțile preferate!
+                        </button>
+                    }
+                    else if (membru.Status == "In asteptare")
+                    {
+                        <span class="pending-msg">Cererea ta a fost trimisă către admin.</span>
+                    }
+                }
+                else
+                {
+                    <form method="post" asp-page-handler="Join">
+                        <input type="hidden" name="clubId" value="@club.IdClub" />
+                        <button type="submit" class="chat-open-btn">Intră acum în club!</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+</div>
 
 <div id="chat-box" class="hidden">
     <div class="chat-header">
@@ -63,6 +133,7 @@ else
 @section Styles {
     <link rel="stylesheet" href="~/css/designStartUser.css" />
 }
+
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>

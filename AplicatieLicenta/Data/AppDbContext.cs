@@ -40,9 +40,8 @@ public partial class AppDbContext : DbContext
     public DbSet<VariantaRaspuns> VarianteRaspuns { get; set; }
     public DbSet<RezultatQuiz> RezultateQuiz { get; set; }
 
-    public DbSet<Avatar> Avatare { get; set; }
-    public DbSet<PiesaAvatar> PieseAvatar { get; set; }
-    public DbSet<PiesaDeblocata> PieseDeblocate { get; set; }
+   
+  
 
 
 

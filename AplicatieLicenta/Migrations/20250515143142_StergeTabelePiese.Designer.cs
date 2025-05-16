@@ -4,6 +4,7 @@ using AplicatieLicenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AplicatieLicenta.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250515143142_StergeTabelePiese")]
+    partial class StergeTabelePiese
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -372,14 +375,18 @@ namespace AplicatieLicenta.Migrations
                     b.Property<int>("Scor")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UtilizatorIdUtilizator")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UtilizatorIdUtilizator");
 
                     b.ToTable("RezultateQuiz");
                 });
@@ -425,9 +432,6 @@ namespace AplicatieLicenta.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("parola");
-
-                    b.Property<int>("ScorTotal")
-                        .HasColumnType("int");
 
                     b.Property<string>("TipUtilizator")
                         .IsRequired()
@@ -661,7 +665,7 @@ namespace AplicatieLicenta.Migrations
 
                     b.HasOne("AplicatieLicenta.Models.User", "Utilizator")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UtilizatorIdUtilizator")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

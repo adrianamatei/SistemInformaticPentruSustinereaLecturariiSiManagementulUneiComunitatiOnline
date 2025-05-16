@@ -2,21 +2,25 @@
 .sidebar {
     height: 100vh;
     position: fixed;
+    overflow-y: auto !important;
 }
 
     .sidebar .nav-link {
         color: #333;
         font-weight: bold;
+        overflow-y: auto;
     }
 
         .sidebar .nav-link.active {
             background-color: #007bff;
             color: white;
+            overflow-y: auto;
         }
 
         .sidebar .nav-link:hover {
             background-color: #0056b3;
             color: white;
+            overflow-y: auto;
         }
 
 /* Main Content Styling */

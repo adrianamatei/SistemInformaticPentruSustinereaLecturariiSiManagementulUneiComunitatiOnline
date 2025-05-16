@@ -1,0 +1,44 @@
+﻿@page
+@model AplicatieLicenta.Pages.Users.TesteCarteModel
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Imagine stânga -->
+        <div class="col-md-4 text-center">
+            <img src="/images/q&a.png" class="img-fluid rounded shadow" alt="Imagine test" style="max-height: 400px;" />
+        </div>
+
+        <!-- Testul -->
+        <div class="col-md-8">
+            <div class="p-4 border rounded" style="max-height: 600px; overflow-y: auto; background-color: #fefefe;">
+                <form method="post">
+                    @for (int i = 0; i < Model.Intrebari.Count; i++)
+                    {
+                        var intrebare = Model.Intrebari[i];
+                        <div class="mb-4 text-center">
+                            <p><strong>@intrebare.Enunt</strong></p>
+                            @for (int j = 0; j < intrebare.Variante.Count; j++)
+                            {
+
+                                var varianteLista = intrebare.Variante.ToList();
+                                var varianta = varianteLista[j];
+                                <div class="form-check d-flex justify-content-center">
+                                    <input class="form-check-input" type="radio" name="RaspunsuriUtilizator[@i]" value="@j" required />
+                                    <label class="form-check-label ms-2">@varianta.Text</label>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <input type="hidden" name="idCarte" value="@Model.CarteId" />
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn px-4 py-2 fw-bold rounded-pill text-white" style="background-color: #C8AD7F;">
+                            Trimite răspunsurile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

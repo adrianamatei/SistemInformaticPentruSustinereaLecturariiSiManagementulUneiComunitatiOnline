@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http.Features;
 
-
 namespace AplicatieLicenta.Pages.Users
 {
     public class StartUserModel : PageModel
@@ -26,14 +25,13 @@ namespace AplicatieLicenta.Pages.Users
         public List<CluburiLectura> CluburiRelevante { get; set; } = new();
         public int UserId { get; set; }
         public string UserEmail { get; set; }
+        public string AvatarImagine { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             if (!userId.HasValue)
-            {
                 return RedirectToPage("/Login");
-            }
 
             UserId = userId.Value;
 
@@ -44,6 +42,47 @@ namespace AplicatieLicenta.Pages.Users
             CategorieVarsta = user.CategorieVarsta;
             UserEmail = user.Email;
 
+            
+            var rezultate = await _context.RezultateQuiz
+                .Where(r => r.UserId == UserId && r.Scor >= 80)
+                .ToListAsync();
+
+            int scorTotal = rezultate.Sum(r =>
+                r.Scor >= 100 ? 20 :
+                r.Scor >= 90 ? 15 : 10);
+
+            int pieseObt = rezultate.Count;
+
+            string avatar = "reading.png";
+            int totalPiese = 3;
+
+            if (pieseObt >= 13) { avatar = "astronaut.png"; totalPiese = 13; }
+            else if (pieseObt >= 11) { avatar = "cavaler.png"; totalPiese = 13; }
+            else if (pieseObt >= 9) { avatar = "inventator.png"; totalPiese = 11; }
+            else if (pieseObt >= 7) { avatar = "magician.png"; totalPiese = 9; }
+            else if (pieseObt >= 5) { avatar = "explorer.png"; totalPiese = 7; }
+            else if (pieseObt >= 3) { avatar = "detective.png"; totalPiese = 5; }
+
+            AvatarImagine = avatar;
+            ViewData["AvatarCurent"] = System.IO.Path.GetFileNameWithoutExtension(avatar).CapitalizeFirst();
+            ViewData["Piese"] = pieseObt;
+            ViewData["TotalPiese"] = totalPiese;
+            ViewData["ScorTotal"] = scorTotal;
+
+            
+            ViewData["TopUtilizatori"] = await _context.Users
+                .Select(u => new
+                {
+                    u.Email,
+                    Scor = _context.RezultateQuiz
+                        .Where(r => r.UserId == u.IdUtilizator && r.Scor >= 80)
+                        .Select(r => r.Scor >= 100 ? 20 : r.Scor >= 90 ? 15 : 10)
+                        .Sum()
+                })
+                .OrderByDescending(u => u.Scor)
+                .Take(10)
+                .ToListAsync();
+
             CluburiRelevante = await _context.CluburiLectura
                 .Include(c => c.MembriClub)
                 .Where(c => c.CategorieVarsta == CategorieVarsta)
@@ -51,6 +90,7 @@ namespace AplicatieLicenta.Pages.Users
 
             return Page();
         }
+
 
         public async Task<IActionResult> OnPostJoinAsync(int clubId)
         {
@@ -158,19 +198,24 @@ namespace AplicatieLicenta.Pages.Users
                     UrlFisierAudio = $"/vocale/{fileName}",
                     DataTrimiterii = DateTime.Now
                 });
-                Console.WriteLine(" Salvare vocal în: " + path);
-
 
                 await _context.SaveChangesAsync();
 
-                return Content(fileName); 
+                return Content(fileName);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("?? EXCEP?IE: " + ex.Message);
                 return BadRequest("Eroare internã: " + ex.Message);
             }
         }
+    }
 
+    public static class StringExtensions
+    {
+        public static string CapitalizeFirst(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return char.ToUpper(value[0]) + value.Substring(1);
+        }
     }
 }

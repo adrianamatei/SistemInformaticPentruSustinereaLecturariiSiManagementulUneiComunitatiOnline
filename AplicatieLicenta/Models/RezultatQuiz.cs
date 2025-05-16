@@ -5,7 +5,7 @@ namespace AplicatieLicenta.Models
     public class RezultatQuiz
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public int QuizId { get; set; }
         public int Scor { get; set; }
         public DateTime Data { get; set; }

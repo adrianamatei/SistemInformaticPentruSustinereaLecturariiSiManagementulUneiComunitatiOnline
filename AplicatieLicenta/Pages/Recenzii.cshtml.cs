@@ -16,7 +16,7 @@ namespace AplicatieLicenta.Pages
             _context = context;
         }
 
-        public List<CarteCuRating> Recenzii { get; set; } = new(); // Ini?ializare pentru evitarea NullReference
+        public List<CarteCuRating> Recenzii { get; set; } = new();
 
         public async Task OnGetAsync()
         {

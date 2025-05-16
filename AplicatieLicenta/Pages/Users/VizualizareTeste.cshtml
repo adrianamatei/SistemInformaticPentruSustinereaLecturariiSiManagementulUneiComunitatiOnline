@@ -1,0 +1,45 @@
+﻿@page
+@model AplicatieLicenta.Pages.Users.VizualizareTesteModel
+@{
+    ViewData["Title"] = "Testele mele";
+}
+
+<h2>Testele disponibile</h2>
+
+@if (TempData["Mesaj"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Mesaj"]
+    </div>
+}
+
+@foreach (var test in Model.TesteDisponibile)
+{
+    <div style="margin-bottom: 1rem; padding: 1rem; background: #fff8e6; border-radius: 10px;">
+        <h4>@test.Titlu</h4>
+        <p><strong>Carte:</strong> @test.Carte.Titlu</p>
+
+        @if (Model.RezultateUser.TryGetValue(test.Id, out var rezultat))
+        {
+            <p><strong>Scor obținut:</strong> @rezultat.Scor%</p>
+
+            @if (rezultat.Scor >= 80)
+            {
+                <p style="color: green;"><strong>Test promovat</strong> – nu mai poate fi reluat.</p>
+            }
+            else
+            {
+                <p style="color: red;"><strong>Test nepromovat</strong> – poți încerca din nou.</p>
+                <a class="btn btn-warning" asp-page="/Users/TesteCarte" asp-route-idCarte="@test.CarteId">
+                    Reia testul
+                </a>
+            }
+        }
+        else
+        {
+            <a class="btn btn-primary" asp-page="/Users/TesteCarte" asp-route-idCarte="@test.CarteId">
+                Începe testul
+            </a>
+        }
+    </div>
+}

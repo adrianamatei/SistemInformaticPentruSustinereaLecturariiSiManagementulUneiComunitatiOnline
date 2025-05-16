@@ -1,55 +1,50 @@
+using AplicatieLicenta.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AplicatieLicenta.Models;
-using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AplicatieLicenta.Pages.Admin
 {
     public class VizualizareTesteModel : PageModel
     {
-        private readonly AplicatieLicenta.Data.AppDbContext _context;
+        private readonly AppDbContext _context;
 
-        public VizualizareTesteModel(AplicatieLicenta.Data.AppDbContext context)
+        public VizualizareTesteModel(AppDbContext context)
         {
             _context = context;
         }
 
-        public List<TestViewModel> Teste { get; set; } = new();
+        public List<TestStatsDto> StatisticiTeste { get; set; } = new();
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            string folder = "wwwroot/teste";
-            if (!Directory.Exists(folder)) return;
-
-            var fisiere = Directory.GetFiles(folder, "*.xml");
-
-            foreach (var path in fisiere)
-            {
-                try
+            StatisticiTeste = await _context.Quizuri
+                .Include(q => q.Carte)
+                .Select(q => new TestStatsDto
                 {
-                    var xml = XElement.Load(path);
-                    string titlu = xml.Element("Titlu")?.Value ?? "Fãrã titlu";
-                    int carteId = int.Parse(xml.Element("CarteId")?.Value ?? "0");
-                    string carteTitlu = _context.Carti.FirstOrDefault(c => c.IdCarte == carteId)?.Titlu ?? "Necunoscutã";
+                    TitluTest = q.Titlu,
+                    TitluCarte = q.Carte.Titlu,
+                    UtilizatoriPromovati = _context.RezultateQuiz
+                        .Where(r => r.QuizId == q.Id && r.Scor >= 80)
+                        .Select(r => r.Utilizator.Email)
+                        .ToList(),
 
-                    Teste.Add(new TestViewModel
-                    {
-                        Titlu = titlu,
-                        CarteTitlu = carteTitlu,
-                        FileName = Path.GetFileName(path)
-                    });
-                }
-                catch
-                {
-                    // ignori fi?iere corupte
-                }
-            }
+                    UtilizatoriPicati = _context.RezultateQuiz
+                        .Where(r => r.QuizId == q.Id && r.Scor < 80)
+                        .Select(r => r.Utilizator.Email)
+                        .ToList()
+                })
+                .ToListAsync();
         }
 
-        public class TestViewModel
+        public class TestStatsDto
         {
-            public string Titlu { get; set; }
-            public string CarteTitlu { get; set; }
-            public string FileName { get; set; } // pentru editare
+            public string TitluTest { get; set; }
+            public string TitluCarte { get; set; }
+            public List<string> UtilizatoriPromovati { get; set; }
+            public List<string> UtilizatoriPicati { get; set; }
         }
     }
 }

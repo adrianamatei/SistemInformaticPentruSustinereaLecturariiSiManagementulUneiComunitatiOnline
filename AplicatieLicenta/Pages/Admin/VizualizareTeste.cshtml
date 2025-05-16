@@ -4,36 +4,67 @@
     Layout = "~/Pages/Shared/AdminLayout.cshtml";
 }
 
-<h2 class="text-center mt-4 mb-4" style="color: #C8AD7F;">Teste disponibile</h2>
+<h2 class="mb-4" style="color: #C8AD7F;">Statistici Teste</h2>
 
-@if (Model.Teste != null && Model.Teste.Count > 0)
+@foreach (var test in Model.StatisticiTeste)
 {
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Titlu Test</th>
-                <th>Cartea asociată</th>
-                <th>Acțiuni</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var test in Model.Teste)
-            {
-                <tr>
-                    <td>@test.Titlu</td>
-                    <td>@test.CarteTitlu</td>
-                    <td>
-                        <a asp-page="/Admin/EditeazaTest" asp-route-id="@test.FileName" class="btn btn-outline-secondary">
-                            ✏️ Editează
-                        </a>
+    <div class="mb-5 border p-3 rounded bg-white">
+        <h5 class="mb-2">
+            <strong>Test:</strong> @test.TitluTest &nbsp; | &nbsp; <strong>Carte:</strong> <em>@test.TitluCarte</em>
+        </h5>
 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Nu există teste salvate momentan.</p>
+        <!-- Tabel utilizatori care au promovat -->
+        <h6 class="mt-4">Utilizatori care au <span class="text-success">promovat</span> (@test.UtilizatoriPromovati.Count):</h6>
+        @if (test.UtilizatoriPromovati.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < test.UtilizatoriPromovati.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@test.UtilizatoriPromovati[i]</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><em>Niciun utilizator nu a promovat acest test.</em></p>
+        }
+
+        <!-- Tabel utilizatori care au picat -->
+        <h6 class="mt-4">Utilizatori care au <span class="text-danger">picat</span> (@test.UtilizatoriPicati.Count):</h6>
+        @if (test.UtilizatoriPicati.Any())
+        {
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < test.UtilizatoriPicati.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@test.UtilizatoriPicati[i]</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><em>Niciun utilizator nu a picat acest test.</em></p>
+        }
+    </div>
 }

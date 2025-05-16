@@ -18,7 +18,9 @@ public partial class User
     public string CategorieVarsta { get; set; } = null!;
     public int NumarIncercariEsec { get; set; }
     public DateTime? BlocatPanaLa { get; set; }
-    public string? TokenResetare { get; set; } 
+    public string? TokenResetare { get; set; }
+    public int ScorTotal { get; set; } = 0;
+
 
     public DateTime? ExpirareToken { get; set; } 
 
