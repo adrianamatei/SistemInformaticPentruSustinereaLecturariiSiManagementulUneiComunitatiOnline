@@ -9,16 +9,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http.Features;
+using Azure.Core;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace AplicatieLicenta.Pages.Users
 {
     public class StartUserModel : PageModel
     {
         private readonly AppDbContext _context;
-
-        public StartUserModel(AppDbContext context)
+        private readonly IConfiguration _configuration;
+        public StartUserModel(AppDbContext context,IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         public string CategorieVarsta { get; set; }
@@ -98,6 +102,14 @@ namespace AplicatieLicenta.Pages.Users
             if (!userId.HasValue)
                 return RedirectToPage("/Login");
 
+            var user = await _context.Users.FindAsync(userId.Value);
+            if (user == null)
+                return RedirectToPage("/Login");
+
+            var club = await _context.CluburiLectura.FirstOrDefaultAsync(c => c.IdClub == clubId);
+            if (club == null)
+                return NotFound();
+
             bool esteMembru = await _context.MembriClub
                 .AnyAsync(m => m.IdUtilizator == userId.Value && m.IdClub == clubId);
 
@@ -112,10 +124,23 @@ namespace AplicatieLicenta.Pages.Users
                 });
 
                 await _context.SaveChangesAsync();
+
+                // Trimite email cãtre admin
+                string adminEmail = "ionelaamatei2004@gmail.com"; // modificã cu adresa realã
+                string subject = $"Cerere nouã pentru clubul: {club.Nume}";
+                string linkAdmin = Url.Page("/Admin/GestionareCluburiLectura", null, null, Request.Scheme);
+
+                string body = $@"
+            <p><strong>{user.Email}</strong> a trimis o cerere de înscriere în clubul <strong>{club.Nume}</strong>.</p>
+            <p>Pentru a gestiona cererea, acceseazã: <a href='{linkAdmin}'>Gestionare Cluburi de Lecturã</a></p>";
+
+                await SendGenericEmail(adminEmail, subject, body);
             }
 
+            TempData["Success"] = "Cererea ta a fost trimisã cãtre admin!";
             return RedirectToPage();
         }
+
 
         public async Task<JsonResult> OnGetIncarcaMesajeAsync(int idClub)
         {
@@ -152,6 +177,7 @@ namespace AplicatieLicenta.Pages.Users
 
             return new JsonResult(mesaje);
         }
+
 
         [IgnoreAntiforgeryToken]
         [RequestSizeLimit(100_000_000)]
@@ -208,7 +234,69 @@ namespace AplicatieLicenta.Pages.Users
                 return BadRequest("Eroare internã: " + ex.Message);
             }
         }
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> OnPostTrimiteTextAsync()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(Request.Form["userId"]);
+                var userEmail = Request.Form["userEmail"];
+                var mesaj = Request.Form["mesaj"];
+                var idClub = Convert.ToInt32(Request.Form["idClub"]);
+
+                if (string.IsNullOrWhiteSpace(mesaj))
+                    return BadRequest("Mesajul nu poate fi gol.");
+
+                _context.MesajClub.Add(new MesajClub
+                {
+                    IdClub = idClub,
+                    IdUtilizator = userId,
+                    Continut = mesaj,
+                    UrlFisierAudio = null,
+                    DataTrimiterii = DateTime.Now
+                });
+
+                _context.UsersActivity.Add(new UsersActivity
+                {
+                    UserId = userId,
+                    Action = $"A trimis un mesaj text în clubul cu ID {idClub}",
+                    Data = $"Continut: {mesaj}",
+                    Timestamp = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+
+                return new JsonResult(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Eroare internã: " + ex.Message);
+            }
+        }
+        private async Task SendGenericEmail(string email, string subject, string htmlBody)
+        {
+            var smtpSettings = _configuration.GetSection("SmtpSettings").Get<SmtpSettings>();
+
+            var mailMessage = new System.Net.Mail.MailMessage
+            {
+                From = new System.Net.Mail.MailAddress(smtpSettings.SenderEmail),
+                Subject = subject,
+                Body = htmlBody,
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(email);
+
+            using (var smtpClient = new System.Net.Mail.SmtpClient(smtpSettings.Server, smtpSettings.Port))
+            {
+                smtpClient.Credentials = new System.Net.NetworkCredential(smtpSettings.SenderEmail, smtpSettings.SenderPassword);
+                smtpClient.EnableSsl = true;
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+        }
     }
+    
 
     public static class StringExtensions
     {
@@ -218,4 +306,6 @@ namespace AplicatieLicenta.Pages.Users
             return char.ToUpper(value[0]) + value.Substring(1);
         }
     }
+   
+
 }

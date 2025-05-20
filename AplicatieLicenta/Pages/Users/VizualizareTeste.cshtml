@@ -19,11 +19,13 @@
         <h4>@test.Titlu</h4>
         <p><strong>Carte:</strong> @test.Carte.Titlu</p>
 
-        @if (Model.RezultateUser.TryGetValue(test.Id, out var rezultat))
+        @if (Model.RezultateUser.TryGetValue(test.Id, out var rezultate))
         {
-            <p><strong>Scor obținut:</strong> @rezultat.Scor%</p>
+            var ultimul = rezultate.OrderByDescending(r => r.Data).First(); // sau .Last() dacă ai nevoie de invers
 
-            @if (rezultat.Scor >= 80)
+            <p><strong>Scor obținut:</strong> @ultimul.Scor%</p>
+
+            @if (ultimul.Scor >= 80)
             {
                 <p style="color: green;"><strong>Test promovat</strong> – nu mai poate fi reluat.</p>
             }
@@ -35,11 +37,6 @@
                 </a>
             }
         }
-        else
-        {
-            <a class="btn btn-primary" asp-page="/Users/TesteCarte" asp-route-idCarte="@test.CarteId">
-                Începe testul
-            </a>
-        }
+
     </div>
 }

@@ -2,6 +2,8 @@ using AplicatieLicenta.Data;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using AplicatieLicenta.Hubs;
+using AplicatieLicenta.Models;
+using AplicatieLicenta.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +24,8 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 104857600; // 100 MB
 });
 builder.Services.AddSignalR();
-
+builder.Services.AddHttpClient<GoogleBookService>();
+builder.Services.Configure<GoogleBooksSettings>(builder.Configuration.GetSection("GoogleBooks"));
 // Add services to the container.
 builder.Services.AddRazorPages();
 

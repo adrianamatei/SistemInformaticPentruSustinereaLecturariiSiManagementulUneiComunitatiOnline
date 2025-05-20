@@ -3,3 +3,97 @@
 @{
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+
+@section Styles {
+    <style>
+        .aboutus-container {
+            background-image: url('/images/Background_about.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: #000;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 40px 60px 20px 60px;
+            box-sizing: border-box;
+            overflow: hidden; /* elimină scroll-ul */
+        }
+
+        .aboutus-content {
+            max-width: 950px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+            .aboutus-content h1 {
+                font-size: 1.8rem;
+                margin-bottom: 0.6rem;
+                color: #111;
+            }
+
+            .aboutus-content h2 {
+                font-size: 1.2rem;
+                margin-top: 1rem;
+                color: #111;
+            }
+
+            .aboutus-content p,
+            .aboutus-content li {
+                font-size: 1rem;
+                color: #111;
+                margin: 0.2rem 0;
+            }
+
+            .aboutus-content ul {
+                padding-left: 20px;
+                margin: 0.4rem 0;
+            }
+
+        .quote {
+            font-style: italic;
+            font-size: 1rem;
+            border-left: 3px solid #333;
+            padding-left: 12px;
+            margin-bottom: 0.6rem;
+            color: #222;
+        }
+
+        a.contact-link {
+            color: #111;
+            text-decoration: underline;
+        }
+    </style>
+}
+
+<div class="aboutus-container">
+    <div class="aboutus-content">
+        <h1>Despre BookHaven</h1>
+
+        <p class="quote">
+            „Un cititor trăiește o mie de vieți. Cel care nu citește niciodată trăiește una singură.”<br />
+            — <em>George R.R. Martin</em>, via Bookroo.com
+        </p>
+
+        <p>
+            <strong>BookHaven</strong> BookHaven este o platforma care incearca convingerea celor aflati la inceput de drum sa citeasca cat mai mult. Acesta platforma este dedicata lecturii si dezvoltarii copiilor cu ajutorul cartilor in format Pdf si audio,adresandu-se si categoriile care nu au invatat inca taina cititului
+        </p>
+
+        <p>
+            Quiz -urile atractive si grupurile de lectura ii motiveaza pe cei mici sa avanseze spre cat mai multe carti citite. Astfel,scopul nostru este sa  transformam lectura intr-o experienta frumoasa si relaxanta pentru copiii fiind de asemnea,o cale spre combaterea alfabetismului functional,lectura fiind importanta pentru minte,inima si suflet
+        </p>
+
+        <h2>Misiunea</h2>
+        <ul>
+            <li>Sa ofere copiilor acces la carti adecvate varstei</li>
+            <li>Sa dezvolte intelegerea prin quiz-uri</li>
+            <li>Sa incurajeze comunicarea printr-un chat interactiv </li>
+        </ul>
+
+        <h2>Contact</h2>
+        <p>
+            Pentru întrebări sau sugestii, lasă-ne un mesaj pe <a asp-page="/Contact" class="contact-link">Formularul de contact</a>.
+        </p>
+    </div>
+</div>

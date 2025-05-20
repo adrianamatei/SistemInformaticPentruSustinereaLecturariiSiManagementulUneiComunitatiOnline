@@ -101,3 +101,53 @@
         opacity: 1;
     }
 }
+/* Mesaj individual în chat */
+.chat-message {
+    background-color: #fffef9;
+    border: 1px solid #e1d3aa;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    max-width: 95%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+    /* Stil pentru nume + oră */
+    .chat-message strong {
+        display: block;
+        color: #5a422a;
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+
+    .chat-message time {
+        color: #888;
+        font-size: 12px;
+        float: right;
+        margin-left: 10px;
+    }
+
+    /* Audio player ajustat */
+    .chat-message audio {
+        margin-top: 6px;
+        width: 100%;
+    }
+
+/* Scrollbar custom în fereastra de chat */
+.chat-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: #d2bfa3;
+    border-radius: 5px;
+}
+
+.chat-body::-webkit-scrollbar-track {
+    background-color: #f5f0e5;
+}
+.chat-body div {
+    margin-bottom: 20px; /* adaugă spațiu între mesaje */
+}

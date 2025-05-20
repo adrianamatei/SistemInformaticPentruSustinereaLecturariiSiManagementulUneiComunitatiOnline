@@ -30,6 +30,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
     public DbSet<MesajClub> MesajClub { get; set; }
+    public DbSet<RecomandareZilnica> RecomandariZilnice { get; set; }
+
 
 
     public virtual DbSet<Vizitatori> Vizitatori { get; set; }

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/BookHaven.styles.css" asp-append-version="true" />
     @RenderSection("Styles", required: false)
     <style>
-        /* Navbar general */
+        /* === NAVBAR GENERAL === */
         .custom-navbar {
             width: 100%;
             background-color: #ffffff;
@@ -24,7 +24,7 @@
             justify-content: center;
         }
 
-        /* Container pentru conținutul navbar-ului */
+        /* === CONTAINER CENTRAL === */
         .custom-container {
             display: flex;
             justify-content: space-between;
@@ -34,51 +34,54 @@
             margin: 0 auto;
         }
 
-        /* Stil pentru logo */
+        /* === LOGO BOOKHAVEN === */
         .custom-brand {
             font-family: 'Georgia', serif;
             font-size: 1.8rem;
             color: #C8AD7F;
             font-weight: bold;
             text-decoration: none;
-            margin-right: auto; /* Păstrează logo-ul în stânga */
+            margin-right: auto;
         }
 
-        .custom-brand:hover {
-            color: #C8A57D;
-        }
+            .custom-brand:hover {
+                color: #C8A57D;
+            }
 
-        /* Meniu de navigare */
         .custom-nav-items {
             display: flex;
-            gap: 20px; /* Reducem spațiul dintre elementele meniului */
+            gap: 18px; /* ✨ Spațiu mai mic între linkuri */
             list-style: none;
             margin: 0;
             padding: 0;
-            justify-content: flex-end; /* Centrează mai bine conținutul pe dreapta */
+            align-items: center;
+            margin-left: auto;
         }
 
-        /* Stil pentru fiecare link din meniu */
         .custom-nav-link {
             display: flex;
             align-items: center;
             text-decoration: none;
-            color: #333333;
-            font-size: 1rem;
+            color: #333;
+            font-size: 0.95rem; /* ✨ Text un pic mai mic */
+            font-weight: 500;
+            line-height: 1;
             transition: color 0.3s ease;
         }
 
-        .custom-nav-link img {
-            width: 25px; /* Dimensiune mai mică pentru iconițe */
-            height: 25px;
-            margin-right: 5px; /* Spațiu redus între icon și text */
-        }
+            .custom-nav-link img {
+                width: 22px; /* ✨ Icon mai mic */
+                height: 22px;
+                margin-right: 6px; /* ✨ spațiu mic între icon și text */
+                object-fit: contain;
+                display: block;
+            }
 
-        .custom-nav-link:hover {
-            color: #C8A57D;
-        }
 
-        /* Compensare pentru navbar fix */
+            .custom-nav-link:hover {
+                color: #C8A57D;
+            }
+
         body {
             margin: 0;
             padding-top: 80px;
@@ -104,11 +107,8 @@
         <nav class="custom-navbar">
             <div class="custom-container">
                 <a href="/Index" class="custom-brand">BookHaven</a>
+
                 <div class="custom-nav-items">
-                    <a href="/Index" class="custom-nav-link">
-                        <img src="~/images/MeniuNavigare/home.png" alt="Home" />
-                        <span>Home</span>
-                    </a>
                     <a href="/Login" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/loginreader.png" alt="Login" />
                         <span>Autentificare</span>
@@ -121,10 +121,21 @@
                         <img src="~/images/MeniuNavigare/cartiaudio.png" alt="Carti Audio" />
                         <span>Carti Audio</span>
                     </a>
-                   
                     <a href="/ChatBot" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/chatbot.png" alt="ChatBot" />
                         <span>ChatBot</span>
+                    </a>
+                    <a href="/Recenzii" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/review.png" alt="Recenzii" />
+                        <span>Recenzii</span>
+                    </a>
+                    <a href="/AboutUs" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/about_us.png" alt="AboutUs" />
+                        <span>Despre</span>
+                    </a>
+                    <a href="/Contact" class="custom-nav-link">
+                        <img src="~/images/MeniuNavigare/contact.png" alt="Contact" />
+                        <span>Contact</span>
                     </a>
                     <a href="/Users/StartUser" class="custom-nav-link">
                         <img src="~/images/MeniuNavigare/contulMeu.jpeg" alt="Contul meu" />
@@ -135,10 +146,10 @@
                         <span>Logout</span>
                     </a>
                 </div>
-
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -154,9 +165,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
-  
-
 </body>
 </html>

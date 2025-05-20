@@ -12,7 +12,8 @@ namespace AplicatieLicenta.Pages.Users
         public VizualizareTesteModel(AppDbContext context) => _context = context;
 
         public List<Quiz> TesteDisponibile { get; set; } = new();
-        public Dictionary<int, RezultatQuiz> RezultateUser { get; set; } = new();
+        public Dictionary<int, List<RezultatQuiz>> RezultateUser { get; set; } = new();
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -24,8 +25,10 @@ namespace AplicatieLicenta.Pages.Users
                 .ToListAsync();
 
             RezultateUser = await _context.RezultateQuiz
-                .Where(r => r.UserId == userId.Value)
-                .ToDictionaryAsync(r => r.QuizId, r => r);
+    .Where(r => r.UserId == userId.Value)
+    .GroupBy(r => r.QuizId)
+    .ToDictionaryAsync(g => g.Key, g => g.ToList());
+
 
             return Page();
         }

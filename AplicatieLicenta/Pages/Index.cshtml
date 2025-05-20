@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model AplicatieLicenta.Pages.IndexModel
 @{
     Layout = null;
 }
@@ -102,14 +102,49 @@
             </div>
         </div>
 
+        <section style="margin-top: 30px; margin-bottom: 50px; text-align: center;">
+            <div style="display: inline-block; text-align: center; margin-left: 200px;">
+                <h2 style="font-size: 1.8rem; color: #000000; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <img src="~/images/recomandarea_zilei.jpeg" alt="Icon" style="width: 30px; height: auto;" />
+                    Recomandarea zilei
+                </h2>
+
+
+                @if (Model.Recomandare != null)
+                {
+                    <div>
+                        <img src="@Model.Recomandare.ImagineCoperta"
+                             alt="@Model.Recomandare.Titlu"
+                             style="width: 180px; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+
+                        <h5 style="margin-top: 12px; font-size: 1.1rem; color: #3c2e1a;">@Model.Recomandare.Titlu</h5>
+                        <p style="margin-top: 3px; font-style: italic; color: #666; font-size: 0.95rem;">
+                            @Model.Recomandare.Autor
+                        </p>
+                    </div>
+                }
+
+                <!-- Mesaj și buton -->
+                <div style="margin-top: 30px;">
+                    <p style="font-size: 1.1rem; color: #444; font-weight: 500; margin-bottom: 15px;">
+                        Primul pas pentru a începe aventura
+                    </p>
+                    <a href="/Users/Inregistrare"
+                       class="btn"
+                       style="background-color: #C8AD7F; color: white; font-weight: bold; padding: 8px 20px; border-radius: 6px; font-size: 1rem; text-decoration: none;">
+                         Înregistrare
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
     </div>
+
     <a href="/ChatBot" class="robotel-widget">
         <div class="robotel-tooltip">Psst! Te ajut?</div>
         <img src="~/images/BotHome.jpg" alt="Robotel Asistent" class="robotel-icon" />
     </a>
-
-
-
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -118,8 +153,5 @@
     </footer>
 
     <script src="/js/carousel.js"></script>
-  
-
-
 </body>
 </html>

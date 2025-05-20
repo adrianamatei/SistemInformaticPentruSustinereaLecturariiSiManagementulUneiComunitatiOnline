@@ -11,26 +11,33 @@
 
     <style>
         /* Panou stânga */
-        #left-panel {
-            width: 250px;
-            background-color: #ffffff; /* Fundal alb */
-            color: #C8AD7F; /* Text crem */
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); /* Umbră laterală */
-        }
+       #left-panel {
+    width: 250px;
+    background-color: #ffffff;
+    color: #C8AD7F;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#main-menu {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto; /* ADĂUGAT */
+}
+
 
             /* Imagine logo */
             #left-panel img {
                 display: block;
-                width: 100px; /* Dimensiune pătrată */
-                height: 100px; /* Dimensiune pătrată */
+                width: 80px; /* Dimensiune pătrată */
+                height: 80px; /* Dimensiune pătrată */
                 object-fit: cover; /* Taie imaginea pentru a se încadra */
                 margin-bottom: 20px;
             }

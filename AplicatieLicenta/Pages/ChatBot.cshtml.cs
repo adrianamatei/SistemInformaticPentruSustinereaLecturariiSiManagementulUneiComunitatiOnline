@@ -1,106 +1,198 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using AplicatieLicenta.Data; 
+using AplicatieLicenta.Services;
+using AplicatieLicenta.Models;
+using AplicatieLicenta.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace AplicatieLicenta.Pages
 {
     public class ChatBotModel : PageModel
     {
-        private readonly HttpClient _httpClient;
+        private readonly GoogleBookService _googleBookService;
         private readonly AppDbContext _context;
 
-       
-        public List<(string Role, string Message)> ConversationHistory { get; set; } = new();
-
-        public ChatBotModel(AppDbContext context)
+        public ChatBotModel(GoogleBookService googleBookService, AppDbContext context)
         {
+            _googleBookService = googleBookService;
             _context = context;
-            _httpClient = new HttpClient();
         }
 
         [BindProperty]
         public string UserMessage { get; set; }
 
-        public string BotResponse { get; set; }
+        public List<ChatMessage> ConversationHistory { get; set; } = new();
+
+        public void OnGet()
+        {
+            var storedConversation = HttpContext.Session.GetString("StoredConversation");
+            if (!string.IsNullOrWhiteSpace(storedConversation))
+            {
+                ConversationHistory = JsonSerializer.Deserialize<List<ChatMessage>>(storedConversation);
+            }
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var hfToken = "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";
-            var endpoint = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1";
+            var storedConversation = HttpContext.Session.GetString("StoredConversation");
+            if (!string.IsNullOrWhiteSpace(storedConversation))
+                ConversationHistory = JsonSerializer.Deserialize<List<ChatMessage>>(storedConversation);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", hfToken);
+            string raspuns = string.Empty;
+            UserMessage = UserMessage?.Trim();
 
-            
-            var activitati = await _context.UsersActivity
-                .OrderByDescending(a => a.Data)
-                .Take(3)
-                .Select(a => $"{a.UserId} - {a.Action}")
-                .ToListAsync();
-
-            
-            string contextText = "";
-
-            if (activitati.Any())
-                contextText += "\n\nActivitate recenta :\n" + string.Join("\n", activitati);
-
-         
-            string prompt = !string.IsNullOrWhiteSpace(contextText)
-                ? $"Esti un asistent care ofera sfaturi pentru combaterea analfabetismului functional. " +
-                  $"Folosind urmatoarele informatii din sistem:\n\n{contextText}\n\nIntrebare: {UserMessage}\n\nRãspuns:"
-                : $"Esti un asistent care ajuta cu sfaturi despre analfabetism functional. Intrebare: {UserMessage}";
-
-            var payload = new { inputs = prompt };
-            var jsonPayload = JsonSerializer.Serialize(payload);
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-
-            try
+            if (!string.IsNullOrWhiteSpace(UserMessage))
             {
-                var response = await _httpClient.PostAsync(endpoint, content);
-                var responseContent = await response.Content.ReadAsStringAsync();
+                ConversationHistory.Add(new ChatMessage("user", UserMessage));
 
-                Console.WriteLine("Hugging Face response: " + responseContent);
+                string inModRecomandare = HttpContext.Session.GetString("InModRecomandare");
+                string tempVarsta = HttpContext.Session.GetString("TempVarsta");
+                string tempGen = HttpContext.Session.GetString("TempGen");
 
-                if (!response.IsSuccessStatusCode)
+                // Recomandare pe baza inputului utilizatorului (vârstã + gen)
+                if (inModRecomandare == "true")
                 {
-                    BotResponse = $"Eroare Hugging Face ({response.StatusCode}): {responseContent}";
-                    return Page();
+                    if (string.IsNullOrWhiteSpace(tempVarsta))
+                    {
+                        HttpContext.Session.SetString("TempVarsta", UserMessage);
+                        raspuns = "Si ce gen de cãrti îti plac? (ex: aventurã, mister, fantasy)";
+                    }
+                    else if (string.IsNullOrWhiteSpace(tempGen))
+                    {
+                        HttpContext.Session.SetString("TempGen", UserMessage);
+                        tempGen = UserMessage;
+                        int.TryParse(tempVarsta, out int varstaInt);
+                        string genCautat = tempGen.Trim().ToLower();
+
+                        var toateCartile = await _context.Carti
+                            .Include(c => c.Genuri)
+                            .Include(c => c.CategoriiVarsta)
+                            .ToListAsync();
+
+                        var cartiRecomandate = toateCartile
+                            .Where(c => c.Genuri.Any(g => g.Denumire.ToLower().Contains(genCautat)))
+                            .Where(c => c.CategoriiVarsta.Any(cv =>
+                            {
+                                var den = cv.Denumire.ToLower();
+                                if (den.Contains("sub")) return varstaInt < 8;
+                                if (den.Contains("peste")) return varstaInt > 14;
+
+                                var parts = den.Split(new[] { '-', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                return parts.Length == 2 &&
+                                       int.TryParse(parts[0], out int min) &&
+                                       int.TryParse(parts[1], out int max) &&
+                                       varstaInt >= min && varstaInt <= max;
+                            }))
+                            .Take(5)
+                            .ToList();
+
+                        if (cartiRecomandate.Any())
+                        {
+                            raspuns = $"Îti recomand urmãtoarele cãrti din genul {tempGen} pentru {tempVarsta} ani:\n" +
+                                      string.Join("\n", cartiRecomandate.Select(c => $"- {c.Titlu} de {c.Autor}"));
+                        }
+                        else
+                        {
+                            raspuns = $"Momentan nu am gãsit cãrti din genul {tempGen} potrivite pentru {tempVarsta} ani.";
+                        }
+
+                        HttpContext.Session.Remove("InModRecomandare");
+                        HttpContext.Session.Remove("TempVarsta");
+                        HttpContext.Session.Remove("TempGen");
+                    }
                 }
-
-                using JsonDocument doc = JsonDocument.Parse(responseContent);
-
-                if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                // Recomandare automatã pentru utilizator autentificat
+                else if (UserMessage.ToLower().Contains("recomanzi"))
                 {
-                    var fullText = doc.RootElement[0].GetProperty("generated_text").ToString();
+                    int? userId = HttpContext.Session.GetInt32("UserId");
 
-                    
-                    var cleanText = fullText.Replace(prompt, "").Trim();
+                    if (userId.HasValue)
+                    {
+                        var user = await _context.Users
+                            .FirstOrDefaultAsync(u => u.IdUtilizator == userId.Value);
 
-                    
-                    BotResponse = cleanText;
+                        if (user == null || string.IsNullOrWhiteSpace(user.CategorieVarsta))
+                        {
+                            raspuns = "Nu am putut determina categoria ta de varsta. Te rog actualizeazã-ti profilul.";
+                        }
+                        else
+                        {
+                            string denumireCategorie = user.CategorieVarsta.ToLower();
+
+                            var cartiRecomandate = await _context.Carti
+                                .Include(c => c.CategoriiVarsta)
+                                .Where(c => c.CategoriiVarsta.Any(cv =>
+                                    cv.Denumire != null && cv.Denumire.ToLower() == denumireCategorie))
+                                .Take(5)
+                                .ToListAsync();
+
+                            if (cartiRecomandate.Any())
+                            {
+                                raspuns = $"Îti recomand aceste cãrti pentru categoria ta de vârstã ({denumireCategorie}):\n" +
+                                          string.Join("\n", cartiRecomandate.Select(c => $"- {c.Titlu} de {c.Autor}"));
+                            }
+                            else
+                            {
+                                raspuns = $"Nu am gãsit momentan cãrti pentru categoria ta de vârstã ({denumireCategorie}).";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("InModRecomandare", "true");
+                        HttpContext.Session.Remove("TempVarsta");
+                        HttpContext.Session.Remove("TempGen");
+                        raspuns = "Ca sã îti pot face o recomandare, câti ani ai?";
+                    }
                 }
+                // Descriere carte prin Google Books
+                else if (UserMessage.ToLower().StartsWith("despre ce e"))
+                {
+                    string titlu = UserMessage.Replace("despre ce e", "", StringComparison.OrdinalIgnoreCase).Trim();
+                    raspuns = await _googleBookService.CautaDescriereCarteAsync(titlu);
+                }
+                // Mesaj fallback
                 else
                 {
-                    BotResponse = "Nu am primit un raspuns valid.";
+                    raspuns = "Îmi poti adresa întrebãri despre o carte anume sau îti pot recomanda ceva potrivit pentru tine.";
                 }
 
-            }
-            catch (Exception ex)
-            {
-                BotResponse = "Eroare la conectarea cu Hugging Face: " + ex.Message;
+                // Salvare mesaj bot în conversa?ie
+                ConversationHistory.Add(new ChatMessage("bot", raspuns));
+
+                // Salvare în tabelul UsersActivity
+                int? userIdSave = HttpContext.Session.GetInt32("UserId");
+                if (userIdSave.HasValue)
+                {
+                    _context.UsersActivity.Add(new UsersActivity
+                    {
+                        UserId = userIdSave.Value,
+                        Action = "Întrebare în chatbot",
+                        Data = UserMessage,
+                        Timestamp = DateTime.Now
+                    });
+                    await _context.SaveChangesAsync();
+                }
             }
 
-            ConversationHistory.Add(("user", UserMessage));
-            ConversationHistory.Add(("bot", BotResponse));
-
-           
             UserMessage = "";
-
+            HttpContext.Session.SetString("StoredConversation", JsonSerializer.Serialize(ConversationHistory));
             return Page();
+        }
+
+        public class ChatMessage
+        {
+            public string Role { get; set; }
+            public string Message { get; set; }
+
+            public ChatMessage() { }
+
+            public ChatMessage(string role, string message)
+            {
+                Role = role;
+                Message = message;
+            }
         }
     }
 }

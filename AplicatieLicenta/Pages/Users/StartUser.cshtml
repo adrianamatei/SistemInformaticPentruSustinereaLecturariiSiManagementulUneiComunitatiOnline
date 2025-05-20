@@ -174,23 +174,28 @@
             chatBox.classList.remove("chat-box-visible");
         }
 
-        function addMessage(email, mesaj, ora, audioUrl = null) {
-            const chatBody = document.getElementById("chat-messages");
-            const mesajNou = document.createElement("div");
+       function addMessage(email, mesaj, ora, audioUrl = null) {
+    const chatBody = document.getElementById("chat-messages");
+    const mesajNou = document.createElement("div");
+    mesajNou.classList.add("chat-message"); // aplica stilul aerisit
 
-            if (audioUrl) {
-                mesajNou.innerHTML = `<strong>${email}</strong> (${ora}):<br>
-                            <audio controls>
-                                <source src="${audioUrl}" type="audio/webm">
-                                Browserul tău nu suportă fișiere audio.
-                            </audio>`;
-            } else {
-                mesajNou.innerHTML = `<strong>${email}</strong> (${ora}): ${mesaj}`;
-            }
+    if (audioUrl) {
+        mesajNou.innerHTML = `
+            <strong>${email}<time> (${ora})</time></strong>
+            <audio controls>
+                <source src="${audioUrl}" type="audio/webm">
+                Browserul tău nu suportă fișiere audio.
+            </audio>`;
+    } else {
+        mesajNou.innerHTML = `
+            <strong>${email}<time> (${ora})</time></strong>
+            <div>${mesaj}</div>`;
+    }
 
-            chatBody.appendChild(mesajNou);
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
+    chatBody.appendChild(mesajNou);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
 
         function loadMesaje(idClub) {
             fetch('/Users/StartUser?handler=IncarcaMesaje&idClub=' + idClub)
@@ -242,15 +247,33 @@
             const input = document.getElementById("messageInput");
             const mesaj = input.value.trim();
 
-            
             if (mesaj !== "") {
+                // Trimite prin SignalR mesajul către ceilalți
                 connection.invoke("SendMessage", currentClubId, userId, userEmail, mesaj)
-                    .catch(err => console.error(" Eroare la trimitere text:", err));
+                    .catch(err => console.error("Eroare la trimitere text:", err));
+
+                // Salvează în baza de date
+                fetch("/Users/StartUser?handler=TrimiteText", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        mesaj: mesaj,
+                        userId: userId,
+                        idClub: currentClubId
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error("Eroare la salvare mesaj text.");
+                    })
+                    .catch(err => console.error("Eroare la salvarea mesajului în DB:", err));
+
                 input.value = "";
                 return;
             }
 
-        
+            // Dacă există mesaj vocal înregistrat
             if (recordedBlob && recordedBlob.size > 0) {
                 const formData = new FormData();
                 formData.append("vocal", recordedBlob, "voce.webm");
@@ -265,18 +288,18 @@
                     .then(r => r.text())
                     .then(fileName => {
                         if (!fileName || fileName.trim().length < 5) {
-                            console.error(" Răspuns invalid de la server:", fileName);
+                            console.error("Răspuns invalid de la server:", fileName);
                             return;
                         }
 
                         const audioUrl = `/vocale/${fileName}`;
                         connection.invoke("SendVocal", currentClubId, userId, userEmail, audioUrl)
-                            .catch(err => console.error(" Eroare la SignalR vocal:", err));
+                            .catch(err => console.error("Eroare la SignalR vocal:", err));
 
                         recordedBlob = null;
                         audioChunks = [];
                     })
-                    .catch(err => console.error(" Eroare la upload vocal:", err));
+                    .catch(err => console.error("Eroare la upload vocal:", err));
 
                 return;
             }
