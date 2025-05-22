@@ -25,6 +25,8 @@ builder.Services.Configure<FormOptions>(options =>
 });
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient<GoogleBookService>();
+builder.Services.AddSingleton<GeminiService>();
+
 builder.Services.Configure<GoogleBooksSettings>(builder.Configuration.GetSection("GoogleBooks"));
 // Add services to the container.
 builder.Services.AddRazorPages();

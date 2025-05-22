@@ -5,6 +5,7 @@ using AplicatieLicenta.Models;
 using AplicatieLicenta.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace AplicatieLicenta.Pages
 {
@@ -12,11 +13,13 @@ namespace AplicatieLicenta.Pages
     {
         private readonly GoogleBookService _googleBookService;
         private readonly AppDbContext _context;
+        private readonly GeminiService _geminiService;
 
-        public ChatBotModel(GoogleBookService googleBookService, AppDbContext context)
+        public ChatBotModel(GoogleBookService googleBookService, AppDbContext context, GeminiService geminiService)
         {
             _googleBookService = googleBookService;
             _context = context;
+            _geminiService = geminiService;
         }
 
         [BindProperty]
@@ -50,13 +53,70 @@ namespace AplicatieLicenta.Pages
                 string tempVarsta = HttpContext.Session.GetString("TempVarsta");
                 string tempGen = HttpContext.Session.GetString("TempGen");
 
-                // Recomandare pe baza inputului utilizatorului (vârstã + gen)
+                var mapariGenuri = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "aventura", "Aventura" },
+                    { "actiune", "Aventura" },
+                    { "fantasy", "Fantezie" },
+                    { "fantezie", "Fantezie" },
+                    { "povesti", "Basm" },
+                    { "basm", "Basm" },
+                    { "fictiune", "Fictiune" }
+                };
+
+                string genGasit = mapariGenuri.Keys.FirstOrDefault(k => UserMessage.ToLower().Contains(k));
+                string genReal = genGasit != null ? mapariGenuri[genGasit] : null;
+
+                if (!string.IsNullOrEmpty(genReal))
+                {
+                    int? userId = HttpContext.Session.GetInt32("UserId");
+
+                    if (userId.HasValue)
+                    {
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUtilizator == userId.Value);
+
+                        if (user != null && !string.IsNullOrEmpty(user.CategorieVarsta))
+                        {
+                            string categorie = user.CategorieVarsta.ToLower();
+
+                            var carti = await _context.Carti
+                                .Include(c => c.Genuri)
+                                .Include(c => c.CategoriiVarsta)
+                                .Where(c => c.Genuri.Any(g => g.Denumire.ToLower() == genReal.ToLower()))
+                                .Where(c => c.CategoriiVarsta.Any(cv => cv.Denumire.ToLower() == categorie))
+                                .Take(5)
+                                .ToListAsync();
+
+                            if (carti.Any())
+                            {
+                                raspuns = $"Iti recomand aceste carti din genul {genReal} potrivite pentru varsta ta ({categorie}):\n" +
+                                          string.Join("\n", carti.Select(c => $"- {c.Titlu} de {c.Autor}"));
+                                goto finalizeaza;
+                            }
+                        }
+                    }
+
+                    var cartiGen = await _context.Carti
+                        .Include(c => c.Genuri)
+                        .Where(c => c.Genuri.Any(g => g.Denumire.ToLower() == genReal.ToLower()))
+                        .Take(5)
+                        .ToListAsync();
+
+                    if (cartiGen.Any())
+                    {
+                        raspuns = $"Iti recomand aceste carti din genul {genReal}, disponibile pe site:\n" +
+                                  string.Join("\n", cartiGen.Select(c => $"- {c.Titlu} de {c.Autor}"));
+                        goto finalizeaza;
+                    }
+                }
+
                 if (inModRecomandare == "true")
                 {
                     if (string.IsNullOrWhiteSpace(tempVarsta))
                     {
                         HttpContext.Session.SetString("TempVarsta", UserMessage);
-                        raspuns = "Si ce gen de cãrti îti plac? (ex: aventurã, mister, fantasy)";
+                        raspuns = "Si ce gen de carti iti plac? (ex: aventura, mister, fantasy)";
+                        goto finalizeaza;
                     }
                     else if (string.IsNullOrWhiteSpace(tempGen))
                     {
@@ -89,32 +149,31 @@ namespace AplicatieLicenta.Pages
 
                         if (cartiRecomandate.Any())
                         {
-                            raspuns = $"Îti recomand urmãtoarele cãrti din genul {tempGen} pentru {tempVarsta} ani:\n" +
+                            raspuns = $"Iti recomand urmatoarele carti din genul {tempGen} pentru {tempVarsta} ani:\n" +
                                       string.Join("\n", cartiRecomandate.Select(c => $"- {c.Titlu} de {c.Autor}"));
                         }
                         else
                         {
-                            raspuns = $"Momentan nu am gãsit cãrti din genul {tempGen} potrivite pentru {tempVarsta} ani.";
+                            raspuns = $"Momentan nu am gasit carti din genul {tempGen} potrivite pentru {tempVarsta} ani.";
                         }
 
                         HttpContext.Session.Remove("InModRecomandare");
                         HttpContext.Session.Remove("TempVarsta");
                         HttpContext.Session.Remove("TempGen");
+                        goto finalizeaza;
                     }
                 }
-                // Recomandare automatã pentru utilizator autentificat
                 else if (UserMessage.ToLower().Contains("recomanzi"))
                 {
                     int? userId = HttpContext.Session.GetInt32("UserId");
 
                     if (userId.HasValue)
                     {
-                        var user = await _context.Users
-                            .FirstOrDefaultAsync(u => u.IdUtilizator == userId.Value);
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUtilizator == userId.Value);
 
                         if (user == null || string.IsNullOrWhiteSpace(user.CategorieVarsta))
                         {
-                            raspuns = "Nu am putut determina categoria ta de varsta. Te rog actualizeazã-ti profilul.";
+                            raspuns = "Nu am putut determina categoria ta de varsta. Te rog actualizeaza-ti profilul.";
                         }
                         else
                         {
@@ -129,46 +188,69 @@ namespace AplicatieLicenta.Pages
 
                             if (cartiRecomandate.Any())
                             {
-                                raspuns = $"Îti recomand aceste cãrti pentru categoria ta de vârstã ({denumireCategorie}):\n" +
+                                raspuns = $"Iti recomand aceste carti pentru categoria ta de varsta ({denumireCategorie}):\n" +
                                           string.Join("\n", cartiRecomandate.Select(c => $"- {c.Titlu} de {c.Autor}"));
                             }
                             else
                             {
-                                raspuns = $"Nu am gãsit momentan cãrti pentru categoria ta de vârstã ({denumireCategorie}).";
+                                raspuns = $"Nu am gasit momentan carti pentru categoria ta de varsta ({denumireCategorie}).";
                             }
                         }
+                        goto finalizeaza;
                     }
                     else
                     {
                         HttpContext.Session.SetString("InModRecomandare", "true");
                         HttpContext.Session.Remove("TempVarsta");
                         HttpContext.Session.Remove("TempGen");
-                        raspuns = "Ca sã îti pot face o recomandare, câti ani ai?";
+                        raspuns = "Ca sa iti pot face o recomandare, cati ani ai?";
+                        goto finalizeaza;
                     }
                 }
-                // Descriere carte prin Google Books
                 else if (UserMessage.ToLower().StartsWith("despre ce e"))
                 {
                     string titlu = UserMessage.Replace("despre ce e", "", StringComparison.OrdinalIgnoreCase).Trim();
                     raspuns = await _googleBookService.CautaDescriereCarteAsync(titlu);
+                    goto finalizeaza;
                 }
-                // Mesaj fallback
                 else
                 {
-                    raspuns = "Îmi poti adresa întrebãri despre o carte anume sau îti pot recomanda ceva potrivit pentru tine.";
+                    raspuns = await _geminiService.TrimitePromptAsync(UserMessage);
+
+                    if (string.IsNullOrWhiteSpace(raspuns) || raspuns.Contains("nu am reusit") || raspuns.Length < 15)
+                    {
+                        string fallbackDescriere = await _googleBookService.CautaDescriereCarteAsync(UserMessage);
+
+                        if (!string.IsNullOrWhiteSpace(fallbackDescriere))
+                        {
+                            string promptTraducere = $"Te rog, traduci in romana urmatorul text:\n{fallbackDescriere}";
+                            raspuns = await _geminiService.TrimitePromptAsync(promptTraducere);
+                        }
+                        else
+                        {
+                            raspuns = "Imi pare rau, nu am reusit sa gasesc un raspuns relevant.";
+                        }
+                    }
                 }
 
-                // Salvare mesaj bot în conversa?ie
+            finalizeaza:
+                if (!string.IsNullOrEmpty(raspuns))
+                {
+                    raspuns = raspuns.Replace("**", "").Replace("*", "•");
+                    raspuns = Regex.Replace(raspuns, @"\s*•\s*•", "•");
+                    raspuns = Regex.Replace(raspuns, @"(?<=[.!?]) +", "$0\n");
+                    raspuns = Regex.Replace(raspuns, " {2,}", " ");
+                }
+
                 ConversationHistory.Add(new ChatMessage("bot", raspuns));
 
-                // Salvare în tabelul UsersActivity
                 int? userIdSave = HttpContext.Session.GetInt32("UserId");
                 if (userIdSave.HasValue)
                 {
                     _context.UsersActivity.Add(new UsersActivity
                     {
                         UserId = userIdSave.Value,
-                        Action = "Întrebare în chatbot",
+                        Action = "Intrebare in chatbot",
                         Data = UserMessage,
                         Timestamp = DateTime.Now
                     });
