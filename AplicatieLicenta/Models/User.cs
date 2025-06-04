@@ -31,4 +31,5 @@ public partial class User
     public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
 
     public virtual ICollection<Vizitatori> Vizitatori { get; set; } = new List<Vizitatori>();
+
 }

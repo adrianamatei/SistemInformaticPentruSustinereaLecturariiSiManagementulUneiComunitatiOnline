@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AplicatieLicenta.Hubs;
 using AplicatieLicenta.Models;
 using AplicatieLicenta.Services;
+using QuestPDF.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,7 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient<GoogleBookService>();
 builder.Services.AddSingleton<GeminiService>();
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.Configure<GoogleBooksSettings>(builder.Configuration.GetSection("GoogleBooks"));
 // Add services to the container.

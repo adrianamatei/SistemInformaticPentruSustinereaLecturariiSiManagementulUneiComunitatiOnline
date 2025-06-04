@@ -34,6 +34,7 @@ public partial class AppDbContext : DbContext
 
 
 
+
     public virtual DbSet<Vizitatori> Vizitatori { get; set; }
     public virtual DbSet<UsersActivity> UsersActivity { get; set; }
     public DbSet<MesajClub> MesajeClub { get; set; }
@@ -98,6 +99,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("url_fisier");
         });
+
         modelBuilder.Entity<MesajClub>()
         .HasOne(m => m.Club)
         .WithMany()

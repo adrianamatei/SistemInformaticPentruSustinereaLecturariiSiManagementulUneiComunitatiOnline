@@ -15,10 +15,20 @@
 }
 
 <!-- HEADER CU AVATAR ȘI EMAIL -->
-<div style="display: flex; align-items: center; margin-bottom: 1rem;">
-    <img src="/images/avatar/@Model.AvatarImagine" alt="Avatar" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-right: 1rem;">
-    <h2 style="color: #5a422a; margin: 0;">@Model.UserEmail</h2>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+    <div style="display: flex; align-items: center;">
+        <img src="/images/avatar/@Model.AvatarImagine" alt="Avatar"
+             style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; margin-right: 1rem;">
+        <h2 style="color: #5a422a; margin: 0;">@Model.UserEmail</h2>
+    </div>
+
+    <button onclick="afiseazaFavorite()" class="btn btn-sm"
+            style="background: none; color: #8b0000; font-weight: bold; font-size: 15px; border: none; cursor: pointer;">
+        ❤️ Vizualizează cărțile favorite
+    </button>
 </div>
+
+
 
 <div style="display: flex; gap: 2rem;">
     <!-- STÂNGA: CLASAMENT + PROGRES -->
@@ -46,6 +56,21 @@
         <!-- SECTIUNEA CLASAMENT GLOBAL -->
         <div class="clasament-global">
             <h3 style="color: #8b5e3c;">Clasamentul copiilor (Top utilizatori)</h3>
+            @{
+                var top3 = ((IEnumerable<dynamic>)ViewData["TopUtilizatori"]).Take(3).ToList();
+                var esteInTop3 = top3.Any(u => u.Email == Model.UserEmail);
+            }
+
+            @if (esteInTop3)
+            {
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <a class="btn btn-success"
+                       style="background-color:#C8AD7F; color: white; padding: 0.5rem 1.5rem; border-radius: 5px;"
+                       href="/Users/DescarcaDiploma">
+                         Descarca-ti acum diploma castigata !
+                    </a>
+                </div>
+            }
             <table class="table table-striped" style="background-color: #fffaf0;">
                 <thead>
                     <tr>
@@ -79,6 +104,7 @@
     </div>
 
     <!-- DREAPTA: CLUBURI DE LECTURĂ -->
+
     <div style="flex: 1; background-color: #fff8e6; padding: 1rem; border-radius: 10px;">
         <h3 style="color: #8b5e3c;">Cluburi de lectură pentru categoria ta de vârstă: <strong>@Model.CategorieVarsta</strong></h3>
 
@@ -113,6 +139,17 @@
                 }
             </div>
         }
+    </div>
+</div>
+<div id="chenar-favorite" class="hidden"
+     style="position: fixed; top: 100px; right: 50px; width: 350px; max-height: 500px; overflow-y: auto;
+            background-color: #fffaf0; border: 2px solid #c8ad7f; border-radius: 10px; padding: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 9999;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h5 style="margin: 0; color: #5a422a;">📚 Cărți favorite</h5>
+        <button onclick="inchideFavorite()" style="background: none; border: none; font-size: 20px; color: #8b5e3c;">×</button>
+    </div>
+    <div id="continut-favorite" style="margin-top: 1rem;">
+        <p>Se încarcă cărțile favorite...</p>
     </div>
 </div>
 
@@ -306,5 +343,24 @@
 
             alert("Scrie un mesaj sau înregistrează ceva înainte de a trimite.");
         }
+        function afiseazaFavorite() {
+    const chenar = document.getElementById("chenar-favorite");
+    chenar.classList.remove("hidden");
+
+    fetch('/Users/StartUser?handler=Favorite')
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("continut-favorite").innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById("continut-favorite").innerHTML = "<p style='color:red;'>Eroare la încărcare.</p>";
+            console.error(err);
+        });
+}
+
+function inchideFavorite() {
+    document.getElementById("chenar-favorite").classList.add("hidden");
+}
+
     </script>
 }

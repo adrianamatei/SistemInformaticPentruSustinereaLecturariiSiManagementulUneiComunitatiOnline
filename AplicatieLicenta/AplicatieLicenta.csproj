@@ -19,10 +19,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="QuestPDF" Version="2025.5.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\diplome\" />
     <Folder Include="wwwroot\vocale\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

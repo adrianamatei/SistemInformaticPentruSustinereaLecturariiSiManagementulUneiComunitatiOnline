@@ -114,6 +114,9 @@ namespace AplicatieLicenta.Pages.Users
 
             return RedirectToPage("/Users/DetaliiPdf", new { id });
         }
+       
+
+
 
         private string RemoveDiacritics(string text)
         {

@@ -110,7 +110,15 @@
                         </p>
                     }
 
-                    <a asp-page-handler="Asculta" asp-route-id="@carte.IdCarte" class="btn custom-citeste-btn mt-2">Ascultă</a>
+                    <form method="post" asp-page-handler="AddFavorite" style="margin-top: 0.5rem; text-align: left;">
+                        <input type="hidden" name="carteId" value="@carte.IdCarte" />
+                        <button type="submit" class="btn btn-sm" style="background: none; border: none; padding: 0;">
+                            <span style="color: red;">❤️</span> <span style="color: black; font-weight: bold;">Adauga la favorite</span>
+                        </button>
+                    </form>
+
+
+
                 </div>
             </div>
         </div>

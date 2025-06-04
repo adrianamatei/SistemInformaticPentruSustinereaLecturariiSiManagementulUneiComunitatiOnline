@@ -101,5 +101,9 @@ namespace AplicatieLicenta.Pages.Users
 
             return RedirectToPage("/Users/DetaliiAudio", new { id });
         }
+       
+
+
+
     }
 }

@@ -26,4 +26,5 @@ public partial class Carti
     public List<Gen> Genuri { get; set; } = new List<Gen>();
 
     public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
+
 }

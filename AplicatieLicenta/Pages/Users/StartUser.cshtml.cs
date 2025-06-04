@@ -295,8 +295,11 @@ namespace AplicatieLicenta.Pages.Users
                 await smtpClient.SendMailAsync(mailMessage);
             }
         }
+        
+
+
     }
-    
+
 
     public static class StringExtensions
     {
