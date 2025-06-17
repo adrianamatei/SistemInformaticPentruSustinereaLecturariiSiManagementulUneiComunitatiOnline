@@ -1,5 +1,5 @@
 # Sistem informatic pentru promovarea lecturii și managementul unei comunități online
-Aplicație implementată oferă un mediu interactiv și sugestiv care pune la dispoziția utilizatorilor o platformă care să corespundă stadiului actual al tehnologiei, oferind o variantă digitalizată a cititului clasic.
+Aplicație implementată oferă un mediu interactiv și sugestiv care pune la dispoziția utilizatorilor o platformă care să corespundă stadiului actual al tehnologiei, oferind o variantă digitalizată a cititului clasic, promovând lectura activă, socializarea între copii și evaluarea prin joc.
 ## Adresa repository-ului în care se află proiectul este: https://github.com/adrianamatei/AplicatieLicenta
 ## Codul sursă(fără fișierele binare):
 - `Pages/` – pagini Razor pentru utilizatori (StartUser, VizualizareCarti, ChatBot etc.) și admin (CreareTest, VizualizareUtilizatori etc.)
