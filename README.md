@@ -17,6 +17,14 @@ Aplicația implementată oferă un mediu interactiv și sugestiv care pune la di
 5. Dacă apar probleme de pachete, rulează comanda:
    ```bash
    dotnet restore
+ ## Cerințe tehnice
+
+- Visual Studio 2022 sau mai nou
+- .NET 6 SDK sau compatibil
+- Entity Framework Core Tools
+- SQL Server LocalDB sau alt server compatibil
+- Browser modern (Chrome, Edge, Firefox)
+
 ## Pașii pentru instalarea și lansarea aplicației sunt următorii:
 1. Prima dată se clonează repository-ul prin comanda: git clone https://github.com/adrianamatei/AplicatieLicenta.git..
 2. Pasul următor este deschiderea în Visual Studio a soluției AplicațieLicență.sln.
