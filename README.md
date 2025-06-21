@@ -27,22 +27,23 @@ Aplicația implementată oferă un mediu interactiv și sugestiv care pune la di
 
 ## Pașii pentru instalarea și lansarea aplicației sunt următorii:
 1. Prima dată se clonează repository-ul prin comanda: git clone https://github.com/adrianamatei/AplicatieLicenta.git..
-2. Pasul următor este deschiderea în Visual Studio a soluției AplicațieLicență.sln.
-3. În cadrul aplicației, se verifică conexiunea cu baza de date și apoi se aplică migrările prin comanda: dotnet ef database update.
+2. Pasul următor este instalarea .NET urmata de deschiderea în Visual Studio a soluției AplicațieLicență.sln.
+3. Pentru partea de baza de date se foloseste Sql Server si baza de date GestionareAplicatieDb.În cadrul aplicației, se verifică conexiunea cu baza de date, se actualizeaza string-ul de conexiune și apoi se aplică migrările prin comanda: dotnet ef database update.
 4. Pentru rulare se apasă F5/Ctrl+F5 sau se rulează comanda dotent run sau se apasă pe butonul de rulare din interfață și astfel aplicația va rula în browser.
 ## Utilizatorii țintă
 Această aplicație este destinată către două categorii de utilizatori:
-- Admin pentru realizarea managementului aplicației 
-- Cititorilor care utilizează funcționalitățile aplicației pentru un mediu mai plăcut de lecturare
+- Admin pentru realizarea managementului aplicației
+- Cititorilor care utilizează funcționalitățile aplicației pentru un mediu mai plăcut de lecturare în care este prezentă componenta socială
 ## Funcționalitățile principale ale aplicației sunt:
 -  Vizualizare și filtrare cărți PDF și audio
 -  Căutare avansată (inclusiv vocală)
 -  Quiz-uri tematice salvate în XML și bază de date
 -  Cluburi de lectură pe vârstă
--  Chat în timp real (text și vocal)
+-  Conversații în timp real (text și vocal)
 -  Avatar și clasament pe scoruri
 -  Diplomă de final pentru utilizatorii aflați pe podium
 -  Listă de cărți favorite
+-  Existența unui chatbot care oferă recomandări și răsounde curiozităților utilizatorilor
 -  Panou admin complet
 
 
