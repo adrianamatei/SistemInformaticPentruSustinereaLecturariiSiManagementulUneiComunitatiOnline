@@ -27,7 +27,6 @@
         input.files = e.dataTransfer.files;
     dropzone.querySelector('p').textContent = file.name;
 
-    // Previzualizarea imaginii
     if (allowedTypePrefix === 'image/')
     {
                     const reader = new FileReader();
@@ -53,7 +52,6 @@
     {
         dropzone.querySelector('p').textContent = file.name;
 
-    // Previzualizarea imaginii
     if (allowedTypePrefix === 'image/')
     {
                     const reader = new FileReader();
@@ -93,18 +91,20 @@
         dropzone.addEventListener('drop', (e) =>
     {
         e.preventDefault();
-    dropzone.classList.remove('dragover');
+            dropzone.classList.remove('dragover');
+
     const file = e.dataTransfer.files[0];
 
     if (file && (file.type === allowedType || file.type === 'audio/mpeg'))
     {
-        input.files = e.dataTransfer.files;
-    dropzone.querySelector('p').textContent = file.name;
-            }
+         input.files = e.dataTransfer.files;
+         dropzone.querySelector('p').textContent = file.name;
+    }
     else
     {
         alert(`Fișier invalid. Selectați un fișier de tip ${allowedType}.`);
-            }
+    }
+
         });
 
         dropzone.addEventListener('click', () => input.click());

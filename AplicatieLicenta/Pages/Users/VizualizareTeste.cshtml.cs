@@ -25,9 +25,9 @@ namespace AplicatieLicenta.Pages.Users
                 .ToListAsync();
 
             RezultateUser = await _context.RezultateQuiz
-    .Where(r => r.UserId == userId.Value)
-    .GroupBy(r => r.QuizId)
-    .ToDictionaryAsync(g => g.Key, g => g.ToList());
+              .Where(r => r.UserId == userId.Value)
+              .GroupBy(r => r.QuizId)
+              .ToDictionaryAsync(g => g.Key, g => g.ToList());
 
 
             return Page();

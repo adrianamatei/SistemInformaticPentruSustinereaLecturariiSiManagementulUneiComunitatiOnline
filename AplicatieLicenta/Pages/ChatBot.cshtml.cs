@@ -14,9 +14,11 @@ namespace AplicatieLicenta.Pages
         private readonly GoogleBookService _googleBookService;
         private readonly AppDbContext _context;
         private readonly GeminiService _geminiService;
+        private readonly GoogleSearchServices _googleSearchServices;
 
-        public ChatBotModel(GoogleBookService googleBookService, AppDbContext context, GeminiService geminiService)
+        public ChatBotModel(GoogleSearchServices googleSearchServices ,GoogleBookService googleBookService, AppDbContext context, GeminiService geminiService)
         {
+            _googleSearchServices = googleSearchServices;
             _googleBookService = googleBookService;
             _context = context;
             _geminiService = geminiService;
@@ -35,7 +37,6 @@ namespace AplicatieLicenta.Pages
                 ConversationHistory = JsonSerializer.Deserialize<List<ChatMessage>>(storedConversation);
             }
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             var storedConversation = HttpContext.Session.GetString("StoredConversation");
@@ -163,6 +164,33 @@ namespace AplicatieLicenta.Pages
                         goto finalizeaza;
                     }
                 }
+                else if (UserMessage.ToLower().StartsWith("unde pot gasi") ||
+           UserMessage.ToLower().Contains("cumpar") ||
+           UserMessage.ToLower().Contains("disponibila"))
+                {
+                    string titlu = Regex.Replace(UserMessage, @"unde pot gasi|cumpar|disponibila|cartea|se gaseste|vreau|este", "", RegexOptions.IgnoreCase).Trim();
+
+                    if (!string.IsNullOrEmpty(titlu))
+                    {
+                        var linkuri = await _googleSearchServices.SearchLinksAsync(titlu + " site:carturesti.ro OR site:libris.ro OR site:diverta.ro");
+
+                        if (linkuri.Any())
+                        {
+                            raspuns = $"Poti gasi cartea \"{titlu}\" sau titluri asemanatoare pe urmatoarele site-uri:\n" +
+          string.Join("\n", linkuri.Take(5).Select(link => $" {link}\n"));
+
+
+
+
+                        }
+                        else
+                        {
+                            raspuns = $"Nu am gãsit momentan linkuri disponibile pentru cartea \"{titlu}\".";
+                        }
+                        goto finalizeaza;
+                    }
+                }
+
                 else if (UserMessage.ToLower().Contains("recomanzi"))
                 {
                     int? userId = HttpContext.Session.GetInt32("UserId");
@@ -236,11 +264,12 @@ namespace AplicatieLicenta.Pages
             finalizeaza:
                 if (!string.IsNullOrEmpty(raspuns))
                 {
-                    raspuns = raspuns.Replace("**", "").Replace("*", "•");
+                    raspuns = raspuns.Replace("*", "•");
                     raspuns = Regex.Replace(raspuns, @"\s*•\s*•", "•");
                     raspuns = Regex.Replace(raspuns, @"(?<=[.!?]) +", "$0\n");
                     raspuns = Regex.Replace(raspuns, " {2,}", " ");
                 }
+
 
                 ConversationHistory.Add(new ChatMessage("bot", raspuns));
 

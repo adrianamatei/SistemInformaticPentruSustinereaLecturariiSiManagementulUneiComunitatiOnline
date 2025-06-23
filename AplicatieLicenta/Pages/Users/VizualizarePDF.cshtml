@@ -136,44 +136,52 @@
 </style>
 
 <script>
-    function pornesteVoiceSearch() {
+    function pornesteVoiceSearch() 
+    {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'ro-RO';
         recognition.start();
 
-        recognition.onresult = function (event) {
+        recognition.onresult = function (event) 
+        {
             const text = event.results[0][0].transcript;
             document.getElementById("searchInput").value = text;
             interpreteazaComanda(text);
         };
 
-        recognition.onerror = function (event) {
+        recognition.onerror = function (event) 
+        {
             console.error("Eroare recunoaștere:", event.error);
         };
     }
 
-    function interpreteazaComanda(text) {
+    function interpreteazaComanda(text)
+    {
         const comanda = text.toLowerCase();
         const params = new URLSearchParams(window.location.search);
 
         
-        if (comanda.includes("scris de")) {
+        if (comanda.includes("scris de")) 
+        {
             const autor = comanda.split("scris de")[1].trim();
             params.set("SortBy", "Autor");
             params.set("Autor", autor);
         }
-        else if (comanda.includes("autor")) {
+        else if (comanda.includes("autor")) 
+        {
             const autor = comanda.split("autor")[1].trim();
             params.set("SortBy", "Autor");
             params.set("Autor", autor);
         }
 
-        else if (comanda.includes("titlu")) {
+        else if (comanda.includes("titlu"))
+        {
             const titlu = comanda.split("titlu")[1].trim();
             params.set("SortBy", "Titlu");
             params.set("Titlu", titlu);
         }
-        else if (comanda.includes("pentru") || comanda.includes("vârstă")) {
+        else if (comanda.includes("pentru") || comanda.includes("vârstă")) 
+        {
             const varsta = comanda.match(/\d{1,2}/);
             if (varsta) {
                 let categorie = "";

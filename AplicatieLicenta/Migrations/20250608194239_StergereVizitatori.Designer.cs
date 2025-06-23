@@ -4,6 +4,7 @@ using AplicatieLicenta.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AplicatieLicenta.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250608194239_StergereVizitatori")]
+    partial class StergereVizitatori
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,29 +114,6 @@ namespace AplicatieLicenta.Migrations
                         .HasName("PK__Carti__D3C2E8FD46C36E6A");
 
                     b.ToTable("Carti", (string)null);
-                });
-
-            modelBuilder.Entity("AplicatieLicenta.Models.CartiPreferate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdCarte")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUtilizator")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdCarte");
-
-                    b.HasIndex("IdUtilizator");
-
-                    b.ToTable("CartiPreferate");
                 });
 
             modelBuilder.Entity("AplicatieLicenta.Models.CategorieVarsta", b =>
@@ -573,25 +553,6 @@ namespace AplicatieLicenta.Migrations
                     b.ToTable("CarteGen");
                 });
 
-            modelBuilder.Entity("AplicatieLicenta.Models.CartiPreferate", b =>
-                {
-                    b.HasOne("AplicatieLicenta.Models.Carti", "Carte")
-                        .WithMany("CartiPreferate")
-                        .HasForeignKey("IdCarte")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AplicatieLicenta.Models.User", "Utilizator")
-                        .WithMany("CartiPreferate")
-                        .HasForeignKey("IdUtilizator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carte");
-
-                    b.Navigation("Utilizator");
-                });
-
             modelBuilder.Entity("AplicatieLicenta.Models.CluburiLectura", b =>
                 {
                     b.HasOne("AplicatieLicenta.Models.User", "IdCreatorNavigation")
@@ -754,8 +715,6 @@ namespace AplicatieLicenta.Migrations
 
             modelBuilder.Entity("AplicatieLicenta.Models.Carti", b =>
                 {
-                    b.Navigation("CartiPreferate");
-
                     b.Navigation("Recenzii");
                 });
 
@@ -776,8 +735,6 @@ namespace AplicatieLicenta.Migrations
 
             modelBuilder.Entity("AplicatieLicenta.Models.User", b =>
                 {
-                    b.Navigation("CartiPreferate");
-
                     b.Navigation("CluburiLectura");
 
                     b.Navigation("MembriClub");

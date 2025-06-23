@@ -56,17 +56,29 @@ namespace AplicatieLicenta.Pages.Users
                 r.Scor >= 90 ? 15 : 10);
 
             int pieseObt = rezultate.Count;
-
             string avatar = "reading.png";
             int totalPiese = 3;
 
-            if (pieseObt >= 13) { avatar = "astronaut.png"; totalPiese = 13; }
-            else if (pieseObt >= 11) { avatar = "cavaler.png"; totalPiese = 13; }
-            else if (pieseObt >= 9) { avatar = "inventator.png"; totalPiese = 11; }
-            else if (pieseObt >= 7) { avatar = "magician.png"; totalPiese = 9; }
-            else if (pieseObt >= 5) { avatar = "explorer.png"; totalPiese = 7; }
-            else if (pieseObt >= 3) { avatar = "detective.png"; totalPiese = 5; }
-
+            if (pieseObt >= 9) 
+            { 
+                avatar = "astronaut.png";
+                totalPiese = 11;
+            }
+            else if (pieseObt >= 7) 
+            { 
+                avatar = "magician.png"; 
+                totalPiese = 9;
+            }
+            else if (pieseObt >= 5)
+            {
+                avatar = "explorer.png";
+                totalPiese = 7; 
+            }
+            else if (pieseObt >= 3)
+            {
+                avatar = "detective.png"; 
+                totalPiese = 5; 
+            }
             AvatarImagine = avatar;
             ViewData["AvatarCurent"] = System.IO.Path.GetFileNameWithoutExtension(avatar).CapitalizeFirst();
             ViewData["Piese"] = pieseObt;
@@ -124,12 +136,9 @@ namespace AplicatieLicenta.Pages.Users
                 });
 
                 await _context.SaveChangesAsync();
-
-                // Trimite email cãtre admin
-                string adminEmail = "ionelaamatei2004@gmail.com"; // modificã cu adresa realã
+                string adminEmail = "ionelaamatei2004@gmail.com"; 
                 string subject = $"Cerere nouã pentru clubul: {club.Nume}";
                 string linkAdmin = Url.Page("/Admin/GestionareCluburiLectura", null, null, Request.Scheme);
-
                 string body = $@"
             <p><strong>{user.Email}</strong> a trimis o cerere de înscriere în clubul <strong>{club.Nume}</strong>.</p>
             <p>Pentru a gestiona cererea, acceseazã: <a href='{linkAdmin}'>Gestionare Cluburi de Lecturã</a></p>";
@@ -295,7 +304,62 @@ namespace AplicatieLicenta.Pages.Users
                 await smtpClient.SendMailAsync(mailMessage);
             }
         }
-        
+        public async Task<IActionResult> OnGetFavoriteAsync()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+                return Content("<p>Trebuie sã fii logat pentru a vedea cãrtile favorite.</p>", "text/html");
+
+            var carti = await _context.CartiPreferate
+                .Where(f => f.IdUtilizator == userId.Value)
+                .Include(f => f.Carte)
+                .Select(f => f.Carte)
+                .ToListAsync();
+
+            if (!carti.Any())
+                return Content("<p>Nu ai adãugat nicio carte la favorite.</p>", "text/html");
+
+            var pdf = carti.Where(c => c.TipCarte == "PDF").ToList();
+            var audio = carti.Where(c => c.TipCarte == "Audio").ToList();
+
+            var htmlBuilder = new System.Text.StringBuilder();
+
+            if (pdf.Any())
+            {
+                htmlBuilder.Append("<h6 style='color:#5a422a;'>CARTI PDF:</h6><ul>");
+                foreach (var carte in pdf)
+                {
+                    htmlBuilder.Append($@"
+                <li style='margin-bottom: 0.5rem;'>
+                    <a href='/Users/DetaliiPdf?id={carte.IdCarte}' 
+                       style='text-decoration: none; color: #8b0000; font-weight: bold;'>
+                        {carte.Titlu}
+                    </a>
+                </li>");
+                }
+                htmlBuilder.Append("</ul>");
+            }
+
+            if (audio.Any())
+            {
+                htmlBuilder.Append("<h6 style='color:#5a422a;'>CARTI AUDIO:</h6><ul>");
+                foreach (var carte in audio)
+                {
+                    htmlBuilder.Append($@"
+                <li style='margin-bottom: 0.5rem;'>
+                    <a href='/Users/DetaliiAudio?id={carte.IdCarte}' 
+                       style='text-decoration: none; color: #8b0000; font-weight: bold;'>
+                        {carte.Titlu}
+                    </a>
+                </li>");
+                }
+                htmlBuilder.Append("</ul>");
+            }
+
+            return Content(htmlBuilder.ToString(), "text/html");
+        }
+
+
 
 
     }

@@ -1,4 +1,4 @@
-﻿/* Stiluri generale pentru body */
+﻿
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,7 +7,6 @@ body {
     color: black;
 }
 
-/* Navbar Styling */
 .custom-navbar {
     width: 100%;
     background-color: #ffffff;
@@ -37,16 +36,16 @@ body {
     color: #C8AD7F;
     font-weight: bold;
     text-decoration: none;
-    margin-right: auto; /* Menține logo-ul în partea stângă */
+    margin-right: auto; 
 }
 
 .custom-nav-items {
     display: flex;
-    gap: 20px; /* Reducerea spațiului dintre elementele meniului */
+    gap: 20px;
     list-style: none;
     margin: 0;
     padding: 0;
-    justify-content: flex-end; /* Asigură poziționarea în dreapta */
+    justify-content: flex-end; 
 }
 
 .custom-nav-link {
@@ -59,16 +58,15 @@ body {
 }
 
     .custom-nav-link img {
-        width: 25px; /* Iconițe mai mici */
+        width: 25px;
         height: 25px;
-        margin-right: 5px; /* Spațiu redus între icon și text */
+        margin-right: 5px; 
     }
 
     .custom-nav-link:hover {
         color: #C8A57D;
     }
 
-/* Main Content */
 .main-container {
     display: flex;
     flex-direction: row;
@@ -76,7 +74,6 @@ body {
     margin-top: 70px;
 }
 
-/* Carousel Styling */
 .carousel {
     width: 30%;
     overflow: hidden;
@@ -107,7 +104,6 @@ body {
         object-fit: contain;
     }
 
-/* Animație pentru carousel */
 @keyframes scrollUp {
     0% {
         transform: translateY(0);
@@ -118,47 +114,44 @@ body {
     }
 }
 
-/* Stilizare pentru widget-ul roboțel */
-/* Stilizare pentru widget-ul roboțel */
 .robotel-widget {
-    position: fixed; /* Asigură că roboțelul rămâne fix la marginea paginii */
-    top: 85%; /* Poziționează roboțelul mai jos pe pagină */
-    right: 10px; /* Poziționează roboțelul aproape de marginea dreaptă */
-    z-index: 1000; /* Asigură că roboțelul este deasupra altor elemente */
+    position: fixed; 
+    top: 85%; 
+    right: 10px; 
+    z-index: 1000; 
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transform: translateY(-50%); /* Aliniere perfectă la mijloc */
+    transform: translateY(-50%); 
 }
 
 .robotel-icon {
-    width: 120px; /* Dimensiune pentru roboțel */
+    width: 120px; 
     height: auto;
     animation: float 3s ease-in-out infinite;
 }
 
 .robotel-tooltip {
-    margin-bottom: 15px; /* Mai mult spațiu între tooltip și roboțel */
-    padding: 8px 15px; /* Padding mai mare pentru tooltip */
+    margin-bottom: 15px; 
+    padding: 8px 15px; 
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px; /* Font mai mare pentru tooltip */
+    font-size: 16px; 
     color: #333;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: block; /* Tooltip-ul este afișat mereu */
-    white-space: nowrap; /* Previne ca textul să fie pe mai multe linii */
-    text-align: center; /* Centrare text */
+    display: block; 
+    white-space: nowrap; 
+    text-align: center;
 }
 
-/* Animație pentru roboțel */
 @keyframes float {
     0%, 100% {
         transform: translateY(0);
     }
 
     50% {
-        transform: translateY(-15px); /* Mișcare mai pronunțată */
+        transform: translateY(-15px);
     }
 }

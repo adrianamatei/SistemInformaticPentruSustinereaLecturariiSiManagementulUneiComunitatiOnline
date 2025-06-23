@@ -74,7 +74,6 @@ namespace AplicatieLicenta.Pages.Admin
 
 
                 var existingBook = await _context.Carti.FirstOrDefaultAsync(c => c.Titlu == Titlu && c.Autor == Autor && c.TipCarte == "PDF");
-
                 if (existingBook != null)
                 {
                     messageError = "O carte cu acest titlu exista deja in baza de date !";
@@ -93,7 +92,6 @@ namespace AplicatieLicenta.Pages.Admin
                     await ImagineCoperta.CopyToAsync(fileStream);
                 }
                 string imagineUrl = $"/uploads/{imagineFileName}";
-
                 string pdfFileName =  Path.GetFileName(UrlFisier.FileName);
                 string pdfPath = Path.Combine(uploadPath, pdfFileName);
                 using (var fileStream = new FileStream(pdfPath, FileMode.Create))
@@ -103,14 +101,13 @@ namespace AplicatieLicenta.Pages.Admin
                 string pdfUrl = $"/uploads/{pdfFileName}";
 
                 var categoriiSelectate = await _context.CategoriiVarsta
-           .Where(cv => CategorieVarsta.Contains(cv.Denumire))
-           .ToListAsync();
+                .Where(cv => CategorieVarsta.Contains(cv.Denumire))
+                .ToListAsync();
 
                 var genuriSelectate = await _context.Genuri
                     .Where(g => Gen.Contains(g.Denumire))
                     .ToListAsync();
 
-               
                 var carte = new Carti
                 {
                     Titlu = Titlu,

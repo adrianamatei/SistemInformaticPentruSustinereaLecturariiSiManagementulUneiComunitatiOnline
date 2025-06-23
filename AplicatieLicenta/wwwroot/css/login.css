@@ -11,13 +11,13 @@ body {
     font-family: Arial, sans-serif;
     height: 100vh;
     margin: -20px 0 50px;
-    color: #ffffff; /* Textul devine alb pentru contrast */
+    color: #ffffff; 
 }
 
 h1 {
     font-weight: bold;
     margin: 0;
-    color: #333333; /* Schimbă titlul în negru pentru fundal alb */
+    color: #333333; 
 }
 
 p, span {
@@ -26,7 +26,7 @@ p, span {
     line-height: 20px;
     letter-spacing: 0.5px;
     margin: 20px 0 30px;
-    color: #666666; /* Text descriptiv în gri */
+    color: #666666; 
 }
 
 a {
@@ -39,7 +39,7 @@ a {
 button {
     border-radius: 20px;
     border: 1px solid #C9AD7F;
-    background-color: #C8AD7F; /* Noua culoare */
+    background-color: #C8AD7F; 
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
@@ -63,7 +63,7 @@ button {
     }
 
     button:hover {
-        background-color: #B89A6D; /* Culoare mai închisă la hover */
+        background-color: #B89A6D;
     }
 
 form {
@@ -155,7 +155,7 @@ input {
 }
 
 .overlay {
-    background: #C8AD7F; /* Noua culoare */
+    background: #C8AD7F; 
     color: #ffffff;
     position: relative;
     left: -100%;
@@ -202,18 +202,18 @@ input {
 }
 
 .forgot-password-link {
-    margin-top: -10px; /* Ajustează distanța față de câmpul de parolă */
+    margin-top: -10px; 
     font-size: 14px;
-    color: #333333; /* Culoare text */
+    color: #333333; 
     text-decoration: underline;
     display: block;
-    text-align: right; /* Forțează alinierea la dreapta */
-    margin-right: 10px; /* Ajustează spațiul față de marginea containerului */
-    width: calc(100% - 20px); /* Asigură că linkul ocupă spațiu complet */
+    text-align: right; 
+    margin-right: 10px; 
+    width: calc(100% - 20px); 
 }
 
     .forgot-password-link:hover {
-        color: #B89A6D; /* Schimbă culoarea la hover */
+        color: #B89A6D;
     }
 
 
@@ -226,12 +226,12 @@ input {
 }
 
 .create-account-link {
-    margin-top: 10px; /* Spațiu față de buton */
+    margin-top: 10px;
     font-size: 14px;
-    color: #C9AD7F; /* Culoarea pastel principală */
+    color: #C9AD7F;
     text-decoration: underline;
     display: block;
-    text-align: center; /* Centrat sub buton */
+    text-align: center; 
     transition: color 0.3s ease;
 }
 
@@ -240,7 +240,7 @@ input {
     }
 
     .create-account-link:hover {
-        color: #B89A6D; /* Schimbă culoarea la hover */
+        color: #B89A6D; 
     }
 
 .input-group {
@@ -252,7 +252,7 @@ input {
 
     .input-group input {
         width: 100%;
-        padding: 12px 40px 12px 15px; /* Spațiu pentru icon pe partea dreaptă */
+        padding: 12px 40px 12px 15px; 
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 14px;
@@ -274,34 +274,34 @@ input {
 }
 
 .alert {
-    display: block !important; /* Asigură afișarea */
-    visibility: visible !important; /* Asigură vizibilitatea */
-    opacity: 1; /* Asigură că nu este transparent */
-    color: #b71c1c; /* Text roșu */
-    background-color: #ffebee; /* Fundal roz deschis */
-    border: 1px solid #b71c1c; /* Bordură roșie */
-    padding: 10px 15px; /* Spațiu interior */
-    margin-top: 10px; /* Spațiu deasupra mesajului */
-    margin-bottom: 20px; /* Spațiu suplimentar sub mesaj */
-    border-radius: 5px; /* Colțuri rotunjite */
-    font-size: 14px; /* Dimensiunea textului */
-    text-align: center; /* Centrare text */
-    max-width: calc(100% - 20px); /* Dimensiune adaptivă, cu spațiu pe margini */
-    word-wrap: break-word; /* Evită suprapunerile de text */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adaugă o umbră subtilă */
+    display: block !important; 
+    visibility: visible !important; 
+    opacity: 1; 
+    color: #b71c1c; 
+    background-color: #ffebee; 
+    border: 1px solid #b71c1c; 
+    padding: 10px 15px; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+    border-radius: 5px; 
+    font-size: 14px; 
+    text-align: center; 
+    max-width: calc(100% - 20px); 
+    word-wrap: break-word; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .forgot-password-link {
-    margin-top: 10px; /* Spațiu între mesaj și link */
-    font-size: 14px; /* Dimensiunea textului */
-    color: #333333; /* Culoare text */
-    text-decoration: underline; /* Subliniere pentru accesibilitate */
-    text-align: right; /* Aliniere la dreapta */
-    margin-right: 10px; /* Ajustează spațiul față de marginea containerului */
+    margin-top: 10px; 
+    font-size: 14px; 
+    color: #333333; 
+    text-decoration: underline; 
+    text-align: right;
+    margin-right: 10px; 
 }
 
 .input-group + .alert {
-    margin-top: 15px; /* Spațiu suplimentar între grupul de input și mesajul de eroare */
+    margin-top: 15px; 
 }
 
 
@@ -314,5 +314,5 @@ input {
 
     .input-group input {
         width: 100%;
-        padding-right: 35px; /* Spațiu pentru icon */
+        padding-right: 35px; 
     }

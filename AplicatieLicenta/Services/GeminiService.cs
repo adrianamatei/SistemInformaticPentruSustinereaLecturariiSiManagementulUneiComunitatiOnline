@@ -34,8 +34,6 @@ namespace AplicatieLicenta.Services
 
             string json = JsonSerializer.Serialize(request);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            // 🔄 API actualizat la versiunea v1 (fără beta!)
             string model = "models/gemini-1.5-pro";
             string url = $"https://generativelanguage.googleapis.com/v1/{model}:generateContent?key={_apiKey}";
 
@@ -47,8 +45,6 @@ namespace AplicatieLicenta.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonDoc = JsonDocument.Parse(responseContent);
-
-                    // Verifică dacă există candidați și extrage textul
                     if (jsonDoc.RootElement.TryGetProperty("candidates", out var candidates) &&
                         candidates.GetArrayLength() > 0 &&
                         candidates[0].TryGetProperty("content", out var content) &&
@@ -59,18 +55,18 @@ namespace AplicatieLicenta.Services
                         return textElement.GetString();
                     }
 
-                    return "Am primit un răspuns de la Gemini, dar nu am putut extrage textul generat.";
+                    return "Am primit un raspuns de la Gemini, dar nu am putut extrage textul generat!";
                 }
 
-                return $"❌ Eroare Gemini ({response.StatusCode}):\n{responseContent}";
+                return $"Eroare Gemini ({response.StatusCode}):\n{responseContent}";
             }
             catch (HttpRequestException httpEx)
             {
-                return $"❌ Eroare de conexiune la Gemini: {httpEx.Message}";
+                return $"Eroare de conexiune la Gemini: {httpEx.Message}";
             }
             catch (Exception ex)
             {
-                return $"❌ Eroare internă: {ex.Message}";
+                return $"Eroare interna: {ex.Message}";
             }
         }
     }

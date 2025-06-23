@@ -17,7 +17,6 @@ namespace AplicatieLicenta.Pages
         }
 
         public List<CarteCuRating> Recenzii { get; set; } = new();
-
         public async Task OnGetAsync()
         {
             Recenzii = await _context.Carti

@@ -18,9 +18,7 @@
             <h1>Confirmare Email</h1>
             <p>Introduceți codul de confirmare trimis pe email pentru a valida contul.</p>
 
-            <!-- Formular de confirmare -->
             <form asp-action="ConfirmareEmail" method="post">
-                <!-- Câmp Email -->
                 <div class="input-group">
                     <label for="email">Email:</label>
                     <div class="input-with-icon">
@@ -29,7 +27,6 @@
                     </div>
                 </div>
 
-                <!-- Câmp Cod de confirmare -->
                 <div class="input-group">
                     <label for="code">Cod de confirmare:</label>
                     <div class="input-with-icon">
@@ -38,12 +35,9 @@
                     </div>
                 </div>
 
-                <!-- Buton de confirmare -->
                 <button type="submit" class="confirm-button">Confirmă</button>
 
-                <!-- Buton de retrimitere cod -->
                 <form method="post">
-                    <!-- Alte câmpuri, dacă există -->
                     <button type="submit" asp-page-handler="Resend" class="retrimitere-button">Retrimite email</button>
                 </form>
                 @if (!string.IsNullOrEmpty(Model.Message))

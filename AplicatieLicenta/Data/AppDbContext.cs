@@ -35,7 +35,7 @@ public partial class AppDbContext : DbContext
 
 
 
-    public virtual DbSet<Vizitatori> Vizitatori { get; set; }
+   
     public virtual DbSet<UsersActivity> UsersActivity { get; set; }
     public DbSet<MesajClub> MesajeClub { get; set; }
     public DbSet<Quiz> Quizuri { get; set; }
@@ -43,8 +43,9 @@ public partial class AppDbContext : DbContext
     public DbSet<VariantaRaspuns> VarianteRaspuns { get; set; }
     public DbSet<RezultatQuiz> RezultateQuiz { get; set; }
 
-   
-  
+    public DbSet<CartiPreferate> CartiPreferate { get; set; }
+
+
 
 
 
@@ -205,6 +206,19 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.IdUtilizator)
                 .HasConstraintName("FK__Recenzii__id_uti__49C3F6B7");
         });
+        modelBuilder.Entity<CartiPreferate>()
+    .HasKey(cp => cp.Id);
+
+        modelBuilder.Entity<CartiPreferate>()
+            .HasOne(cp => cp.Utilizator)
+            .WithMany(u => u.CartiPreferate)
+            .HasForeignKey(cp => cp.IdUtilizator);
+
+        modelBuilder.Entity<CartiPreferate>()
+            .HasOne(cp => cp.Carte)
+            .WithMany(c => c.CartiPreferate)
+            .HasForeignKey(cp => cp.IdCarte);
+
 
         modelBuilder.Entity<User>(entity =>
         {
@@ -231,26 +245,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("tip_utilizator");
         });
 
-        modelBuilder.Entity<Vizitatori>(entity =>
-        {
-            entity.HasKey(e => e.IdVizita).HasName("PK__Vizitato__8E2EF95ABAC6D5B7");
-
-            entity.ToTable("Vizitatori");
-
-            entity.Property(e => e.IdVizita).HasColumnName("id_vizita");
-            entity.Property(e => e.DataVizitei)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("data_vizitei");
-            entity.Property(e => e.IdUtilizator).HasColumnName("id_utilizator");
-            entity.Property(e => e.TipUtilizator)
-                .HasMaxLength(20)
-                .HasColumnName("tip_utilizator");
-
-            entity.HasOne(d => d.IdUtilizatorNavigation).WithMany(p => p.Vizitatori)
-                .HasForeignKey(d => d.IdUtilizator)
-                .HasConstraintName("FK__Vizitator__id_ut__440B1D61");
-        });
+       
 
 
         OnModelCreatingPartial(modelBuilder);

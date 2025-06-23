@@ -195,7 +195,8 @@
             addMessage(email, mesaj, ora, audioUrl);
         });
 
-        function openChat(clubName, clubId) {
+        function openChat(clubName, clubId) 
+        {
             currentClubId = clubId;
             document.getElementById("chat-title").textContent = "Discutie în " + clubName;
             document.getElementById("chat-box").classList.remove("hidden");
@@ -205,25 +206,29 @@
             connection.invoke("JoinClub", clubId).catch(err => console.error(err));
         }
 
-        function toggleChat() {
+        function toggleChat()
+        {
             const chatBox = document.getElementById("chat-box");
             chatBox.classList.add("hidden");
             chatBox.classList.remove("chat-box-visible");
         }
 
-       function addMessage(email, mesaj, ora, audioUrl = null) {
+       function addMessage(email, mesaj, ora, audioUrl = null) 
+       {
     const chatBody = document.getElementById("chat-messages");
     const mesajNou = document.createElement("div");
     mesajNou.classList.add("chat-message"); // aplica stilul aerisit
 
-    if (audioUrl) {
+    if (audioUrl) 
+    {
         mesajNou.innerHTML = `
             <strong>${email}<time> (${ora})</time></strong>
             <audio controls>
                 <source src="${audioUrl}" type="audio/webm">
                 Browserul tău nu suportă fișiere audio.
             </audio>`;
-    } else {
+    } else 
+    {
         mesajNou.innerHTML = `
             <strong>${email}<time> (${ora})</time></strong>
             <div>${mesaj}</div>`;
@@ -234,7 +239,8 @@
 }
 
 
-        function loadMesaje(idClub) {
+        function loadMesaje(idClub) 
+        {
             fetch('/Users/StartUser?handler=IncarcaMesaje&idClub=' + idClub)
                 .then(res => res.json())
                 .then(data => {
@@ -244,10 +250,11 @@
                         addMessage(msg.email, msg.continut, msg.dataTrimiterii, msg.audioUrl);
                     });
                 })
-                .catch(err => console.error(" Eroare la încărcarea mesajelor:", err));
+                .catch(err => console.error(" Eroare la încărcarea mesajelor !", err));
         }
 
-        function startRecording() {
+        function startRecording() 
+        {
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
                     mediaRecorder = new MediaRecorder(stream);
@@ -273,23 +280,25 @@
                 .catch(err => console.error("Acces la microfon refuzat:", err));
         }
 
-        function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        function stopRecording() 
+        
+        {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") 
+            {
                 mediaRecorder.stop();
                 console.log(" Înregistrare oprită");
             }
         }
 
-        function sendMessage() {
+        function sendMessage() 
+        {
             const input = document.getElementById("messageInput");
             const mesaj = input.value.trim();
 
-            if (mesaj !== "") {
-                // Trimite prin SignalR mesajul către ceilalți
+            if (mesaj !== "") 
+            {
                 connection.invoke("SendMessage", currentClubId, userId, userEmail, mesaj)
                     .catch(err => console.error("Eroare la trimitere text:", err));
-
-                // Salvează în baza de date
                 fetch("/Users/StartUser?handler=TrimiteText", {
                     method: "POST",
                     headers: {
@@ -309,9 +318,8 @@
                 input.value = "";
                 return;
             }
-
-            // Dacă există mesaj vocal înregistrat
-            if (recordedBlob && recordedBlob.size > 0) {
+            if (recordedBlob && recordedBlob.size > 0) 
+            {
                 const formData = new FormData();
                 formData.append("vocal", recordedBlob, "voce.webm");
                 formData.append("idClub", currentClubId);
@@ -343,7 +351,8 @@
 
             alert("Scrie un mesaj sau înregistrează ceva înainte de a trimite.");
         }
-        function afiseazaFavorite() {
+        function afiseazaFavorite() 
+        {
     const chenar = document.getElementById("chenar-favorite");
     chenar.classList.remove("hidden");
 
@@ -358,7 +367,8 @@
         });
 }
 
-function inchideFavorite() {
+function inchideFavorite() 
+{
     document.getElementById("chenar-favorite").classList.add("hidden");
 }
 

@@ -8,7 +8,7 @@ namespace AplicatieLicenta.Models
         [Required(ErrorMessage = "Enunțul este obligatoriu !")]
         public string Enunt { get; set; }
         [Required(ErrorMessage = "Selectează o categorie !")]
-        public string Categorie { get; set; } // Personaje, Emotii, Actiune
+        public string Categorie { get; set; } 
 
         public Quiz Quiz { get; set; }
         public ICollection<VariantaRaspuns> Variante { get; set; }

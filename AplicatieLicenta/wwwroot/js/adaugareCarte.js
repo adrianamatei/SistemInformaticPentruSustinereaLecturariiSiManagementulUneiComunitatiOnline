@@ -67,7 +67,8 @@
         {
             const file = input.files[0];
 
-            if (file && file.type.startsWith(allowedTypePrefix)) {
+            if (file && file.type.startsWith(allowedTypePrefix))
+            {
                 dropzone.querySelector("p").textContent = file.name;
                 fileSelectedViaDrop = false;
 

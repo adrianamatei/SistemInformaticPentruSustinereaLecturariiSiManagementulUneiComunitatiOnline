@@ -46,8 +46,8 @@
     padding: 10px;
     background: #f9f9f9;
     display: flex;
-    flex-wrap: wrap; /* permite trecerea pe rând nou */
-    gap: 8px; /* spațiere între butoane și input */
+    flex-wrap: wrap; 
+    gap: 8px;
     border-top: 1px solid #e1cba3;
     align-items: center;
 }
@@ -101,7 +101,6 @@
         opacity: 1;
     }
 }
-/* Mesaj individual în chat */
 .chat-message {
     background-color: #fffef9;
     border: 1px solid #e1d3aa;
@@ -114,7 +113,7 @@
     font-size: 14px;
 }
 
-    /* Stil pentru nume + oră */
+    
     .chat-message strong {
         display: block;
         color: #5a422a;
@@ -129,13 +128,13 @@
         margin-left: 10px;
     }
 
-    /* Audio player ajustat */
+   
     .chat-message audio {
         margin-top: 6px;
         width: 100%;
     }
 
-/* Scrollbar custom în fereastra de chat */
+
 .chat-body::-webkit-scrollbar {
     width: 10px;
 }
@@ -149,5 +148,5 @@
     background-color: #f5f0e5;
 }
 .chat-body div {
-    margin-bottom: 20px; /* adaugă spațiu între mesaje */
+    margin-bottom: 20px; 
 }

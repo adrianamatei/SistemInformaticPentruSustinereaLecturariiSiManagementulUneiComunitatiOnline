@@ -1,16 +1,14 @@
-﻿/* Stil general pentru body */
-body {
+﻿body {
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: Arial, sans-serif;
-    min-height: 100vh; /* Înălțime completă */
+    min-height: 100vh; 
     margin: 0;
-    background-color: #f4f4f4; /* Fundal neutru */
+    background-color: #f4f4f4; 
     color: #333;
 }
 
-/* Container principal */
 .container-wide {
     display: flex;
     justify-content: space-between;
@@ -19,19 +17,17 @@ body {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 90%; /* Dimensiune relativă */
-    max-width: 1200px; /* Lățime maximă */
+    width: 90%;
+    max-width: 1200px;
     margin: 20px auto;
-    gap: 20px; /* Spațiu între elemente */
+    gap: 20px; 
 }
 
-/* Formular pe partea stângă */
 .form-container {
-    flex: 1; /* Formularul ocupă spațiul necesar */
-    max-width: 50%; /* Dimensiune maximă de 50% */
+    flex: 1; 
+    max-width: 50%; 
 }
 
-/* Titlul formularului */
 h1 {
     font-size: 24px;
     margin-bottom: 10px;
@@ -39,7 +35,6 @@ h1 {
     color: #333;
 }
 
-/* Text subtitlu */
 span {
     font-size: 14px;
     display: block;
@@ -48,22 +43,20 @@ span {
     color: #666;
 }
 
-/* Grup de input-uri */
-/* Grup de input-uri */
+
 .input-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
-    /* Eticheta și input-ul într-o linie */
     .input-group label {
-        margin-bottom: 5px; /* Spațiu între label și input */
+        margin-bottom: 5px; 
         font-size: 14px;
         color: #333;
     }
 
-    /* Input și select */
+   
     .input-group input,
     .input-group select {
         width: 100%;
@@ -72,24 +65,21 @@ span {
         border-radius: 5px;
         font-size: 14px;
         color: #333;
-        box-sizing: border-box; /* Asigură alinierea corectă */
+        box-sizing: border-box; 
     }
 
-/* Container pentru input cu icon */
 .input-with-icon {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-    /* Input în interiorul containerului cu icon */
     .input-with-icon input {
-        padding-right: 40px; /* Spațiu pentru icon */
-        padding-left: 10px; /* Spațiu standard */
+        padding-right: 40px; 
+        padding-left: 10px;
         width: 100%;
     }
 
-    /* Icon poziționat absolut */
     .input-with-icon i {
         position: absolute;
         right: 10px;
@@ -97,7 +87,6 @@ span {
         font-size: 16px;
     }
 
-/* Buton de înregistrare */
 .register-button {
     background-color: #C9AD7F;
     color: #ffffff;
@@ -114,7 +103,6 @@ span {
         background-color: #b1976b;
     }
 
-/* Link pentru crearea unui cont */
 .create-account-link {
     display: block;
     margin-top: 20px;
@@ -132,33 +120,33 @@ span {
         text-decoration: underline;
     }
 
-/* Imagine pe partea dreaptă */
+
 .image-container {
-    flex: 1; /* Imaginea ocupă spațiul necesar */
-    max-width: 50%; /* Dimensiune maximă de 50% */
+    flex: 1;
+    max-width: 50%; 
     display: flex;
-    justify-content: flex-end; /* Așează imaginea la dreapta */
+    justify-content: flex-end; 
     align-items: center;
 }
 
 
 .alert {
-    display: block !important; /* Asigură afișarea */
-    visibility: visible !important; /* Asigură vizibilitatea */
-    opacity: 1; /* Asigură că nu este transparent */
-    color: #b71c1c; /* Text roșu */
-    background-color: #ffebee; /* Fundal roz deschis */
-    border: 1px solid #b71c1c; /* Bordură roșie */
-    padding: 10px 15px; /* Spațiu interior */
-    margin-top: 10px; /* Spațiu deasupra mesajului */
-    margin-bottom: 20px; /* Spațiu suplimentar sub mesaj */
-    border-radius: 5px; /* Colțuri rotunjite */
-    font-size: 14px; /* Dimensiunea textului */
-    text-align: center; /* Centrare text */
-    max-width: calc(100% - 20px); /* Dimensiune adaptivă, cu spațiu pe margini */
-    word-wrap: break-word; /* Evită suprapunerile de text */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adaugă o umbră subtilă */
+    display: block !important; 
+    visibility: visible !important;
+    opacity: 1; 
+    color: #b71c1c; 
+    background-color: #ffebee; 
+    border: 1px solid #b71c1c; 
+    padding: 10px 15px; 
+    margin-top: 10px; 
+    margin-bottom: 20px;
+    border-radius: 5px; 
+    font-size: 14px; 
+    text-align: center;
+    max-width: calc(100% - 20px); 
+    word-wrap: break-word; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
 .alert {
-    margin-top: 15px; /* Spațiu suplimentar între grupul de input și mesajul de eroare */
+    margin-top: 15px; 
 }

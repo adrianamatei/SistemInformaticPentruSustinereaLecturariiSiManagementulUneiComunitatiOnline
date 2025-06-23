@@ -29,7 +29,9 @@ public partial class User
     public virtual ICollection<MembriClub> MembriClub { get; set; } = new List<MembriClub>();
 
     public virtual ICollection<Recenzii> Recenzii { get; set; } = new List<Recenzii>();
+    public virtual ICollection<CartiPreferate> CartiPreferate { get; set; } = new List<CartiPreferate>();
 
-    public virtual ICollection<Vizitatori> Vizitatori { get; set; } = new List<Vizitatori>();
+
+
 
 }

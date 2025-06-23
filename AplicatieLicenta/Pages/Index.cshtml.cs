@@ -26,8 +26,6 @@ namespace AplicatieLicenta.Pages
         public async Task<IActionResult> OnGetAsync()
         {
             var azi = DateTime.Today;
-
-            // Cãutãm o recomandare deja salvatã pentru azi
             var recomandareAzi = await _context.RecomandariZilnice
                 .Include(r => r.Carte)
                 .FirstOrDefaultAsync(r => r.DataGenerare.Date == azi);
@@ -38,7 +36,6 @@ namespace AplicatieLicenta.Pages
             }
             else
             {
-                // Nu existã recomandare pentru azi, alegem una nouã
                 var carti = await _context.Carti.ToListAsync();
                 if (carti.Any())
                 {
@@ -57,7 +54,6 @@ namespace AplicatieLicenta.Pages
                     await _context.SaveChangesAsync();
                 }
             }
-
             return Page();
         }
     }

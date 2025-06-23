@@ -178,7 +178,8 @@ namespace AplicatieLicenta.Pages.Users
         private async Task ActualizeazaScorUtilizator(int userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.IdUtilizator == userId);
-            if (user == null) return;
+            if (user == null) 
+                return;
 
             var testePromovate = await _context.RezultateQuiz
                 .Where(r => r.UserId == userId && r.Scor >= 80)
@@ -187,7 +188,7 @@ namespace AplicatieLicenta.Pages.Users
             int scorTotal = 0;
             foreach (var rezultat in testePromovate)
             {
-                scorTotal += CalculeazaPunctePeTest(rezultat.Scor);
+                scorTotal = scorTotal+ CalculeazaPunctePeTest(rezultat.Scor);
             }
 
             user.ScorTotal = scorTotal;
@@ -196,8 +197,10 @@ namespace AplicatieLicenta.Pages.Users
 
         private int CalculeazaPunctePeTest(int scor)
         {
-            if (scor >= 100) return 20;
-            if (scor >= 90) return 15;
+            if (scor >= 100)
+                return 20;
+            if (scor >= 90) 
+                return 15;
             return 10;
         }
     }

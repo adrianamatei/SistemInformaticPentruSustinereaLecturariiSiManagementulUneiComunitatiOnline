@@ -114,10 +114,6 @@ namespace AplicatieLicenta.Pages.Users
 
             return RedirectToPage("/Users/DetaliiPdf", new { id });
         }
-       
-
-
-
         private string RemoveDiacritics(string text)
         {
             var normalized = text.Normalize(NormalizationForm.FormD);
@@ -129,5 +125,47 @@ namespace AplicatieLicenta.Pages.Users
             }
             return sb.ToString().Normalize(NormalizationForm.FormC);
         }
+        public async Task<IActionResult> OnPostAddFavoriteAsync(int carteId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                TempData["ErrorMessage"] = "Trebuie sã fii logat pentru a salva carti la favorite.";
+                return RedirectToPage("/Login");
+            }
+            var dejaAdaugata = await _context.CartiPreferate
+                .AnyAsync(f => f.IdUtilizator == userId.Value && f.IdCarte == carteId);
+            if (!dejaAdaugata)
+            {
+                
+                var cartePreferata = new CartiPreferate
+                {
+                    IdCarte = carteId,
+                    IdUtilizator = userId.Value
+                };
+
+                _context.CartiPreferate.Add(cartePreferata);
+                var carte = await _context.Carti
+                    .Where(c => c.IdCarte == carteId)
+                    .Select(c => new { c.Titlu })
+                    .FirstOrDefaultAsync();
+
+                string titluCarte = carte?.Titlu ?? "necunoscutã";
+                _context.UsersActivity.Add(new UsersActivity
+                {
+                    UserId = userId.Value,
+                    Action = $"A adãugat cartea '{titluCarte}' la favorite",
+                    Data = "Adãugare la favorite",
+                    Timestamp = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage();
+        }
+
+
+
     }
 }

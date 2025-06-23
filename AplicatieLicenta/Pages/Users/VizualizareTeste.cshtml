@@ -21,7 +21,7 @@
 
         @if (Model.RezultateUser.TryGetValue(test.Id, out var rezultate))
         {
-            var ultimul = rezultate.OrderByDescending(r => r.Data).First(); // sau .Last() dacă ai nevoie de invers
+            var ultimul = rezultate.OrderByDescending(r => r.Data).First(); 
 
             <p><strong>Scor obținut:</strong> @ultimul.Scor%</p>
 

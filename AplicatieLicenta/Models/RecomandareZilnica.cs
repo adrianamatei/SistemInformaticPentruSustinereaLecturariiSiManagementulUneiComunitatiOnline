@@ -6,6 +6,6 @@
         public int CarteId { get; set; }
         public DateTime DataGenerare { get; set; }
 
-        public Carti Carte { get; set; } // Navigare
+        public Carti Carte { get; set; } 
     }
 }

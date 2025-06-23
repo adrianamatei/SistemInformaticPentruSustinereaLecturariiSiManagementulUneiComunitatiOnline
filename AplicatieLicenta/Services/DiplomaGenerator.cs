@@ -17,7 +17,7 @@ namespace AplicatieLicenta.Services
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(0); // fundal pe toată pagina
+                    page.Margin(0); 
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(18).FontFamily("Times New Roman"));
 

@@ -1,5 +1,4 @@
-﻿/* Admin Sidebar Styling */
-.sidebar {
+﻿.sidebar {
     height: 100vh;
     position: fixed;
     overflow-y: auto !important;
@@ -23,12 +22,10 @@
             overflow-y: auto;
         }
 
-/* Main Content Styling */
 main {
     margin-top: 20px;
 }
 
-/* Header Styling */
 header {
     border-bottom: 1px solid #ddd;
 }
