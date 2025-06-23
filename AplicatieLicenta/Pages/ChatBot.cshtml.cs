@@ -185,7 +185,7 @@ namespace AplicatieLicenta.Pages
                         }
                         else
                         {
-                            raspuns = $"Nu am gãsit momentan linkuri disponibile pentru cartea \"{titlu}\".";
+                            raspuns = $"Nu am gãsit momentan linkuri disponibile pentru cartea \"{titlu}\" pe care tu ai cautat-o.";
                         }
                         goto finalizeaza;
                     }
