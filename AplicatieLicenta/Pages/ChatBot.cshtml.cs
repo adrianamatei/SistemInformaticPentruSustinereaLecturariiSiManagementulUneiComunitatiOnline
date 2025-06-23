@@ -185,7 +185,7 @@ namespace AplicatieLicenta.Pages
                         }
                         else
                         {
-                            raspuns = $"Nu am gãsit momentan linkuri disponibile pentru cartea \"{titlu}\" pe care tu ai cautat-o.";
+                            raspuns = $"Nu am gasit momentan linkuri disponibile pentru cartea \"{titlu}\" pe care tu ai cautat-o.";
                         }
                         goto finalizeaza;
                     }
@@ -256,7 +256,7 @@ namespace AplicatieLicenta.Pages
                         }
                         else
                         {
-                            raspuns = "Imi pare rau, nu am reusit sa gasesc un raspuns relevant.";
+                            raspuns = "Imi pare rau, nu am reusit sa gasesc un raspuns relevant intrebarii tale !";
                         }
                     }
                 }
