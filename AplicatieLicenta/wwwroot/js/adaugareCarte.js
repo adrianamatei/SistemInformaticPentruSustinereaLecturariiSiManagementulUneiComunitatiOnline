@@ -128,7 +128,7 @@
             }
             else
             {
-                alert("Fișier invalid. Selectați un fișier PDF.");
+                alert("Fisier invalid. Selectati un fisier PDF.");
             }
         });
 
@@ -144,7 +144,7 @@
             }
             else
             {
-                alert("Fișier invalid. Selectați un fișier PDF.");
+                alert("Fisier invalid. Selectati un fisier PDF.");
             }
         });
     };
